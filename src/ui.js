@@ -1,8 +1,7 @@
 /**
  * ShopBoard — UI Module
  *
- * Implements Concept A: Editorial Minimalism (The Architectural Ledger).
- * Strictly manages DOM queries, rendering, interactive Viewfinder, and UI event listeners.
+ * Handles all DOM queries, rendering, interactive Viewfinder, and UI event listeners.
  * Interacts with pure logic from logic.js and persistent cart state from state.js.
  */
 
@@ -40,105 +39,159 @@ function escapeHtml(str) {
 }
 
 /**
- * Formats a two-digit reference number for editorial ledger styling.
- *
- * @param {number} num
- * @returns {string} e.g. "01"
- */
-function formatTwoDigit(num) {
-  return String(num).padStart(2, "0");
-}
-
-/**
- * Generates an authentic Swiss architectural miniature sheet preview for each product card.
+ * Generates miniature architectural specimen sheet layout markup for each product.
  *
  * @param {Object} product
  * @returns {string} HTML snippet
  */
 function getSpecimenPreviewHtml(product) {
-  const specs = {
-    "cv-template": {
-      code: "ATS-DOC // A4",
-      meta: "2-COL • TYPOGRAPHIC",
-      cells: ["EXPERIENCE LOG", "SKILL MATRIX", "99% PARSE"],
-    },
-    "study-planner": {
-      code: "SEM-II // GRID",
-      meta: "16-WK • ACADEMIC",
-      cells: ["MON–FRI BLOCKS", "EXAM CADENCE", "REVISION"],
-    },
-    "portfolio-template": {
-      code: "WEB-SYS // FLUID",
-      meta: "12-COL • EDITORIAL",
-      cells: ["CASE INDEX", "SPECIMEN VIEW", "COLOPHON"],
-    },
-    "budget-tracker": {
-      code: "FIN-LEDGER // Q1",
-      meta: "DOUBLE-ENTRY • USD",
-      cells: ["INFLOW +28%", "OPEX CAP", "RESERVE"],
-    },
-    "task-manager": {
-      code: "KANBAN // SPRINT",
-      meta: "3-STAGE • PRIORITY",
-      cells: ["BACKLOG [04]", "ACTIVE [02]", "DONE [14]"],
-    },
-    "digital-notebook": {
-      code: "INDEX-NB // 5MM",
-      meta: "HYPERLINKED • DOT",
-      cells: ["SEC 01–08", "CROSS-REF", "ARCHIVE"],
-    },
-    "invoice-template": {
-      code: "INV-BILL // NET15",
-      meta: "AUTO-CALC • LEDGER",
-      cells: ["LINE ITEMS", "TAX MATRIX", "REMITTANCE"],
-    },
-    "fitness-planner": {
-      code: "CYCLE-LOG // WK04",
-      meta: "PROGRESSIVE • LOAD",
-      cells: ["SPLIT A/B", "VOLUME BAR", "RECOVERY"],
-    },
-    "pitch-deck": {
-      code: "DECK-16:9 // SEED",
-      meta: "24-SLIDE • NARRATIVE",
-      cells: ["THESIS 01", "UNIT ECON", "ROADMAP"],
-    },
-    "habit-tracker": {
-      code: "CADENCE // 30-DAY",
-      meta: "STREAK • MATRIX",
-      cells: ["DAILY CHECK", "94% RATE", "MILESTONE"],
-    },
-    "student-dashboard": {
-      code: "ACAD-HUB // CORE",
-      meta: "MULTI-COURSE • SYNC",
-      cells: ["SYLLABUS", "DEADLINES", "GPA 3.94"],
-    },
-    "project-planner": {
-      code: "GANTT-SYS // Q1–Q4",
-      meta: "CRITICAL PATH • AGILE",
-      cells: ["PHASE 01", "DELIVERABLES", "SHIPPED"],
-    },
-  };
-
-  const spec = specs[product.id] || {
-    code: "SYS-SPEC // 01",
-    meta: "MODULAR • STANDARD",
-    cells: ["STRUCTURE", "PERSISTENCE", "VERIFIED"],
-  };
-
-  return `
-    <div class="plate-specimen-mini" aria-hidden="true">
-      <div class="mini-sheet-top">
-        <span class="mini-sheet-code">${spec.code}</span>
-        <span class="mini-sheet-meta">${spec.meta}</span>
-      </div>
-      <div class="mini-sheet-Rule"></div>
-      <div class="mini-sheet-cells">
-        <span class="mini-cell is-accent">${spec.cells[0]}</span>
-        <span class="mini-cell">${spec.cells[1]}</span>
-        <span class="mini-cell">${spec.cells[2]}</span>
-      </div>
-    </div>
-  `;
+  switch (product.id) {
+    case "cv-template":
+      return `
+        <div class="specimen-sheet specimen-cv" aria-hidden="true">
+          <div class="sheet-header-mock">
+            <span class="sheet-bar-heavy"></span>
+            <span class="sheet-bar-sub"></span>
+          </div>
+          <div class="sheet-split-mock">
+            <div class="sheet-col-main">
+              <span class="sheet-line-bold"></span>
+              <span class="sheet-line-text"></span>
+              <span class="sheet-line-text"></span>
+              <span class="sheet-line-bold"></span>
+              <span class="sheet-line-text"></span>
+            </div>
+            <div class="sheet-col-side">
+              <span class="sheet-tag-pill"></span>
+              <span class="sheet-tag-pill"></span>
+              <span class="sheet-tag-pill"></span>
+            </div>
+          </div>
+        </div>
+      `;
+    case "study-planner":
+      return `
+        <div class="specimen-sheet specimen-planner" aria-hidden="true">
+          <div class="sheet-grid-mock">
+            <div class="grid-cell-day">Mon</div>
+            <div class="grid-cell-day">Tue</div>
+            <div class="grid-cell-day">Wed</div>
+            <div class="grid-cell-day">Thu</div>
+            <div class="grid-slot is-filled"></div>
+            <div class="grid-slot"></div>
+            <div class="grid-slot is-accent"></div>
+            <div class="grid-slot"></div>
+          </div>
+        </div>
+      `;
+    case "portfolio-template":
+      return `
+        <div class="specimen-sheet specimen-web" aria-hidden="true">
+          <div class="sheet-browser-dots"><span></span><span></span><span></span></div>
+          <div class="sheet-web-hero">
+            <span class="web-hero-title"></span>
+            <div class="web-case-card"></div>
+          </div>
+        </div>
+      `;
+    case "budget-tracker":
+      return `
+        <div class="specimen-sheet specimen-finance" aria-hidden="true">
+          <div class="sheet-stat-row">
+            <div class="sheet-metric-card"><span class="m-val"></span></div>
+            <div class="sheet-metric-card"><span class="m-val"></span></div>
+          </div>
+          <div class="sheet-bars-mock">
+            <div class="bar-fill" style="width: 78%"></div>
+            <div class="bar-fill is-accent" style="width: 52%"></div>
+          </div>
+        </div>
+      `;
+    case "task-manager":
+      return `
+        <div class="specimen-sheet specimen-kanban" aria-hidden="true">
+          <div class="kanban-col-mock"><div class="kanban-card"></div><div class="kanban-card"></div></div>
+          <div class="kanban-col-mock"><div class="kanban-card is-active"></div></div>
+          <div class="kanban-col-mock"><div class="kanban-card"></div></div>
+        </div>
+      `;
+    case "digital-notebook":
+      return `
+        <div class="specimen-sheet specimen-notebook" aria-hidden="true">
+          <div class="notebook-index"><span></span><span></span><span></span></div>
+          <div class="notebook-ruled-lines">
+            <span class="n-line"></span><span class="n-line"></span><span class="n-line"></span>
+          </div>
+        </div>
+      `;
+    case "invoice-template":
+      return `
+        <div class="specimen-sheet specimen-invoice" aria-hidden="true">
+          <div class="invoice-table-mock">
+            <div class="inv-head-row"><span></span><span></span></div>
+            <div class="inv-data-row"><span></span><span></span></div>
+            <div class="inv-total-row"><span></span></div>
+          </div>
+        </div>
+      `;
+    case "fitness-planner":
+      return `
+        <div class="specimen-sheet specimen-fitness" aria-hidden="true">
+          <div class="fitness-streak-row">
+            <span class="f-dot on"></span><span class="f-dot on"></span><span class="f-dot on"></span><span class="f-dot"></span>
+          </div>
+          <div class="fitness-bars"><span style="width: 65%"></span><span style="width: 80%"></span></div>
+        </div>
+      `;
+    case "pitch-deck":
+      return `
+        <div class="specimen-sheet specimen-pitch" aria-hidden="true">
+          <div class="pitch-slide-mock">
+            <span class="pitch-badge">Slide</span>
+            <span class="pitch-headline"></span>
+            <div class="pitch-chart-stubs"><span style="height: 12px"></span><span style="height: 20px"></span><span style="height: 16px"></span></div>
+          </div>
+        </div>
+      `;
+    case "habit-tracker":
+      return `
+        <div class="specimen-sheet specimen-habit" aria-hidden="true">
+          <div class="habit-matrix">
+            <span class="h-dot on"></span><span class="h-dot on"></span><span class="h-dot on"></span><span class="h-dot on"></span>
+            <span class="h-dot on"></span><span class="h-dot on"></span><span class="h-dot"></span><span class="h-dot"></span>
+          </div>
+        </div>
+      `;
+    case "student-dashboard":
+      return `
+        <div class="specimen-sheet specimen-student" aria-hidden="true">
+          <div class="student-hub-mock">
+            <div class="s-slot"><span class="s-bar"></span></div>
+            <div class="s-slot"><span class="s-bar accent"></span></div>
+          </div>
+        </div>
+      `;
+    case "project-planner":
+      return `
+        <div class="specimen-sheet specimen-roadmap" aria-hidden="true">
+          <div class="roadmap-track-mock">
+            <div class="roadmap-milestone is-done"><span class="m-point"></span><span class="m-bar"></span></div>
+            <div class="roadmap-milestone is-active"><span class="m-point"></span><span class="m-bar"></span></div>
+            <div class="roadmap-milestone"><span class="m-point"></span><span class="m-bar"></span></div>
+          </div>
+        </div>
+      `;
+    default:
+      return `
+        <div class="specimen-sheet specimen-generic" aria-hidden="true">
+          <div class="generic-tile-inner">
+            <span class="sheet-line-bold"></span>
+            <span class="sheet-line-text"></span>
+            <span class="sheet-line-text"></span>
+          </div>
+        </div>
+      `;
+  }
 }
 
 /**
@@ -156,13 +209,9 @@ export function renderProducts(productsToRender) {
   if (productsToRender.length === 0) {
     container.innerHTML = `
       <div class="products-empty" role="status">
-        <h3 class="products-empty-title">No Catalog Entries Match Selection</h3>
-        <p class="products-empty-desc">
-          No templates or operating sheets match your current search query or active category filter.
-        </p>
-        <button type="button" id="reset-filters-btn" class="btn btn-outline-hairline">
-          Reset All Filters
-        </button>
+        <p class="products-empty-title">No products found</p>
+        <p class="products-empty-desc">Try adjusting your search query or selecting a different category.</p>
+        <button type="button" id="reset-filters-btn" class="btn btn-sm btn-outline">Reset Filters</button>
       </div>
     `;
     if (announcer) {
@@ -172,34 +221,29 @@ export function renderProducts(productsToRender) {
   }
 
   container.innerHTML = productsToRender
-    .map((product, index) => {
-      const refNum = formatTwoDigit(index + 1);
-      return `
+    .map(
+      (product) => `
         <article class="product-card" data-product-id="${escapeHtml(product.id)}">
-          <div class="product-plate-mast">
-            <span class="product-ref-code">REF. SB-${refNum}</span>
-            <span class="product-category-stamp">${escapeHtml(product.category.toUpperCase())}</span>
-          </div>
-
-          <div class="product-graphic-plate" aria-hidden="true">
-            <div class="plate-icon-stamp">
-              ${product.icon || ""}
-            </div>
+          <div class="product-tile">
             ${getSpecimenPreviewHtml(product)}
+            <div class="product-tile-header">
+              <div class="product-icon-wrap" aria-hidden="true">
+                ${product.icon || ""}
+              </div>
+              <span class="product-category-tag">${escapeHtml(product.category)}</span>
+            </div>
           </div>
-
-          <div class="product-content">
+          <div class="product-body">
             <h3 class="product-title">${escapeHtml(product.name)}</h3>
             <p class="product-description">${escapeHtml(product.description)}</p>
-
-            <div class="product-footer-bar">
-              <div class="product-price-lockup">
+            <div class="product-footer">
+              <div class="product-price-info">
                 <span class="product-price">$${product.price}</span>
-                <span class="product-currency">USD</span>
+                <span class="price-demo-tag">(Demo)</span>
               </div>
               <button
                 type="button"
-                class="btn-add-cart add-to-cart-btn"
+                class="btn btn-sm btn-action add-to-cart-btn"
                 data-id="${escapeHtml(product.id)}"
                 aria-label="Add ${escapeHtml(product.name)} to Cart"
               >
@@ -208,8 +252,8 @@ export function renderProducts(productsToRender) {
             </div>
           </div>
         </article>
-      `;
-    })
+      `,
+    )
     .join("");
 
   if (announcer) {
@@ -220,145 +264,102 @@ export function renderProducts(productsToRender) {
 }
 
 /**
- * Initializes the Interactive Specimen Viewfinder in the Hero section.
- * Renders authentic editorial sheets for CV, Academic Planner, Operating Ledger, and Sprint Board.
+ * Initializes the Interactive Specimen Viewfinder in the Hero (The Live Thing).
  */
 export function setupViewfinder() {
   const display = document.querySelector("#viewfinder-display");
-  const tabs = document.querySelectorAll(".specimen-tabs-bar .tab-btn");
+  const tabs = document.querySelectorAll(".viewfinder-tabs .tab-btn");
   if (!display || !tabs.length) return;
 
   const views = {
     cv: `
-      <div class="specimen-sheet-layout">
-        <div class="specimen-sheet-mast">
-          <div>
-            <h3 class="specimen-subject-name">ELENA ROSTOVA</h3>
-            <span class="specimen-subject-sub">SYSTEMS ARCHITECT &bull; ZÜRICH, CH</span>
+      <div class="vf-document vf-doc-cv">
+        <div class="vf-doc-top">
+          <div class="vf-doc-identity">
+            <div class="vf-doc-name">SARAH CHEN</div>
+            <div class="vf-doc-role">Systems Architect &bull; San Francisco, CA</div>
           </div>
-          <span class="specimen-pill">REF: ATS-CH-99</span>
+          <span class="vf-badge-verified">ATS Format &bull; 98% Match</span>
         </div>
-        <div class="specimen-columns-split">
-          <div>
-            <div class="specimen-subhead">EXPERIENCE RECORD</div>
-            <div class="specimen-record-item">
-              <div class="specimen-item-role">Principal Systems Engineer &bull; Helvetica Foundry</div>
-              <div class="specimen-item-detail">Architected zero-dependency frontend runtime serving 4.8M monthly requests.</div>
+        <div class="vf-doc-columns">
+          <div class="vf-doc-left">
+            <h4 class="vf-heading-compact">EXPERIENCE RECORD</h4>
+            <div class="vf-item">
+              <div class="vf-item-title">Principal Engineer &bull; HyperScale Inc.</div>
+              <div class="vf-item-desc">Architected micro-frontend pipeline reducing build latency by 42%.</div>
             </div>
-            <div class="specimen-record-item">
-              <div class="specimen-item-role">Staff Interface Designer &bull; Basel Digital</div>
-              <div class="specimen-item-detail">Standardized mathematical design tokens and accessible typography matrix.</div>
+            <div class="vf-item">
+              <div class="vf-item-title">Staff Developer &bull; Core Labs</div>
+              <div class="vf-item-desc">Spearheaded accessible design token library serving 1.2M daily users.</div>
             </div>
           </div>
-          <div>
-            <div class="specimen-subhead">CORE DISCIPLINES</div>
-            <div class="specimen-tag-matrix">
-              <span class="specimen-pill">Vanilla JS</span>
-              <span class="specimen-pill">Web Standards</span>
-              <span class="specimen-pill">Modular CSS</span>
-              <span class="specimen-pill">WCAG 2.1 AAA</span>
-              <span class="specimen-pill">State Machines</span>
-              <span class="specimen-pill">Data Integrity</span>
+          <div class="vf-doc-right">
+            <h4 class="vf-heading-compact">STACK</h4>
+            <div class="vf-pill-cloud">
+              <span class="vf-pill">TypeScript</span>
+              <span class="vf-pill">Web Standards</span>
+              <span class="vf-pill">State Sync</span>
+              <span class="vf-pill">Micro-arch</span>
             </div>
           </div>
         </div>
       </div>
     `,
     planner: `
-      <div class="specimen-sheet-layout">
-        <div class="specimen-sheet-mast">
-          <div>
-            <h3 class="specimen-subject-name">2026 ACADEMIC PLANNER</h3>
-            <span class="specimen-subject-sub">SEMESTER II CURRICULUM MATRIX &bull; COREPRO SD-AI</span>
+      <div class="vf-document vf-doc-planner">
+        <div class="vf-doc-top">
+          <div class="vf-doc-identity">
+            <div class="vf-doc-name">SEMESTER MASTER PLAN</div>
+            <div class="vf-doc-role">Week 08 Sprint &bull; Computational Theory &amp; Systems</div>
           </div>
-          <span class="specimen-pill">WEEK 08 / 16</span>
+          <span class="vf-badge-verified">3 Checkpoints Due</span>
         </div>
-        <div class="specimen-columns-split">
-          <div>
-            <div class="specimen-subhead">CRITICAL MILESTONES</div>
-            <div class="specimen-record-item">
-              <div class="specimen-item-role">Day 2: Architecture &amp; Cart Persistence</div>
-              <div class="specimen-item-detail">Passed empirical audit with 30 automated unit tests &amp; zero regressions.</div>
-            </div>
-            <div class="specimen-record-item">
-              <div class="specimen-item-role">Day 3: State Machines &amp; Async Handlers</div>
-              <div class="specimen-item-detail">Preparation of modular payment workflows and receipt generation.</div>
-            </div>
-          </div>
-          <div>
-            <div class="specimen-subhead">ALLOCATION SCHEDULE</div>
-            <div class="specimen-tag-matrix">
-              <span class="specimen-pill">08:00 Architectural Audit</span>
-              <span class="specimen-pill">11:00 Test Execution</span>
-              <span class="specimen-pill">14:00 Typographic Polish</span>
-              <span class="specimen-pill">17:00 Artifact Verification</span>
-            </div>
-          </div>
+        <div class="vf-planner-grid">
+          <div class="vf-day-box"><span class="day-h">MON</span><div class="task-badge">Graph Theory HW</div></div>
+          <div class="vf-day-box"><span class="day-h">TUE</span><div class="task-badge is-active">Lab Checkpoint</div></div>
+          <div class="vf-day-box"><span class="day-h">WED</span><div class="task-badge">Study Group</div></div>
+          <div class="vf-day-box"><span class="day-h">THU</span><div class="task-badge">Architecture Exam</div></div>
         </div>
       </div>
     `,
     budget: `
-      <div class="specimen-sheet-layout">
-        <div class="specimen-sheet-mast">
-          <div>
-            <h3 class="specimen-subject-name">OPERATING LEDGER</h3>
-            <span class="specimen-subject-sub">INDEPENDENT STUDIO Q1 FINANCIAL SUMMARY</span>
+      <div class="vf-document vf-doc-budget">
+        <div class="vf-doc-top">
+          <div class="vf-doc-identity">
+            <div class="vf-doc-name">OPERATING BALANCE LEDGER</div>
+            <div class="vf-doc-role">Monthly Runway &amp; Tooling Subscriptions</div>
           </div>
-          <span class="specimen-pill">AUDITED &bull; BALANCED</span>
+          <span class="vf-badge-verified">Active Tracker</span>
         </div>
-        <div class="specimen-columns-split">
-          <div>
-            <div class="specimen-subhead">LINE ITEM ACCOUNTS</div>
-            <div class="specimen-record-item">
-              <div class="specimen-item-role">Digital Software &amp; Assets Revenue</div>
-              <div class="specimen-item-detail">Net inflow: $48,240.00 &bull; +28% over prior quarter ledger.</div>
-            </div>
-            <div class="specimen-record-item">
-              <div class="specimen-item-role">Infrastructure &amp; Tooling OPEX</div>
-              <div class="specimen-item-detail">Net outflow: $3,120.00 &bull; 93.5% operating margin.</div>
-            </div>
-          </div>
-          <div>
-            <div class="specimen-subhead">RESERVE STATUS</div>
-            <div class="specimen-tag-matrix">
-              <span class="specimen-pill">Cash: $142,500</span>
-              <span class="specimen-pill">Runway: 28 Mo</span>
-              <span class="specimen-pill">Tax Escrow: 100%</span>
-              <span class="specimen-pill">Zero Debt</span>
-            </div>
-          </div>
+        <div class="vf-budget-metrics">
+          <div class="vf-stat-tile"><span class="st-lbl">Monthly Target</span><span class="st-val">$2,400.00</span></div>
+          <div class="vf-stat-tile"><span class="st-lbl">Current Spend</span><span class="st-val">$1,680.00</span></div>
+          <div class="vf-stat-tile"><span class="st-lbl">Net Buffer</span><span class="st-val">$720.00</span></div>
         </div>
       </div>
     `,
     kanban: `
-      <div class="specimen-sheet-layout">
-        <div class="specimen-sheet-mast">
-          <div>
-            <h3 class="specimen-subject-name">SYSTEMS EXECUTION BOARD</h3>
-            <span class="specimen-subject-sub">HIGH-PRECISION QUEUE &bull; SPRINT 14</span>
+      <div class="vf-document vf-doc-kanban">
+        <div class="vf-doc-top">
+          <div class="vf-doc-identity">
+            <div class="vf-doc-name">ENGINEERING ROADMAP</div>
+            <div class="vf-doc-role">CorePro Release 2.0 &bull; High Priority Queue</div>
           </div>
-          <span class="specimen-pill">VELOCITY: 42 PTS</span>
+          <span class="vf-badge-verified">3 In Flight</span>
         </div>
-        <div class="specimen-columns-split">
-          <div>
-            <div class="specimen-subhead">IN-FLIGHT WORKSTREAM</div>
-            <div class="specimen-record-item">
-              <div class="specimen-item-role">[ACTIVE] Architectural Ledger System</div>
-              <div class="specimen-item-detail">Swiss editorial hierarchy: limestone ground, carbon ink, tabular math.</div>
-            </div>
-            <div class="specimen-record-item">
-              <div class="specimen-item-role">[QUEUED] Responsive Viewport Verification</div>
-              <div class="specimen-item-detail">Empirical headless Chromium audit across 320px to 1440px viewports.</div>
-            </div>
+        <div class="vf-kanban-board">
+          <div class="vf-board-col">
+            <span class="col-title">BACKLOG (4)</span>
+            <div class="b-card">API Spec Definition</div>
+            <div class="b-card">Cache Invalidation</div>
           </div>
-          <div>
-            <div class="specimen-subhead">COMPLETED ITEMS</div>
-            <div class="specimen-tag-matrix">
-              <span class="specimen-pill">✓ Clean Unit Tests</span>
-              <span class="specimen-pill">✓ Strict ESLint</span>
-              <span class="specimen-pill">✓ Mobile Overflows 0px</span>
-              <span class="specimen-pill">✓ Zero !important</span>
-            </div>
+          <div class="vf-board-col">
+            <span class="col-title">IN FLIGHT (2)</span>
+            <div class="b-card is-active">Specimen Catalogue UI</div>
+          </div>
+          <div class="vf-board-col">
+            <span class="col-title">SHIPPED (14)</span>
+            <div class="b-card">Storage Schema Sync</div>
           </div>
         </div>
       </div>
@@ -465,10 +466,8 @@ export function renderCartUI() {
   if (cart.length === 0) {
     cartItemsContainer.innerHTML = `
       <div class="cart-empty">
-        <p class="cart-empty-title">Cart Ledger Is Empty</p>
-        <p class="cart-empty-subtitle">
-          Select digital operating sheets or templates from the catalog to add items.
-        </p>
+        <p class="cart-empty-title">Your cart is empty</p>
+        <p class="cart-empty-subtitle">Explore the digital products catalog and add items to your cart.</p>
       </div>
     `;
     return;
@@ -482,7 +481,7 @@ export function renderCartUI() {
           <div class="cart-item-main">
             <div class="cart-item-info">
               <h3 class="cart-item-name">${escapeHtml(item.name)}</h3>
-              <p class="cart-item-unit-price">$${item.price} USD each</p>
+              <p class="cart-item-unit-price">$${item.price} each (Demo)</p>
             </div>
             <button
               type="button"
@@ -513,7 +512,7 @@ export function renderCartUI() {
                 +
               </button>
             </div>
-            <span class="cart-item-line-total">$${lineTotal} USD</span>
+            <span class="cart-item-line-total">Line Total: $${lineTotal}</span>
           </div>
         </div>
       `;
@@ -522,9 +521,9 @@ export function renderCartUI() {
 }
 
 /**
- * Sets up toolbar controls (search, category filter, price sort).
+ * Sets up search, category filter, and sort event listeners.
  *
- * @param {Array<Object>} allProducts - Catalog of all products.
+ * @param {Array<Object>} allProducts - Full dataset of products.
  */
 export function setupToolbar(allProducts) {
   const searchInput = document.querySelector("#product-search");
@@ -533,12 +532,13 @@ export function setupToolbar(allProducts) {
   const productsContainer = document.querySelector("#products-grid");
 
   function updateProducts() {
-    const query = searchInput ? searchInput.value : "";
+    const searchTerm = searchInput ? searchInput.value : "";
     const category = categorySelect ? categorySelect.value : "all";
-    const sortBy = sortSelect ? sortSelect.value : "default";
+    const sortOrder = sortSelect ? sortSelect.value : "default";
 
-    const filtered = filterProducts(allProducts, query, category);
-    const sorted = sortProducts(filtered, sortBy);
+    const filtered = filterProducts(allProducts, { searchTerm, category });
+    const sorted = sortProducts(filtered, sortOrder);
+
     renderProducts(sorted);
   }
 
@@ -711,7 +711,7 @@ export function setupRegistrationForm() {
 
   const clearFeedback = () => {
     feedbackElement.textContent = "";
-    feedbackElement.className = "form-feedback-message";
+    feedbackElement.className = "form-feedback";
   };
 
   form.addEventListener("input", clearFeedback);
@@ -726,8 +726,8 @@ export function setupRegistrationForm() {
     }
 
     feedbackElement.textContent =
-      "Studio access registered. Note: This is an educational demonstration only. No account has been created and no personal data or passwords have been stored.";
-    feedbackElement.className = "form-feedback-message is-visible is-success";
+      "Registration successful! Note: This is an educational demonstration only. No account has been created and no personal data or passwords have been stored.";
+    feedbackElement.className = "form-feedback is-visible is-success";
 
     form.reset();
   });

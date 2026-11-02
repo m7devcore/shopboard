@@ -2,7 +2,7 @@
 
 ShopBoard is a modern, responsive, and accessible digital products storefront built as part of the **CorePro Software Development Using AI** program (Day 2 Homework).
 
-The project demonstrates production-grade vanilla web architecture, strict modularity, pure calculation logic, safe client-side `localStorage` persistence, and the **Editorial Minimalism (The Architectural Ledger)** visual identity without relying on external UI frameworks.
+The project demonstrates production-grade vanilla web architecture, strict modularity, pure calculation logic, safe client-side `localStorage` persistence, and the **Obsidian & Liquid Glass** visual identity without relying on external UI frameworks.
 
 ---
 
@@ -11,7 +11,7 @@ The project demonstrates production-grade vanilla web architecture, strict modul
 - **Course**: CorePro Software Development Using AI
 - **Module**: Day 2 — Interactive Frontend Architecture & AI-Assisted Development
 - **Repository**: [https://github.com/m7devcore/shopboard](https://github.com/m7devcore/shopboard)
-- **Design Identity**: Editorial Minimalism / The Architectural Ledger (Swiss Modernist typography, architectural limestone `#F7F6F2`, carbon `#141414`, structural hairlines `#DDDCD6`, and International Klein Blue `#0038FF` accents; free of AI clichés like cosmic blobs and generic glassmorphism)
+- **Design Identity**: Obsidian & Liquid Glass (dark mode, glassmorphism, fluid typography, responsive layout)
 
 ShopBoard features a catalog of 12 realistic digital production systems (templates, planners, and productivity tools), an interactive specimen viewfinder, instant search, multi-category filtering, price sorting, and an off-canvas shopping cart drawer that persists safely across browser sessions.
 
@@ -111,7 +111,7 @@ shopboard/
 │   └── cdp.mjs                  ← Portable zero-dependency Chrome DevTools Protocol client
 ├── public/                      ← Static assets, archival imagery, and license records
 └── src/
-    ├── style.css                ← Mobile-first styling, Swiss typography, architectural hairlines, zero !important
+    ├── style.css                ← Mobile-first styling, glassmorphism, responsive breakpoints
     ├── data.js                  ← Product catalog data (12 products with id, name, category, price, icon)
     ├── logic.js                 ← Pure deterministic functions (zero DOM, zero localStorage)
     ├── state.js                 ← Shopping cart state management & safe localStorage sync
