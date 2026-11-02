@@ -67,3 +67,14 @@ This document records real bugs encountered and resolved, preventive edge-case v
 - **Cause:** If click event listeners were registered inside `renderProducts()`, each filter change would attach another listener, resulting in 5 units added on a single click.
 - **Fix:** Event listeners are attached once on `#products-grid` using event delegation (`event.target.closest('.add-to-cart-btn')`). `renderProducts()` only updates markup and never calls `addEventListener()`. Real browser test verified 1 unit was added.
 - **Did I use AI? For what?** Yes, used AI to script the headless browser test simulating 5 category changes and a single click.
+
+---
+
+## Bug 4: Machine-Specific Absolute Import Paths in Browser Automation Scripts
+
+- **What I saw:** Both `test-browser-interaction.mjs` and `test-mobile-responsive.mjs` imported the CDP browser helper via an absolute machine-specific path (`file:///C:/Users/minaw/.gemini/config/skills/design-taste-frontend/scripts/lib/cdp.mjs`), causing tests to fail with module resolution errors on any other machine.
+- **Type:** runtime / portability
+- **How I found it:** Code review and portability audit of committed browser test scripts.
+- **Cause:** Hardcoded local path to the developer's user profile directory instead of a relative in-repo module path.
+- **Fix:** Vendored the zero-dependency, multi-platform Chrome DevTools Protocol helper into `tests/cdp.mjs`. Updated both automation scripts to import from `./tests/cdp.mjs` using relative paths. Added graceful prerequisite detection that informs users if Chrome/Chromium is missing without crashing. Documented prerequisites in `README.md` and added `npm run test:browser` and `npm run test:responsive` to `package.json`.
+- **Did I use AI? For what?** Yes, used AI to isolate the standalone helper, vendor it within the repository, and update the test harnesses and documentation.

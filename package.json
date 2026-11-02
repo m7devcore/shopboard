@@ -11,6 +11,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "node --test test-logic.mjs test-state.mjs",
+    "test:browser": "node test-browser-interaction.mjs",
+    "test:responsive": "node test-mobile-responsive.mjs",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -19,6 +21,10 @@
       "prettier --write"
     ],
     "*.mjs": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "tests/**/*.mjs": [
       "eslint --fix",
       "prettier --write"
     ],

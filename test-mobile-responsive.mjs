@@ -1,7 +1,4 @@
-import {
-  Browser,
-  sleep,
-} from "file:///C:/Users/minaw/.gemini/config/skills/design-taste-frontend/scripts/lib/cdp.mjs";
+import { Browser, sleep } from "./tests/cdp.mjs";
 import { createServer } from "node:http";
 import { resolve, join, extname } from "node:path";
 import { statSync, createReadStream, mkdirSync } from "node:fs";
@@ -52,7 +49,18 @@ const viewports = [
 ];
 
 console.log(`Starting Mobile & Responsive Audit at ${url}...`);
-const browser = await Browser.launch();
+
+let browser;
+try {
+  browser = await Browser.launch();
+} catch (launchError) {
+  console.warn(`⚠️ Mobile responsive audit skipped: ${launchError.message}`);
+  console.warn(
+    "Prerequisite: To run responsive audit tests, install Google Chrome / Edge or set the CHROME_PATH environment variable.",
+  );
+  server.close();
+  process.exit(0);
+}
 
 let allPass = true;
 

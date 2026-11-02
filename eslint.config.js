@@ -20,10 +20,11 @@ export default [
       "no-var": "error",
       "prefer-const": "error",
       "no-unused-vars": "warn",
+      "no-empty": ["error", { allowEmptyCatch: true }],
     },
   },
   {
-    files: ["*.mjs", "*.js"],
+    files: ["*.mjs", "*.js", "tests/**/*.mjs", "tests/**/*.js"],
     ignores: ["src/**"],
     languageOptions: {
       ecmaVersion: "latest",
@@ -38,6 +39,7 @@ export default [
       "no-var": "error",
       "prefer-const": "error",
       "no-unused-vars": "warn",
+      "no-empty": ["error", { allowEmptyCatch: true }],
     },
   },
 ];

@@ -65,15 +65,25 @@ Open the printed URL (typically `http://localhost:5173`) in your browser.
 
 ## 4. Available NPM Scripts
 
-| Command                | Description                                                              |
-| :--------------------- | :----------------------------------------------------------------------- |
-| `npm run dev`          | Starts Vite local development server with HMR.                           |
-| `npm run build`        | Builds optimized production assets into the `dist/` directory.           |
-| `npm run preview`      | Serves the local production build preview.                               |
-| `npm test`             | Runs the Node.js native test suite (`test-logic.mjs`, `test-state.mjs`). |
-| `npm run lint`         | Runs ESLint across all JavaScript modules and test suites.               |
-| `npm run format`       | Formats all source files (HTML, CSS, JS, JSON, MD) with Prettier.        |
-| `npm run format:check` | Checks formatting without modifying files.                               |
+| Command                   | Description                                                                   |
+| :------------------------ | :---------------------------------------------------------------------------- |
+| `npm run dev`             | Starts Vite local development server with HMR.                                |
+| `npm run build`           | Builds optimized production assets into the `dist/` directory.                |
+| `npm run preview`         | Serves the local production build preview.                                    |
+| `npm test`                | Runs the fast Node.js native unit tests (`test-logic.mjs`, `test-state.mjs`). |
+| `npm run test:browser`    | Runs real browser interaction tests via CDP (`test-browser-interaction.mjs`). |
+| `npm run test:responsive` | Runs multi-viewport responsive overflow audit (`test-mobile-responsive.mjs`). |
+| `npm run lint`            | Runs ESLint across all JavaScript modules and test suites.                    |
+| `npm run format`          | Formats all source files (HTML, CSS, JS, JSON, MD) with Prettier.             |
+| `npm run format:check`    | Checks formatting without modifying files.                                    |
+
+### Browser Automation Testing Prerequisites
+
+- **Unit Tests (`npm test`)**: 100% portable, zero dependencies, run in any Node.js environment without a browser.
+- **Browser Automation (`npm run test:browser`, `npm run test:responsive`)**: Uses a zero-dependency Chrome DevTools Protocol helper (`tests/cdp.mjs`).
+  - Requires **Node.js v22+** (for native `WebSocket` support).
+  - Requires an installed Chromium-based browser (**Google Chrome**, **Microsoft Edge**, or **Chromium**) accessible in system paths or configured via the `CHROME_PATH` environment variable.
+  - If a browser is not detected, the test gracefully outputs an informative warning and exits without crashing.
 
 ---
 
@@ -97,6 +107,8 @@ shopboard/
 ├── test-state.mjs               ← Cart state and localStorage persistence tests
 ├── test-browser-interaction.mjs ← Headless browser interaction & CDP test
 ├── test-mobile-responsive.mjs   ← Multi-viewport responsive & overflow audit
+├── tests/
+│   └── cdp.mjs                  ← Portable zero-dependency Chrome DevTools Protocol client
 ├── public/                      ← Static assets, archival imagery, and license records
 └── src/
     ├── style.css                ← Mobile-first styling, glassmorphism, responsive breakpoints

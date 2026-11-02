@@ -1,7 +1,4 @@
-import {
-  Browser,
-  sleep,
-} from "file:///C:/Users/minaw/.gemini/config/skills/design-taste-frontend/scripts/lib/cdp.mjs";
+import { Browser, sleep } from "./tests/cdp.mjs";
 import { createServer } from "node:http";
 import { resolve, join, extname } from "node:path";
 import { statSync, createReadStream } from "node:fs";
@@ -40,7 +37,18 @@ const port = server.address().port;
 const url = `http://127.0.0.1:${port}/index.html`;
 
 console.log(`Starting Browser & UI Interaction Test at ${url}...`);
-const browser = await Browser.launch();
+
+let browser;
+try {
+  browser = await Browser.launch();
+} catch (launchError) {
+  console.warn(`⚠️ Browser automation skipped: ${launchError.message}`);
+  console.warn(
+    "Prerequisite: To run browser interaction tests, install Google Chrome / Edge or set the CHROME_PATH environment variable.",
+  );
+  server.close();
+  process.exit(0);
+}
 
 let failed = false;
 
