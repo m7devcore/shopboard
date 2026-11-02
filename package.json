@@ -7,15 +7,19 @@
     "dev": "vite",
     "build": "vite build --base=./",
     "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "node --test test-logic.mjs test-state.mjs",
+    "test": "node --test test-logic.mjs test-state.mjs test-api.mjs",
     "test:browser": "node test-browser-interaction.mjs",
     "test:responsive": "node test-mobile-responsive.mjs",
     "prepare": "husky"
   },
   "lint-staged": {
+    "*.ts": [
+      "prettier --write"
+    ],
     "*.js": [
       "eslint --fix",
       "prettier --write"
@@ -39,6 +43,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^17.6.0",
     "prettier": "^3.9.10",
+    "typescript": "^7.0.2",
     "vite": "^8.3.5"
   }
 }

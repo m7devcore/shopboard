@@ -350,11 +350,11 @@
         <div class="container">
           <div class="section-header-wrap">
             <div class="section-title-lockup">
-              <span class="studio-topic-tag">Digital Catalogue</span>
-              <h2 class="section-title">Production Systems &amp; Templates</h2>
+              <span class="studio-topic-tag">Product Catalogue</span>
+              <h2 class="section-title">Studio Collection &amp; Essentials</h2>
               <p class="section-subtitle">
-                Twelve precision templates with zero dependencies and instant browser localStorage
-                persistence. Educational demo values.
+                Twelve production items fetched dynamically from the ShopBoard API with instant
+                browser localStorage persistence. Educational demo values.
               </p>
             </div>
           </div>
@@ -387,7 +387,7 @@
                   type="search"
                   id="product-search"
                   class="toolbar-input"
-                  placeholder="Search by template name or keyword..."
+                  placeholder="Search products by name or category..."
                   autocomplete="off"
                 />
               </div>
@@ -398,6 +398,9 @@
               <div class="select-input-wrap">
                 <select id="category-filter" class="toolbar-select">
                   <option value="all">All Categories (12)</option>
+                  <option value="Bags">Bags</option>
+                  <option value="Shoes">Shoes</option>
+                  <option value="Accessories">Accessories</option>
                   <option value="Templates">Templates</option>
                   <option value="Planners">Planners</option>
                   <option value="Productivity">Productivity</option>
@@ -744,6 +747,7 @@
     <!-- Cart Backdrop Overlay with Frosted Blur -->
     <div id="cart-backdrop" class="cart-backdrop" aria-hidden="true"></div>
 
-    <script type="module" src="/src/main.js"></script>
+    <div id="toasts" class="toast-stack" aria-live="polite" aria-atomic="false"></div>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
