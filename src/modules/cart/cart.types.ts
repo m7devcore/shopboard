@@ -13,4 +13,6 @@ export interface CartItem {
 
 export type Cart = CartItem[];
 
-export type AddableProduct = Pick<CartItem, "id" | "name" | "price">;
+export type AddableProduct = Pick<CartItem, "id" | "name" | "price"> & {
+  inStock?: boolean;
+};

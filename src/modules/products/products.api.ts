@@ -142,7 +142,6 @@ const API_PRODUCT_DESCRIPTIONS: Readonly<Record<number, string>> = {
 export function toProduct(api: ApiProduct): Product {
   const category = toCategory(api.category_name);
   const priceDollars = Math.round(api.price_cents) / 100;
-  const stockNote = api.in_stock ? "" : " (Currently out of stock)";
   const baseDescription =
     API_PRODUCT_DESCRIPTIONS[api.id] ??
     `Precision-crafted ${api.title.toLowerCase()} from the ShopBoard ${category} collection.`;
@@ -153,7 +152,7 @@ export function toProduct(api: ApiProduct): Product {
     category,
     price: priceDollars,
     inStock: api.in_stock,
-    description: `${baseDescription}${stockNote}`,
+    description: baseDescription,
     icon: CATEGORY_ICONS[category],
   };
 }

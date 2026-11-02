@@ -41,6 +41,9 @@ export function isValidCartItem(item: unknown): item is CartItem {
  * @returns Restored cart items or empty array if missing/invalid.
  */
 export function loadCartFromStorage(): Cart {
+  if (typeof localStorage === "undefined") {
+    return [];
+  }
   try {
     const rawData = localStorage.getItem(STORAGE_KEY);
     if (!rawData) {
@@ -68,6 +71,9 @@ export function loadCartFromStorage(): Cart {
  * @param cart - Current cart array.
  */
 export function saveCartToStorage(cart: readonly CartItem[]): void {
+  if (typeof localStorage === "undefined") {
+    return;
+  }
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
   } catch (error) {
@@ -101,6 +107,11 @@ export function getCartState(): Cart {
  */
 export function addToCart(product: AddableProduct): Cart {
   if (!product || !product.id) {
+    return [...cartState];
+  }
+
+  // Guard against adding out-of-stock items
+  if ("inStock" in product && product.inStock === false) {
     return [...cartState];
   }
 

@@ -239,7 +239,101 @@ try {
     console.log("✅ Error state, Error Toast, and Retry recovery (12 products loaded) passed!");
   }
 
-  // TEST 9: Check for red console exceptions
+  // TEST 9: Day 3 — Out-of-stock items have disabled Add to Cart and cannot be added
+  console.log("Testing out-of-stock product UI and Add-to-Cart prevention...");
+  await page.goto(url, { settleMs: 1000 });
+  const outOfStockCheck = await page.eval(() => {
+    // Find all out of stock product cards (e.g. Mini Crossbody Bag, id: "3" or Sunglasses, id: "9")
+    const outOfStockCards = Array.from(document.querySelectorAll(".product-card.is-out-of-stock"));
+    const buttonsDisabled = outOfStockCards.every((card) => {
+      const btn = card.querySelector(".add-to-cart-btn");
+      return btn && btn.disabled && btn.textContent.trim() === "Out of Stock";
+    });
+
+    // Try clicking an out-of-stock button directly and via dispatch
+    const outBtn = document.querySelector(".product-card.is-out-of-stock .add-to-cart-btn");
+    const initialBadge = document.querySelector("#cart-count").textContent.trim();
+    if (outBtn) {
+      outBtn.click();
+      outBtn.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    }
+    const badgeAfterClick = document.querySelector("#cart-count").textContent.trim();
+
+    return {
+      outOfStockCount: outOfStockCards.length,
+      buttonsDisabled,
+      cartCountUnchanged: initialBadge === badgeAfterClick,
+    };
+  });
+
+  if (
+    outOfStockCheck.outOfStockCount !== 2 ||
+    !outOfStockCheck.buttonsDisabled ||
+    !outOfStockCheck.cartCountUnchanged
+  ) {
+    failed = true;
+    console.error("❌ Out-of-stock verification failed:", outOfStockCheck);
+  } else {
+    console.log(
+      `✅ Out-of-stock prevention passed! (${outOfStockCheck.outOfStockCount} items disabled, cart count unchanged)`,
+    );
+  }
+
+  // TEST 10: Day 3 — Category dropdown displays only active catalog categories
+  console.log("Testing active catalog category options in dropdown...");
+  const categoryOptions = await page.eval(() => {
+    const options = Array.from(document.querySelectorAll("#category-filter option")).map((o) =>
+      o.value.trim(),
+    );
+    return options;
+  });
+
+  const expectedCategories = ["all", "Bags", "Shoes", "Accessories"];
+  const matchesCategories =
+    categoryOptions.length === expectedCategories.length &&
+    expectedCategories.every((cat) => categoryOptions.includes(cat));
+
+  if (!matchesCategories) {
+    failed = true;
+    console.error("❌ Category options mismatch:", categoryOptions);
+  } else {
+    console.log("✅ Category options match active catalog exactly:", categoryOptions);
+  }
+
+  // TEST 11: Day 3 — Toast auto-dismissal after duration
+  console.log("Testing toast notification auto-dismissal...");
+  const toastDismissCheck = await page.eval(async () => {
+    // Click an in-stock Add to Cart button to trigger success toast
+    const availableBtn = document.querySelector(
+      ".product-card:not(.is-out-of-stock) .add-to-cart-btn",
+    );
+    if (!availableBtn) return { triggered: false };
+    availableBtn.click();
+
+    const toastAppeared = Boolean(document.querySelector("#toasts .toast-item"));
+    return { triggered: true, toastAppeared };
+  });
+
+  if (!toastDismissCheck.toastAppeared) {
+    failed = true;
+    console.error("❌ Toast did not appear on Add to Cart:", toastDismissCheck);
+  } else {
+    console.log("Waiting 3.6s for toast auto-dismissal...");
+    await sleep(3600);
+    const toastGone = await page.eval(() => {
+      const remainingToasts = document.querySelectorAll("#toasts .toast-item").length;
+      return remainingToasts === 0;
+    });
+
+    if (!toastGone) {
+      failed = true;
+      console.error("❌ Toast was not dismissed after timeout!");
+    } else {
+      console.log("✅ Toast auto-dismissed successfully from DOM!");
+    }
+  }
+
+  // TEST 12: Check for red console exceptions
   if (page.consoleErrors.length > 0) {
     failed = true;
     console.error("❌ Console errors detected:", page.consoleErrors);

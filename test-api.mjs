@@ -224,4 +224,22 @@ describe("API Client, Runtime Validation & Product Mapper (Day 3)", () => {
       (err) => err instanceof ApiError && err.status === 500,
     );
   });
+
+  test("addToCart prevents adding out-of-stock products", async () => {
+    const { addToCart, clearCart, getCartState } = await import("./src/state.ts");
+    clearCart();
+
+    // Unavailable product (inStock: false)
+    const outOfStockItem = { id: "p-out", name: "Out Item", price: 50, inStock: false };
+    const cartAfterBlockedAdd = addToCart(outOfStockItem);
+    assert.strictEqual(cartAfterBlockedAdd.length, 0);
+    assert.strictEqual(getCartState().length, 0);
+
+    // Available product (inStock: true)
+    const availableItem = { id: "p-avail", name: "Avail Item", price: 50, inStock: true };
+    const cartAfterValidAdd = addToCart(availableItem);
+    assert.strictEqual(cartAfterValidAdd.length, 1);
+    assert.strictEqual(cartAfterValidAdd[0].id, "p-avail");
+    clearCart();
+  });
 });

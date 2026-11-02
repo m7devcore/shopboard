@@ -31,168 +31,168 @@ function escapeHtml(str: string): string {
 }
 
 /**
- * Generates miniature architectural specimen sheet layout markup for each product.
+ * Generates card header preview markup for each product.
+ * Displays accurate category visual representation for physical catalog items,
+ * or original miniature specimen sheets when displaying the digital dataset.
  */
-function getSpecimenPreviewHtml(product: Product): string {
-  switch (product.id) {
-    case "cv-template":
-    case "1":
-      return `
-        <div class="specimen-sheet specimen-cv" aria-hidden="true">
-          <div class="sheet-header-mock">
-            <span class="sheet-bar-heavy"></span>
-            <span class="sheet-bar-sub"></span>
-          </div>
-          <div class="sheet-split-mock">
-            <div class="sheet-col-main">
-              <span class="sheet-line-bold"></span>
-              <span class="sheet-line-text"></span>
-              <span class="sheet-line-text"></span>
-              <span class="sheet-line-bold"></span>
-              <span class="sheet-line-text"></span>
-            </div>
-            <div class="sheet-col-side">
-              <span class="sheet-tag-pill"></span>
-              <span class="sheet-tag-pill"></span>
-              <span class="sheet-tag-pill"></span>
-            </div>
-          </div>
+function getProductPreviewHtml(product: Product): string {
+  // If product is from digital templates catalog (e.g. cv-template, study-planner)
+  if (product.id === "cv-template") {
+    return `
+      <div class="specimen-sheet specimen-cv" aria-hidden="true">
+        <div class="sheet-header-mock">
+          <span class="sheet-bar-heavy"></span>
+          <span class="sheet-bar-sub"></span>
         </div>
-      `;
-    case "study-planner":
-    case "2":
-      return `
-        <div class="specimen-sheet specimen-planner" aria-hidden="true">
-          <div class="sheet-grid-mock">
-            <div class="grid-cell-day">Mon</div>
-            <div class="grid-cell-day">Tue</div>
-            <div class="grid-cell-day">Wed</div>
-            <div class="grid-cell-day">Thu</div>
-            <div class="grid-slot is-filled"></div>
-            <div class="grid-slot"></div>
-            <div class="grid-slot is-accent"></div>
-            <div class="grid-slot"></div>
-          </div>
-        </div>
-      `;
-    case "portfolio-template":
-    case "3":
-      return `
-        <div class="specimen-sheet specimen-web" aria-hidden="true">
-          <div class="sheet-browser-dots"><span></span><span></span><span></span></div>
-          <div class="sheet-web-hero">
-            <span class="web-hero-title"></span>
-            <div class="web-case-card"></div>
-          </div>
-        </div>
-      `;
-    case "budget-tracker":
-    case "4":
-      return `
-        <div class="specimen-sheet specimen-finance" aria-hidden="true">
-          <div class="sheet-stat-row">
-            <div class="sheet-metric-card"><span class="m-val"></span></div>
-            <div class="sheet-metric-card"><span class="m-val"></span></div>
-          </div>
-          <div class="sheet-bars-mock">
-            <div class="bar-fill" style="width: 78%"></div>
-            <div class="bar-fill is-accent" style="width: 52%"></div>
-          </div>
-        </div>
-      `;
-    case "task-manager":
-    case "5":
-      return `
-        <div class="specimen-sheet specimen-kanban" aria-hidden="true">
-          <div class="kanban-col-mock"><div class="kanban-card"></div><div class="kanban-card"></div></div>
-          <div class="kanban-col-mock"><div class="kanban-card is-active"></div></div>
-          <div class="kanban-col-mock"><div class="kanban-card"></div></div>
-        </div>
-      `;
-    case "digital-notebook":
-    case "6":
-      return `
-        <div class="specimen-sheet specimen-notebook" aria-hidden="true">
-          <div class="notebook-index"><span></span><span></span><span></span></div>
-          <div class="notebook-ruled-lines">
-            <span class="n-line"></span><span class="n-line"></span><span class="n-line"></span>
-          </div>
-        </div>
-      `;
-    case "invoice-template":
-    case "7":
-      return `
-        <div class="specimen-sheet specimen-invoice" aria-hidden="true">
-          <div class="invoice-table-mock">
-            <div class="inv-head-row"><span></span><span></span></div>
-            <div class="inv-data-row"><span></span><span></span></div>
-            <div class="inv-total-row"><span></span></div>
-          </div>
-        </div>
-      `;
-    case "fitness-planner":
-    case "8":
-      return `
-        <div class="specimen-sheet specimen-fitness" aria-hidden="true">
-          <div class="fitness-streak-row">
-            <span class="f-dot on"></span><span class="f-dot on"></span><span class="f-dot on"></span><span class="f-dot"></span>
-          </div>
-          <div class="fitness-bars"><span style="width: 65%"></span><span style="width: 80%"></span></div>
-        </div>
-      `;
-    case "pitch-deck":
-    case "9":
-      return `
-        <div class="specimen-sheet specimen-pitch" aria-hidden="true">
-          <div class="pitch-slide-mock">
-            <span class="pitch-badge">Slide</span>
-            <span class="pitch-headline"></span>
-            <div class="pitch-chart-stubs"><span style="height: 12px"></span><span style="height: 20px"></span><span style="height: 16px"></span></div>
-          </div>
-        </div>
-      `;
-    case "habit-tracker":
-    case "10":
-      return `
-        <div class="specimen-sheet specimen-habit" aria-hidden="true">
-          <div class="habit-matrix">
-            <span class="h-dot on"></span><span class="h-dot on"></span><span class="h-dot on"></span><span class="h-dot on"></span>
-            <span class="h-dot on"></span><span class="h-dot on"></span><span class="h-dot"></span><span class="h-dot"></span>
-          </div>
-        </div>
-      `;
-    case "student-dashboard":
-    case "11":
-      return `
-        <div class="specimen-sheet specimen-student" aria-hidden="true">
-          <div class="student-hub-mock">
-            <div class="s-slot"><span class="s-bar"></span></div>
-            <div class="s-slot"><span class="s-bar accent"></span></div>
-          </div>
-        </div>
-      `;
-    case "project-planner":
-    case "12":
-      return `
-        <div class="specimen-sheet specimen-roadmap" aria-hidden="true">
-          <div class="roadmap-track-mock">
-            <div class="roadmap-milestone is-done"><span class="m-point"></span><span class="m-bar"></span></div>
-            <div class="roadmap-milestone is-active"><span class="m-point"></span><span class="m-bar"></span></div>
-            <div class="roadmap-milestone"><span class="m-point"></span><span class="m-bar"></span></div>
-          </div>
-        </div>
-      `;
-    default:
-      return `
-        <div class="specimen-sheet specimen-generic" aria-hidden="true">
-          <div class="generic-tile-inner">
+        <div class="sheet-split-mock">
+          <div class="sheet-col-main">
             <span class="sheet-line-bold"></span>
             <span class="sheet-line-text"></span>
             <span class="sheet-line-text"></span>
+            <span class="sheet-line-bold"></span>
+            <span class="sheet-line-text"></span>
+          </div>
+          <div class="sheet-col-side">
+            <span class="sheet-tag-pill"></span>
+            <span class="sheet-tag-pill"></span>
+            <span class="sheet-tag-pill"></span>
           </div>
         </div>
-      `;
+      </div>
+    `;
   }
+  if (product.id === "study-planner") {
+    return `
+      <div class="specimen-sheet specimen-planner" aria-hidden="true">
+        <div class="sheet-grid-mock">
+          <div class="grid-cell-day">Mon</div>
+          <div class="grid-cell-day">Tue</div>
+          <div class="grid-cell-day">Wed</div>
+          <div class="grid-cell-day">Thu</div>
+          <div class="grid-slot is-filled"></div>
+          <div class="grid-slot"></div>
+          <div class="grid-slot is-accent"></div>
+          <div class="grid-slot"></div>
+        </div>
+      </div>
+    `;
+  }
+  if (product.id === "portfolio-template") {
+    return `
+      <div class="specimen-sheet specimen-web" aria-hidden="true">
+        <div class="sheet-browser-dots"><span></span><span></span><span></span></div>
+        <div class="sheet-web-hero">
+          <span class="web-hero-title"></span>
+          <div class="web-case-card"></div>
+        </div>
+      </div>
+    `;
+  }
+  if (product.id === "budget-tracker") {
+    return `
+      <div class="specimen-sheet specimen-finance" aria-hidden="true">
+        <div class="sheet-stat-row">
+          <div class="sheet-metric-card"><span class="m-val"></span></div>
+          <div class="sheet-metric-card"><span class="m-val"></span></div>
+        </div>
+        <div class="sheet-bars-mock">
+          <div class="bar-fill" style="width: 78%"></div>
+          <div class="bar-fill is-accent" style="width: 52%"></div>
+        </div>
+      </div>
+    `;
+  }
+  if (product.id === "task-manager") {
+    return `
+      <div class="specimen-sheet specimen-kanban" aria-hidden="true">
+        <div class="kanban-col-mock"><div class="kanban-card"></div><div class="kanban-card"></div></div>
+        <div class="kanban-col-mock"><div class="kanban-card is-active"></div></div>
+        <div class="kanban-col-mock"><div class="kanban-card"></div></div>
+      </div>
+    `;
+  }
+  if (product.id === "digital-notebook") {
+    return `
+      <div class="specimen-sheet specimen-notebook" aria-hidden="true">
+        <div class="notebook-index"><span></span><span></span><span></span></div>
+        <div class="notebook-ruled-lines">
+          <span class="n-line"></span><span class="n-line"></span><span class="n-line"></span>
+        </div>
+      </div>
+    `;
+  }
+  if (product.id === "invoice-template") {
+    return `
+      <div class="specimen-sheet specimen-invoice" aria-hidden="true">
+        <div class="invoice-table-mock">
+          <div class="inv-head-row"><span></span><span></span></div>
+          <div class="inv-data-row"><span></span><span></span></div>
+          <div class="inv-total-row"><span></span></div>
+        </div>
+      </div>
+    `;
+  }
+  if (product.id === "fitness-planner") {
+    return `
+      <div class="specimen-sheet specimen-fitness" aria-hidden="true">
+        <div class="fitness-streak-row">
+          <span class="f-dot on"></span><span class="f-dot on"></span><span class="f-dot on"></span><span class="f-dot"></span>
+        </div>
+        <div class="fitness-bars"><span style="width: 65%"></span><span style="width: 80%"></span></div>
+      </div>
+    `;
+  }
+  if (product.id === "pitch-deck") {
+    return `
+      <div class="specimen-sheet specimen-pitch" aria-hidden="true">
+        <div class="pitch-slide-mock">
+          <span class="pitch-badge">Slide</span>
+          <span class="pitch-headline"></span>
+          <div class="pitch-chart-stubs"><span style="height: 12px"></span><span style="height: 20px"></span><span style="height: 16px"></span></div>
+        </div>
+      </div>
+    `;
+  }
+  if (product.id === "habit-tracker") {
+    return `
+      <div class="specimen-sheet specimen-habit" aria-hidden="true">
+        <div class="habit-matrix">
+          <span class="h-dot on"></span><span class="h-dot on"></span><span class="h-dot on"></span><span class="h-dot on"></span>
+          <span class="h-dot on"></span><span class="h-dot on"></span><span class="h-dot"></span><span class="h-dot"></span>
+        </div>
+      </div>
+    `;
+  }
+  if (product.id === "student-dashboard") {
+    return `
+      <div class="specimen-sheet specimen-student" aria-hidden="true">
+        <div class="student-hub-mock">
+          <div class="s-slot"><span class="s-bar"></span></div>
+          <div class="s-slot"><span class="s-bar accent"></span></div>
+        </div>
+      </div>
+    `;
+  }
+  if (product.id === "project-planner") {
+    return `
+      <div class="specimen-sheet specimen-roadmap" aria-hidden="true">
+        <div class="roadmap-track-mock">
+          <div class="roadmap-milestone is-done"><span class="m-point"></span><span class="m-bar"></span></div>
+          <div class="roadmap-milestone is-active"><span class="m-point"></span><span class="m-bar"></span></div>
+          <div class="roadmap-milestone"><span class="m-point"></span><span class="m-bar"></span></div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Neutral visual card representation for API physical products (Bags, Shoes, Accessories)
+  return `
+    <div class="specimen-sheet product-category-backdrop" aria-hidden="true">
+      <div class="category-emblem">
+        ${product.icon ?? ""}
+      </div>
+    </div>
+  `;
 }
 
 /**
@@ -221,16 +221,27 @@ export function renderProducts(productsToRender: readonly Product[]): void {
   }
 
   container.innerHTML = productsToRender
-    .map(
-      (product) => `
-        <article class="product-card" data-product-id="${escapeHtml(product.id)}">
+    .map((product) => {
+      const isAvailable = product.inStock;
+      const buttonText = isAvailable ? "Add to Cart" : "Out of Stock";
+      const disabledAttr = isAvailable ? "" : "disabled";
+      const outOfStockCardClass = isAvailable ? "" : " is-out-of-stock";
+      const outOfStockBadge = isAvailable
+        ? ""
+        : `<span class="stock-badge out-of-stock" aria-label="Unavailable">Out of Stock</span>`;
+
+      return `
+        <article class="product-card${outOfStockCardClass}" data-product-id="${escapeHtml(product.id)}">
           <div class="product-tile">
-            ${getSpecimenPreviewHtml(product)}
+            ${getProductPreviewHtml(product)}
             <div class="product-tile-header">
               <div class="product-icon-wrap" aria-hidden="true">
                 ${product.icon ?? ""}
               </div>
-              <span class="product-category-tag">${escapeHtml(product.category)}</span>
+              <div class="product-tags-wrap">
+                ${outOfStockBadge}
+                <span class="product-category-tag">${escapeHtml(product.category)}</span>
+              </div>
             </div>
           </div>
           <div class="product-body">
@@ -245,15 +256,16 @@ export function renderProducts(productsToRender: readonly Product[]): void {
                 type="button"
                 class="btn btn-sm btn-action add-to-cart-btn"
                 data-id="${escapeHtml(product.id)}"
-                aria-label="Add ${escapeHtml(product.name)} to Cart"
+                aria-label="${isAvailable ? `Add ${escapeHtml(product.name)} to Cart` : `${escapeHtml(product.name)} is currently out of stock`}"
+                ${disabledAttr}
               >
-                Add to Cart
+                ${buttonText}
               </button>
             </div>
           </div>
         </article>
-      `,
-    )
+      `;
+    })
     .join("");
 
   if (announcer) {
@@ -337,6 +349,7 @@ export function renderCatalogState(state: LoadState, onRetry?: () => void): void
 
     case "success": {
       activeCatalogProducts = [...state.products];
+      updateCategoryFilterOptions(state.products);
 
       // Distinct empty API state when the server returns 0 items
       if (state.products.length === 0) {
@@ -360,12 +373,37 @@ export function renderCatalogState(state: LoadState, onRetry?: () => void): void
 }
 
 /**
- * Sets up search, category filter, and sort event listeners once.
+ * Updates the `#category-filter` select options to match the distinct categories
+ * present in the active catalog, preserving the "All Categories" option.
  */
+export function updateCategoryFilterOptions(products: readonly Product[]): void {
+  const categorySelect = document.querySelector("#category-filter");
+  if (!(categorySelect instanceof HTMLSelectElement)) return;
+
+  const currentSelection = categorySelect.value;
+  const categories = Array.from(new Set(products.map((p) => p.category)));
+
+  // If no products, leave standard default
+  if (categories.length === 0) return;
+
+  categorySelect.innerHTML = [
+    `<option value="all">All Categories (${products.length})</option>`,
+    ...categories.map((cat) => `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`),
+  ].join("");
+
+  // Restore selection if still valid, otherwise reset to 'all'
+  const isStillValid = categories.some((c) => c === currentSelection);
+  if (isStillValid) {
+    categorySelect.value = currentSelection;
+  } else {
+    categorySelect.value = "all";
+  }
+}
 export function setupToolbar(allProducts?: readonly Product[]): void {
   if (allProducts) {
     activeCatalogProducts = [...allProducts];
     currentLoadStatus = "success";
+    updateCategoryFilterOptions(allProducts);
   }
 
   if (toolbarEventsBound) {
@@ -441,7 +479,7 @@ export function setupProductCardEvents(allProducts?: readonly Product[]): void {
     if (!productId) return;
 
     const product = activeCatalogProducts.find((entry) => entry.id === productId);
-    if (!product) return;
+    if (!product || !product.inStock) return;
 
     addToCart(product);
     renderCartUI();
