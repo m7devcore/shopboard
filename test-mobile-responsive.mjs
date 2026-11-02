@@ -54,12 +54,14 @@ let browser;
 try {
   browser = await Browser.launch();
 } catch (launchError) {
-  console.warn(`⚠️ Mobile responsive audit skipped: ${launchError.message}`);
-  console.warn(
+  console.error(
+    `❌ Mobile responsive audit failed: Could not launch Chromium: ${launchError.message}`,
+  );
+  console.error(
     "Prerequisite: To run responsive audit tests, install Google Chrome / Edge or set the CHROME_PATH environment variable.",
   );
   server.close();
-  process.exit(0);
+  process.exit(1);
 }
 
 let allPass = true;

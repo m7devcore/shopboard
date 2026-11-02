@@ -83,7 +83,7 @@ Open the printed URL (typically `http://localhost:5173`) in your browser.
 - **Browser Automation (`npm run test:browser`, `npm run test:responsive`)**: Uses a zero-dependency Chrome DevTools Protocol helper (`tests/cdp.mjs`).
   - Requires **Node.js v22+** (for native `WebSocket` support).
   - Requires an installed Chromium-based browser (**Google Chrome**, **Microsoft Edge**, or **Chromium**) accessible in system paths or configured via the `CHROME_PATH` environment variable.
-  - If a browser is not detected, the test gracefully outputs an informative warning and exits without crashing.
+  - If a browser is not detected or fails to launch, the test script outputs a clear diagnostic error and exits with code 1 to ensure missing browser environments cannot falsely pass as successful test runs.
 
 ---
 
