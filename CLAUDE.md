@@ -2,15 +2,15 @@
 
 ## 1. Project Overview
 
-ShopBoard is an educational digital products storefront built as part of the CorePro Software Development Using AI program. It showcases clean, accessible, and responsive frontend architecture using modern web standards without external libraries.
+ShopBoard is an educational digital products storefront built as part of the CorePro Software Development Using AI program (Days 2 & 3). It showcases clean, accessible, and responsive frontend architecture using strict TypeScript, feature-based modular architecture, live REST API integration, and modern web standards without external UI frameworks.
 
 ## 2. Tech Stack
 
-- **Bundler & Dev Server**: Vite (Vanilla JavaScript)
+- **Bundler & Dev Server**: Vite (TypeScript + Vanilla Web Standards)
+- **Language**: Strict TypeScript (`"strict": true`, `"noUnusedLocals": true`, `"noEmit": true`)
 - **Markup**: Semantic HTML5
 - **Styles**: Mobile-first CSS3 (Strictly no `!important`)
-- **Scripting**: Vanilla JavaScript (ES Modules)
-- **Quality Tools**: Prettier, ESLint, Husky, lint-staged
+- **Quality Tools**: TypeScript (`tsc --noEmit`), Prettier, ESLint, Husky, lint-staged, Node.js Test Runner
 
 Do not introduce frameworks or runtime dependencies without prior approval.
 
@@ -33,83 +33,89 @@ These rules address the specific failure modes observed when AI agents generate 
 ### Rule 3: Defensive LocalStorage Deserialization
 
 - **Mistake observed**: Blindly calling `JSON.parse(localStorage.getItem(...))` crashes the entire application if the storage key is missing, corrupted, or tampered with.
-- **Enforceable rule**: Always wrap `JSON.parse()` in a `try...catch` block. Validate that the parsed result is an array with `Array.isArray()`, and sanitize each item (verifying valid `id`, `name`, numeric `price`, and positive `quantity > 0`). Fall back safely to `[]`.
+- **Enforceable rule**: Always wrap `JSON.parse()` in a `try...catch` block. Validate that the parsed result is an array with `Array.isArray()`, and sanitize each item via `isValidCartItem()` (verifying valid `id`, `name`, numeric `price`, and positive `quantity > 0`). Fall back safely to `[]`.
 
-### Rule 4: Strict Separation of Concerns (Sole DOM Ownership)
+### Rule 4: Strict Separation of Concerns (UI Modules Own the DOM)
 
-- **Mistake observed**: Mixing `document.querySelector` or `innerHTML` inside logic or bootstrap modules breaks modularity and makes unit testing impossible in Node.js.
-- **Enforceable rule**: Only ONE file touches the page DOM: `src/ui.js`. `src/logic.js` must remain 100% pure (no `window`, `document`, or `localStorage`). `src/state.js` manages state and storage only. `src/main.js` only coordinates module initialization.
+- **Mistake observed**: Mixing `document.querySelector` or `innerHTML` inside logic, API, state, or bootstrap modules breaks modularity and makes unit testing impossible in Node.js.
+- **Enforceable rule**: Only UI modules (`src/ui.ts`, `src/modules/products/products.ui.ts`, `src/modules/cart/cart.ui.ts`, `src/shared/ui/toast.ts`) touch the page DOM. `src/logic.ts` and `src/modules/**/*.logic.ts` must remain 100% pure (no `window`, `document`, `fetch`, or `localStorage`). `src/shared/api/client.ts` and `src/modules/products/products.api.ts` handle HTTP and mapping only. `src/main.ts` only coordinates module initialization.
 
 ### Rule 5: Empirical Verification Integrity
 
 - **Mistake observed**: Claiming features or tests passed based on assumptions or code inspection rather than execution.
-- **Enforceable rule**: Never claim a test, build, lint, or UI check passed without executing the command and verifying the actual terminal/browser output. Distinguish pure logic unit tests from real browser interaction verification.
+- **Enforceable rule**: Never claim a test, typecheck, build, lint, or UI check passed without executing the command and verifying the actual terminal/browser output. Distinguish pure logic unit tests from real browser interaction verification.
 
 ---
 
-## 4. Day 2 Modular Architecture
+## 4. Core Day 3 Engineering Rules (TypeScript & REST APIs)
 
-The application strictly adheres to the following separation of concerns:
+### Rule 6: Strict TypeScript Hygiene — Zero `any`, Zero Unsafe `as`, Zero `!`
 
-### `src/data.js`
+- **Mistake observed**: AI-generated TypeScript frequently uses `as any`, `as Product[]`, or non-null assertions (`document.querySelector(...)!`) to silence compiler errors, erasing runtime safety.
+- **Enforceable rule**: Never use `any`, unsafe `as` type assertions, or `!` non-null assertions in `src/**/*.ts`. Narrow DOM elements with `if (!el) return` or `instanceof HTMLElement`, and narrow external data with runtime type guards.
 
-- Contains product catalog data only.
-- Exports an array of 12 digital products.
-- Each product defines: `id`, `name`, `category`, `description`, `price` (numeric), and visual SVG icon.
-- No UI logic, DOM manipulation, or calculations.
+### Rule 7: Runtime Validation at External Boundaries (`fetch` & `localStorage`)
 
-### `src/logic.js`
+- **Mistake observed**: Treating `await res.json()` or `JSON.parse()` as trusted TypeScript types causes runtime crashes when an API returns an unexpected payload or error shape.
+- **Enforceable rule**: Treat all external JSON (`res.json()` and `localStorage`) as `unknown`. Pass API payloads through runtime validators (`isApiProduct`, `parseApiProduct`, `parseApiProductList`) inside `fetchJson<T>(path, validate)`.
 
-- Contains pure utility functions for searching, filtering, sorting, and monetary calculations.
-- Functions must be deterministic with zero side-effects.
-- **Strict Rule**: Zero access to `window`, `document`, DOM nodes, or `localStorage`.
-- Never mutates the original product array (creates a shallow copy before sorting).
-- Exports: `filterProducts`, `sortProducts`, `calculateTotalItems`, `calculateTotalPrice`, `calculateLineTotal`, `groupProductsByCategory`.
+### Rule 8: Separate API Wire Types from Internal Domain Types (`toProduct` Mapper)
 
-### `src/state.js`
+- **Mistake observed**: Leaking backend wire field names (`title`, `category_name`, `price_cents`, `in_stock`) into UI templates or business logic causes `$8900` cent-pricing bugs and couples the UI to backend naming.
+- **Enforceable rule**: Keep `ApiProduct` and `ApiProductList` strictly inside `src/modules/products/products.api.ts`. Convert `price_cents` to dollars (`Math.round(api.price_cents) / 100`) and map wire fields to `Product` exclusively inside `toProduct(api: ApiProduct): Product`.
 
-- Manages in-memory application cart state.
-- Handles reading from and writing to `localStorage` using `JSON.stringify` and `JSON.parse`.
-- Defensively guards against missing, corrupted, or non-array stored data with try/catch fallbacks.
-- Exports: `initializeCartState`, `getCartState`, `addToCart`, `increaseQuantity`, `decreaseQuantity`, `removeFromCart`, `clearCart`, `saveCartToStorage`, `loadCartFromStorage`.
+### Rule 9: Complete Async UI State Coverage (`LoadState`)
 
-### `src/ui.js`
+- **Mistake observed**: Only coding the happy path for `fetch()` leaves users with blank screens during loading, uncaught errors on HTTP 500, or ambiguous empty messages.
+- **Enforceable rule**: Model async data fetching with the `LoadState` discriminated union (`loading`, `error`, `success`). Always render distinct UI states for:
+  1. Loading state (`.catalog-state-loading`)
+  2. Error state (`.catalog-state-error`) with a working Retry (`#retry-fetch-btn`) button
+  3. Empty API catalog state (`.catalog-state-empty-api`) when the API returns `items: []`
+  4. Empty search/filter state (`.catalog-state-empty-filter`) with a Reset Filters (`#reset-filters-btn`) button
+  5. Success state rendering product cards
 
-- Centralizes all DOM querying, rendering, and event listener attachments (Sole DOM owner).
-- Renders product cards dynamically using `Array.prototype.map()` and `Array.prototype.join('')`.
-- Implements event delegation on `#products-grid` for "Add to Cart" button clicks using `event.target.closest()` and `data-id`.
-- Manages search, filter, and sort toolbar event bindings.
-- Handles shopping cart sidebar toggling, backdrop dismiss, Esc key dismiss, item removal, and clearing.
-- Manages accessible registration demo form validation and non-persisting status feedback.
-- Exports: `initUI`, `renderProducts`, `renderCartUI`, `setupToolbar`, `setupProductCardEvents`, `setupCartEvents`, `setupRegistrationForm`, `setupViewfinder`, `openCartSidebar`, `closeCartSidebar`.
+### Rule 10: Centralized Toast Notifications (`showToast`)
 
-### `src/main.js`
-
-- Lightweight application entry point.
-- Imports styles, product data, state initializer, and `initUI`.
-- Calls `initializeCartState()` and `initUI(products)`.
-- Contains zero direct DOM interactions.
+- **Mistake observed**: Scattering ad-hoc alert boxes or silent failures across modules.
+- **Enforceable rule**: Route transient user notifications (such as "Added to cart" confirmation and API error alerts) through `showToast(message, type)` in `src/shared/ui/toast.ts`, rendering into the accessible `#toasts` (`aria-live="polite"`) container.
 
 ---
 
-## 5. Where Future Features Belong
+## 5. Day 3 Modular Architecture
 
-- **Wishlist Feature**:
-  - `src/state.js`: Add `wishlistState`, `addToWishlist()`, `removeFromWishlist()`, `getWishlistState()`, with localStorage persistence under key `shopboard_wishlist`.
-  - `src/logic.js`: Pure functions if needed (e.g., checking if product is wishlisted, counting wishlist items).
-  - `src/ui.js`: Render wishlist heart icon/button on product cards, attach delegated click listener, and render wishlist drawer/panel.
-  - `src/main.js`: Remains unchanged, simply bootstrapping through `initUI`.
+```
+src/
+├── shared/
+│   ├── api/
+│   │   └── client.ts            ← BASE_URL, ApiError, fetchJson<T>() with runtime validation
+│   └── ui/
+│       └── toast.ts             ← showToast(), ToastType ('success' | 'error' | 'info')
+├── modules/
+│   ├── products/
+│   │   ├── products.types.ts    ← Category, Product, CategoryFilter, SortOrder, LoadState
+│   │   ├── products.api.ts      ← ApiProduct, ApiProductList, toProduct(), getProducts(), getProduct()
+│   │   ├── products.logic.ts    ← Pure filterProducts, sortProducts, groupProductsByCategory
+│   │   └── products.ui.ts       ← renderProducts, renderCatalogState, setupToolbar, setupProductCardEvents
+│   └── cart/
+│       ├── cart.types.ts        ← CartItem, Cart, AddableProduct
+│       ├── cart.logic.ts        ← Pure calculateLineTotal, calculateTotalItems, calculateTotalPrice
+│       ├── cart.state.ts        ← Cart state & defensive localStorage sync (isValidCartItem)
+│       └── cart.ui.ts           ← renderCartUI, openCartSidebar, closeCartSidebar, setupCartEvents
+├── data.ts                      ← Preserved original 12 digital products dataset (Day 2 baseline)
+├── logic.ts                     ← Barrel re-exporting pure functions from products.logic & cart.logic
+├── state.ts                     ← Barrel re-exporting cart state functions from cart.state
+├── ui.ts                        ← UI coordinator (setupViewfinder, setupRegistrationForm, initUI)
+└── main.ts                      ← Bootstrap entry point (connects state, getProducts(), LoadState, toasts)
+```
 
 ---
 
 ## 6. Verification Protocol
 
+- Run `npm run typecheck` — verify zero TypeScript compiler errors (`tsc --noEmit`).
 - Run `npm run lint` — verify zero ESLint errors or warnings.
 - Run `npm run format:check` — verify Prettier compliance.
-- Run `npm test` — verify Node native test suite passes completely.
-- Run `npm run build` — verify zero build errors.
-- Confirm all 12 products render dynamically with zero hardcoded cards in `index.html`.
-- Confirm search (case-insensitive), category filter, and price sort work cooperatively.
-- Verify cart persistence across page reloads.
-- Verify native form validation and feedback behavior.
-- Document only real test outcomes without fabricating pass states.
+- Run `npm test` — verify Node native test suite (`test-logic.mjs`, `test-state.mjs`, `test-api.mjs`) passes completely.
+- Run `npm run build` — verify zero production build errors.
+- Run `npm run test:browser` — verify browser interactions, cart persistence, empty states, error + retry recovery, and zero console errors.
+- Run `npm run test:responsive` — verify zero horizontal overflow across all 6 viewports (`320px` to `1440px`).

@@ -33,7 +33,7 @@ const {
   loadCartFromStorage,
   saveCartToStorage,
   initializeCartState,
-} = await import("./src/state.js");
+} = await import("./src/state.ts");
 
 describe("State Module — Cart Operations", () => {
   beforeEach(() => {

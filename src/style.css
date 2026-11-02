@@ -2855,3 +2855,109 @@ select:focus-visible {
     animation: none;
   }
 }
+
+/* ==========================================================================
+   Day 3: Async Catalog Loading States & Toast Notification Stack
+   ========================================================================== */
+
+.catalog-loading-spinner {
+  width: 2.25rem;
+  height: 2.25rem;
+  margin: 0 auto 1rem;
+  border-radius: var(--radius-pill);
+  border: 2px solid rgba(255, 255, 255, 0.14);
+  border-top-color: var(--color-accent-cyan);
+  animation: catalogSpin 0.8s linear infinite;
+}
+
+@keyframes catalogSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.catalog-state-error {
+  border-color: rgba(248, 113, 113, 0.35);
+}
+
+.toast-stack {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  max-width: min(380px, calc(100vw - 2.5rem));
+  pointer-events: none;
+}
+
+.toast-item {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.1rem;
+  background: rgba(10, 15, 26, 0.94);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-md);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.toast-item.is-leaving {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.toast-indicator {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: var(--radius-pill);
+  flex-shrink: 0;
+  background: var(--color-accent-cyan);
+}
+
+.toast-success {
+  border-color: rgba(52, 211, 153, 0.4);
+}
+
+.toast-success .toast-indicator {
+  background: var(--color-accent-emerald);
+}
+
+.toast-error {
+  border-color: rgba(248, 113, 113, 0.45);
+}
+
+.toast-error .toast-indicator {
+  background: #f87171;
+}
+
+.toast-message {
+  flex: 1;
+}
+
+.toast-dismiss-btn {
+  background: transparent;
+  border: none;
+  color: var(--color-ink-muted);
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0.15rem 0.35rem;
+  cursor: pointer;
+  border-radius: var(--radius-xs);
+  transition: color var(--transition-fast);
+}
+
+.toast-dismiss-btn:hover {
+  color: #ffffff;
+}

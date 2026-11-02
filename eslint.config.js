@@ -3,7 +3,7 @@ import globals from "globals";
 
 export default [
   {
-    ignores: ["dist/**", "node_modules/**", ".taste-skill/**"],
+    ignores: ["dist/**", "node_modules/**", ".taste-skill/**", "src/**/*.ts"],
   },
   js.configs.recommended,
   {

@@ -1,6 +1,6 @@
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
-import { products as catalogProducts } from "./src/data.js";
+import { products as catalogProducts } from "./src/data.ts";
 import {
   filterProducts,
   sortProducts,
@@ -8,7 +8,7 @@ import {
   calculateTotalPrice,
   calculateLineTotal,
   groupProductsByCategory,
-} from "./src/logic.js";
+} from "./src/logic.ts";
 
 const sampleProducts = [
   { id: "p1", name: "CV Template", category: "Templates", price: 29 },

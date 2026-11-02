@@ -166,7 +166,80 @@ try {
     console.log("✅ Clear cart emptied localStorage and reset count to 0!");
   }
 
-  // TEST 6: Check for red console exceptions
+  // TEST 6: Day 3 — Empty search/filter state & Reset Filters button
+  console.log("Testing empty search-result state and Reset Filters button...");
+  for (let i = 0; i < 15; i++) {
+    const readyCount = await page.eval(() => document.querySelectorAll(".product-card").length);
+    if (readyCount === 12) break;
+    await sleep(200);
+  }
+  const filterEmptyCheck = await page.eval(() => {
+    const searchInput = document.querySelector("#product-search");
+    searchInput.value = "nonexistent_product_xyz";
+    searchInput.dispatchEvent(new Event("input", { bubbles: true }));
+    const hasEmptyFilterState = Boolean(document.querySelector(".catalog-state-empty-filter"));
+    const resetBtn = document.querySelector("#reset-filters-btn");
+    if (resetBtn) resetBtn.click();
+    const cardCountAfterReset = document.querySelectorAll(".product-card").length;
+    return { hasEmptyFilterState, cardCountAfterReset };
+  });
+
+  if (!filterEmptyCheck.hasEmptyFilterState || filterEmptyCheck.cardCountAfterReset !== 12) {
+    failed = true;
+    console.error("❌ Empty filter state or Reset Filters failed:", filterEmptyCheck);
+  } else {
+    console.log("✅ Empty search-result state and Reset Filters passed!");
+  }
+
+  // TEST 7: Day 3 — Empty API state (distinct from empty search state)
+  console.log("Testing Empty API state (?api_mode=empty)...");
+  await page.goto(`${url}?api_mode=empty`, { settleMs: 1000 });
+  const emptyApiCheck = await page.eval(() => {
+    return {
+      hasEmptyApiState: Boolean(document.querySelector(".catalog-state-empty-api")),
+      hasEmptyFilterState: Boolean(document.querySelector(".catalog-state-empty-filter")),
+    };
+  });
+
+  if (!emptyApiCheck.hasEmptyApiState || emptyApiCheck.hasEmptyFilterState) {
+    failed = true;
+    console.error("❌ Empty API state check failed:", emptyApiCheck);
+  } else {
+    console.log("✅ Empty API state rendered distinctly from empty filter state!");
+  }
+
+  // TEST 8: Day 3 — Error state, Error Toast, and working Retry button (?api_mode=fail_once)
+  console.log("Testing API Error state, Error Toast, and Retry recovery (?api_mode=fail_once)...");
+  await page.goto(`${url}?api_mode=fail_once`, { settleMs: 1000 });
+  const errorStateCheck = await page.eval(() => {
+    const hasErrorCard = Boolean(document.querySelector(".catalog-state-error"));
+    const hasErrorToast = Boolean(document.querySelector("#toasts .toast-error"));
+    const retryBtn = document.querySelector("#retry-fetch-btn");
+    if (retryBtn) retryBtn.click();
+    return { hasErrorCard, hasErrorToast, clickedRetry: Boolean(retryBtn) };
+  });
+
+  await sleep(1000);
+  const retryRecoveryCount = await page.eval(() => {
+    return document.querySelectorAll(".product-card").length;
+  });
+
+  if (
+    !errorStateCheck.hasErrorCard ||
+    !errorStateCheck.hasErrorToast ||
+    !errorStateCheck.clickedRetry ||
+    retryRecoveryCount !== 12
+  ) {
+    failed = true;
+    console.error("❌ Error state or Retry recovery failed:", {
+      errorStateCheck,
+      retryRecoveryCount,
+    });
+  } else {
+    console.log("✅ Error state, Error Toast, and Retry recovery (12 products loaded) passed!");
+  }
+
+  // TEST 9: Check for red console exceptions
   if (page.consoleErrors.length > 0) {
     failed = true;
     console.error("❌ Console errors detected:", page.consoleErrors);

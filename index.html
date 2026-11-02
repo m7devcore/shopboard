@@ -398,6 +398,9 @@
               <div class="select-input-wrap">
                 <select id="category-filter" class="toolbar-select">
                   <option value="all">All Categories (12)</option>
+                  <option value="Bags">Bags</option>
+                  <option value="Shoes">Shoes</option>
+                  <option value="Accessories">Accessories</option>
                   <option value="Templates">Templates</option>
                   <option value="Planners">Planners</option>
                   <option value="Productivity">Productivity</option>
@@ -744,6 +747,7 @@
     <!-- Cart Backdrop Overlay with Frosted Blur -->
     <div id="cart-backdrop" class="cart-backdrop" aria-hidden="true"></div>
 
-    <script type="module" src="/src/main.js"></script>
+    <div id="toasts" class="toast-stack" aria-live="polite" aria-atomic="false"></div>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

@@ -1,29 +1,30 @@
-# ShopBoard — Digital Systems & Production Templates
+# ShopBoard — Digital Systems & Production Storefront (Days 2 & 3)
 
-ShopBoard is a modern, responsive, and accessible digital products storefront built as part of the **CorePro Software Development Using AI** program (Day 2 Homework).
+ShopBoard is a modern, responsive, and accessible storefront built as part of the **CorePro Software Development Using AI** program (Day 2 & Day 3 Assignments).
 
-The project demonstrates production-grade vanilla web architecture, strict modularity, pure calculation logic, safe client-side `localStorage` persistence, and the **Obsidian & Liquid Glass** visual identity without relying on external UI frameworks.
+The project demonstrates production-grade vanilla web architecture, **Strict TypeScript** (`"strict": true`, zero `any`, zero unsafe `as`, zero `!`), feature-based modular architecture (`src/shared/`, `src/modules/products/`, `src/modules/cart/`), runtime-validated REST API integration (`https://shopboard-api.vercel.app/api/products`), complete async UI state management (`LoadState`), centralized accessible toast notifications, safe client-side `localStorage` persistence, and the frozen **Obsidian & Liquid Glass** visual identity without external UI frameworks.
 
 ---
 
 ## 1. Project Overview & Context
 
 - **Course**: CorePro Software Development Using AI
-- **Module**: Day 2 — Interactive Frontend Architecture & AI-Assisted Development
+- **Modules**:
+  - **Day 2**: Interactive Frontend Architecture, Pure Logic, Event Delegation & Safe LocalStorage Persistence
+  - **Day 3**: Strict TypeScript Migration, Feature Modules, Live REST API Integration, Async UI States & AI Code Review
 - **Repository**: [https://github.com/m7devcore/shopboard](https://github.com/m7devcore/shopboard)
 - **Design Identity**: Obsidian & Liquid Glass (dark mode, glassmorphism, fluid typography, responsive layout)
-
-ShopBoard features a catalog of 12 realistic digital production systems (templates, planners, and productivity tools), an interactive specimen viewfinder, instant search, multi-category filtering, price sorting, and an off-canvas shopping cart drawer that persists safely across browser sessions.
 
 ---
 
 ## 2. Technology Stack
 
-- **Bundler & Dev Server**: [Vite](https://vitejs.dev/) v8 (Vanilla JavaScript)
-- **Markup**: Semantic HTML5 (Single `<h1>`, accessible `<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<aside>`, `<footer>`, linked `<label>`s, native HTML validation)
-- **Styling**: Mobile-first CSS3 with CSS Custom Properties, glassmorphism filters, zero `!important`, and full `@media (min-width: ...)` responsiveness
-- **Scripting**: Vanilla JavaScript (Modern ES Modules)
+- **Bundler & Dev Server**: [Vite](https://vitejs.dev/) v8
+- **Language**: [TypeScript](https://www.typescriptlang.org/) v7 (`"strict": true`, `"noUnusedLocals": true`, `"noEmit": true`)
+- **Markup**: Semantic HTML5 (Single `<h1>`, accessible `<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<aside>`, `<footer>`, linked `<label>`s, native HTML validation, ARIA live regions)
+- **Styling**: Mobile-first CSS3 with CSS Custom Properties, glassmorphism filters, and full `@media (min-width: ...)` responsiveness
 - **Quality & Guardrails**:
+  - `tsc --noEmit` for strict static type checking
   - [Prettier](https://prettier.io/) for automated formatting
   - [ESLint](https://eslint.org/) (Flat config) for linting and code quality
   - [Husky](https://typicode.github.io/husky/) & [lint-staged](https://github.com/lint-staged/lint-staged) for Git pre-commit hooks
@@ -35,13 +36,11 @@ ShopBoard features a catalog of 12 realistic digital production systems (templat
 
 ### Prerequisites
 
-- **Node.js**: v20+ (v22+ or v26+ recommended)
+- **Node.js**: v22.6+ or v26+ (supports native TypeScript execution for unit tests and native `WebSocket` for CDP browser tests)
 - **npm**: v10+
 - **Git**
 
 ### Installation
-
-Clone the repository and install development dependencies:
 
 ```bash
 git clone https://github.com/m7devcore/shopboard.git
@@ -49,11 +48,7 @@ cd shopboard
 npm install
 ```
 
-> **Note:** Running `npm install` automatically configures the Git pre-commit hook via Husky.
-
 ### Running the Development Server
-
-Start Vite's fast local development server:
 
 ```bash
 npm run dev
@@ -65,151 +60,97 @@ Open the printed URL (typically `http://localhost:5173`) in your browser.
 
 ## 4. Available NPM Scripts
 
-| Command                   | Description                                                                   |
-| :------------------------ | :---------------------------------------------------------------------------- |
-| `npm run dev`             | Starts Vite local development server with HMR.                                |
-| `npm run build`           | Builds optimized production assets into the `dist/` directory.                |
-| `npm run preview`         | Serves the local production build preview.                                    |
-| `npm test`                | Runs the fast Node.js native unit tests (`test-logic.mjs`, `test-state.mjs`). |
-| `npm run test:browser`    | Runs real browser interaction tests via CDP (`test-browser-interaction.mjs`). |
-| `npm run test:responsive` | Runs multi-viewport responsive overflow audit (`test-mobile-responsive.mjs`). |
-| `npm run lint`            | Runs ESLint across all JavaScript modules and test suites.                    |
-| `npm run format`          | Formats all source files (HTML, CSS, JS, JSON, MD) with Prettier.             |
-| `npm run format:check`    | Checks formatting without modifying files.                                    |
-
-### Browser Automation Testing Prerequisites
-
-- **Unit Tests (`npm test`)**: 100% portable, zero dependencies, run in any Node.js environment without a browser.
-- **Browser Automation (`npm run test:browser`, `npm run test:responsive`)**: Uses a zero-dependency Chrome DevTools Protocol helper (`tests/cdp.mjs`).
-  - Requires **Node.js v22+** (for native `WebSocket` support).
-  - Requires an installed Chromium-based browser (**Google Chrome**, **Microsoft Edge**, or **Chromium**) accessible in system paths or configured via the `CHROME_PATH` environment variable.
-  - If a browser is not detected or fails to launch, the test script outputs a clear diagnostic error and exits with code 1 to ensure missing browser environments cannot falsely pass as successful test runs.
+| Command                   | Description                                                                                   |
+| :------------------------ | :-------------------------------------------------------------------------------------------- |
+| `npm run dev`             | Starts Vite local development server with HMR.                                                |
+| `npm run typecheck`       | Runs `tsc --noEmit` to verify zero TypeScript errors under strict mode.                       |
+| `npm run build`           | Builds optimized production assets into the `dist/` directory.                                |
+| `npm run preview`         | Serves the local production build preview.                                                    |
+| `npm test`                | Runs the fast Node.js native unit tests (`test-logic.mjs`, `test-state.mjs`, `test-api.mjs`). |
+| `npm run test:browser`    | Runs real browser interaction tests via CDP (`test-browser-interaction.mjs`).                 |
+| `npm run test:responsive` | Runs multi-viewport responsive overflow audit (`test-mobile-responsive.mjs`).                 |
+| `npm run lint`            | Runs ESLint across JavaScript modules and test suites.                                        |
+| `npm run format`          | Formats all source files (TS, HTML, CSS, JS, JSON, MD) with Prettier.                         |
+| `npm run format:check`    | Checks formatting without modifying files.                                                    |
 
 ---
 
-## 5. Modular Architecture & Responsibilities
-
-ShopBoard adheres to a clean separation of concerns where each module has a single, well-defined responsibility:
+## 5. Day 3 Modular Architecture & Responsibilities
 
 ```
 shopboard/
-├── index.html                   ← Semantic HTML entry point (zero hardcoded product cards)
+├── index.html                   ← Semantic HTML entry point + #toasts live region
+├── tsconfig.json                ← Strict TypeScript compiler configuration
 ├── package.json                 ← Scripts, metadata, and devDependencies
-├── package-lock.json            ← Deterministic dependency lockfile
 ├── eslint.config.js             ← Modern flat ESLint configuration
-├── .prettierrc                  ← Prettier formatting rules
-├── .prettierignore              ← Files excluded from formatting
-├── .husky/pre-commit            ← Active Git pre-commit hook running lint-staged
-├── CLAUDE.md                    ← AI agent instructions and architectural rules
+├── CLAUDE.md                    ← AI agent instructions and Day 2 + Day 3 rules
 ├── AGENTS.md                    ← Course agent rules and workflow specifications
-├── debugging-log.md             ← Structured log of bugs and edge-case validations
+├── ai-review-log.md             ← Day 3 AI code review audit of ai-products.ts
+├── debugging-log.md             ← Day 2 structured log of bugs and edge-case validations
 ├── test-logic.mjs               ← Pure logic unit tests (search, filter, sort, calculations)
 ├── test-state.mjs               ← Cart state and localStorage persistence tests
-├── test-browser-interaction.mjs ← Headless browser interaction & CDP test
+├── test-api.mjs                 ← API client, runtime validation, and toProduct() mapper tests
+├── test-browser-interaction.mjs ← Headless browser interaction, async state & retry CDP test
 ├── test-mobile-responsive.mjs   ← Multi-viewport responsive & overflow audit
 ├── tests/
 │   └── cdp.mjs                  ← Portable zero-dependency Chrome DevTools Protocol client
-├── public/                      ← Static assets, archival imagery, and license records
 └── src/
-    ├── style.css                ← Mobile-first styling, glassmorphism, responsive breakpoints
-    ├── data.js                  ← Product catalog data (12 products with id, name, category, price, icon)
-    ├── logic.js                 ← Pure deterministic functions (zero DOM, zero localStorage)
-    ├── state.js                 ← Shopping cart state management & safe localStorage sync
-    ├── ui.js                    ← Sole owner of DOM manipulation, rendering, and event listeners
-    └── main.js                  ← Application bootstrap importing modules and delegating to ui.js
+    ├── style.css                ← Frozen Day 2 Obsidian & Liquid Glass styling + toast/async states
+    ├── shared/
+    │   ├── api/
+    │   │   └── client.ts        ← BASE_URL, ApiError, fetchJson<T>() with runtime validation
+    │   └── ui/
+    │       └── toast.ts         ← Centralized accessible toast notifications (showToast)
+    ├── modules/
+    │   ├── products/
+    │   │   ├── products.types.ts ← Category, Product, CategoryFilter, SortOrder, LoadState
+    │   │   ├── products.api.ts   ← ApiProduct, ApiProductList, toProduct(), getProducts(), getProduct()
+    │   │   ├── products.logic.ts ← Pure filterProducts, sortProducts, groupProductsByCategory
+    │   │   └── products.ui.ts    ← renderProducts, renderCatalogState, setupToolbar, setupProductCardEvents
+    │   └── cart/
+    │       ├── cart.types.ts     ← CartItem, Cart, AddableProduct
+    │       ├── cart.logic.ts     ← Pure calculateLineTotal, calculateTotalItems, calculateTotalPrice
+    │       ├── cart.state.ts     ← Cart state & defensive localStorage sync (isValidCartItem)
+    │       └── cart.ui.ts        ← renderCartUI, openCartSidebar, closeCartSidebar, setupCartEvents
+    ├── data.ts                  ← Preserved Day 2 local dataset of 12 digital products
+    ├── logic.ts                 ← Pure logic barrel re-exporting product and cart logic
+    ├── state.ts                 ← Cart state barrel re-exporting state functions
+    ├── ui.ts                    ← Main UI coordinator (initUI, setupViewfinder, setupRegistrationForm)
+    └── main.ts                  ← Bootstrap entry point (connects state, getProducts(), LoadState, toasts)
 ```
 
-### Module Responsibilities
+---
 
-1. **`src/data.js` (Catalog Data)**:
-   - Contains an array of 12 digital products.
-   - Products include metadata: `id`, `name`, `category`, `price`, `description`, and SVG visual icons.
-   - Zero side-effects, DOM, or calculations.
+## 6. Documented Comparison: Course REST API Catalog vs. Preserved Day 2 Local Dataset
 
-2. **`src/logic.js` (Pure Business Logic)**:
-   - Contains pure functions: `filterProducts`, `sortProducts`, `calculateTotalItems`, `calculateTotalPrice`, `calculateLineTotal`, `groupProductsByCategory`.
-   - **Strict Constraint**: Zero access to `document`, `window`, or `localStorage`.
-   - Never mutates input arrays (creates shallow copies before sorting).
+In Day 3, the live storefront fetches its catalog from the official course REST API (`https://shopboard-api.vercel.app/api/products`), while the original Day 2 dataset (`src/data.ts`) is preserved intact for unit testing and reference.
 
-3. **`src/state.js` (Cart State & Persistence)**:
-   - Manages in-memory cart state: `addToCart`, `increaseQuantity`, `decreaseQuantity`, `removeFromCart`, `clearCart`.
-   - Handles serialization and deserialization via `localStorage` under the key `shopboard_cart`.
-   - Employs defensive parsing (`try...catch`, `Array.isArray` check, schema filtering) to guard against corrupted or malformed saved data.
-
-4. **`src/ui.js` (Primary DOM Interaction Module)**:
-   - **Sole owner of direct page interactions**: All calls to `document`, `window`, `querySelector`, `innerHTML`, and `addEventListener` reside exclusively in this file.
-   - Dynamic product card generation with HTML escaping to prevent XSS.
-   - Event delegation on `#products-grid` for "Add to Cart" actions, preventing duplicate listener registration.
-   - Off-canvas cart drawer toggling, escape key listeners, backdrop dismissal, and live ARIA announcements.
-   - Accessible studio registration demo form handling.
-
-5. **`src/main.js` (Bootstrap Coordinator)**:
-   - Minimal entry point: imports CSS, data, state, and `initUI`.
-   - Initializes stored state (`initializeCartState()`) and mounts the UI via `initUI(products)`.
-   - Contains zero direct DOM manipulation.
+| Attribute                | Course REST API (`products.api.ts`)                                     | Preserved Day 2 Local Dataset (`src/data.ts`)                           |
+| :----------------------- | :---------------------------------------------------------------------- | :---------------------------------------------------------------------- |
+| **Source**               | `GET https://shopboard-api.vercel.app/api/products`                     | Local ES module export `products` in `src/data.ts`                      |
+| **Item Count**           | 12 products (`total: 12`)                                               | 12 products                                                             |
+| **Wire ID Format**       | Numeric IDs (`1`–`12`), mapped to `string` (`"1"`–`"12"`)               | Slug IDs (`"cv-template"`, `"study-planner"`, etc.)                     |
+| **Name Field**           | `title` (mapped to `name` in `toProduct()`)                             | `name`                                                                  |
+| **Category Field**       | `category_name`: `"Bags"`, `"Shoes"`, `"Accessories"`                   | `category`: `"Templates"`, `"Planners"`, `"Productivity"`               |
+| **Price Representation** | `price_cents` (integer cents, e.g., `8900`), converted to `$89`         | `price` (numeric dollars, `$7`–`$18`)                                   |
+| **Stock Status**         | `in_stock: boolean` (IDs `3` and `9` are `false`; others `true`)        | `inStock: true` on all 12 items                                         |
+| **Product Examples**     | Leather Tote Bag (`$89`), White Sneakers (`$79`), Silver Watch (`$149`) | CV Template (`$12`), Study Planner (`$10`), Pitch Deck Template (`$18`) |
 
 ---
 
-## 6. Key Features & Acceptance Verification
+## 7. Async UI States & Simulation Switches
 
-### Dynamic Product Rendering
+ShopBoard handles all 5 async UI states via `LoadState` in `src/modules/products/products.ui.ts`:
 
-- All 12 digital products render dynamically from JavaScript data.
-- Zero product cards are hardcoded in `index.html`.
+1. **Loading State (`.catalog-state-loading`)**: Displayed while `getProducts()` is in flight.
+2. **Error State (`.catalog-state-error`)**: Displayed on network or HTTP failures (`404`/`500`), accompanied by an error toast (`showToast(message, "error")`) and a working **Try Again** (`#retry-fetch-btn`) button that re-invokes `loadCatalog()`.
+3. **Empty API State (`.catalog-state-empty-api`)**: Displayed when the API returns `{ items: [], total: 0 }`.
+4. **Empty Search/Filter State (`.catalog-state-empty-filter`)**: Displayed when user search or category filters match zero items in a non-empty catalog, featuring a **Reset Filters** (`#reset-filters-btn`) button.
+5. **Success State**: Renders the 12 product cards with specimen previews and interactive Add-to-Cart buttons.
 
-### Cooperative Search, Category Filter, and Sorting
+You can test the async simulation modes in the browser using query parameters:
 
-- **Search**: Case-insensitive partial matching by name. Empty or whitespace queries display all products in the selected category.
-- **Filter**: Filter by "All Categories", "Templates", "Planners", or "Productivity".
-- **Sort**: Sort by "Price: Low to High", "Price: High to Low", or "Default Order".
-- **Default Restoration**: Selecting "Default Order" restores the original catalog sequence without mutating data.
-- **Combined Operations**: All three controls work synchronously together (e.g. searching "template" in category "Templates" sorted High to Low produces: Pitch Deck Template $18, Portfolio Template $15, CV Template $12, Invoice Template $9).
-
-### Shopping Cart Lifecycle
-
-- Adding an existing product increments its quantity rather than creating duplicate lines.
-- Increase (`+`) and decrease (`-`) controls dynamically adjust quantities and line totals.
-- Decreasing quantity from 1 removes the item from the cart. Quantities never display as zero or negative.
-- "Remove" deletes only the targeted product.
-- "Clear Cart" empties all cart items and resets badge and total to 0.
-- All totals are computed dynamically using `Array.prototype.reduce()`.
-
-### Safe LocalStorage Persistence
-
-- Cart data persists in `localStorage` under `shopboard_cart`.
-- Restored seamlessly on page reload or fresh visits.
-- Defensive fallback protects against missing keys, non-JSON strings, non-array objects, and invalid entities without crashing the page.
-
-### Event Listener Safety (Preventing Duplicate Listeners)
-
-- Event listeners are attached once using event delegation on `#products-grid`.
-- Changing the category filter multiple times (e.g. 5 times) and clicking "Add to Cart" once adds **exactly one** unit to the cart.
-
----
-
-## 7. Extending ShopBoard: Adding a Wishlist Feature
-
-Thanks to the modular Day 2 architecture, introducing a new feature like a **Wishlist** has an obvious, predictable home:
-
-1. **State (`src/state.js`)**:
-   - Add `wishlistState` array.
-   - Export `addToWishlist(product)`, `removeFromWishlist(productId)`, `getWishlistState()`, and persistence under `shopboard_wishlist`.
-2. **Logic (`src/logic.js`)**:
-   - Add pure helper functions (e.g. `isItemWishlisted(wishlist, productId)`).
-3. **UI (`src/ui.js`)**:
-   - Add a wishlist button/heart icon to the product card template in `renderProducts()`.
-   - Add a delegated click handler on `#products-grid` for `.wishlist-btn`.
-   - Render the wishlist drawer or count badge.
-4. **Bootstrap (`src/main.js`)**:
-   - Remains clean and unchanged.
-
----
-
-## 8. Educational Demo Limitations & Disclaimers
-
-ShopBoard is developed as an educational frontend learning demonstration:
-
-- **No Real Checkout**: No payment gateway (Stripe, PayPal) or backend processing is integrated.
-- **No User Database**: Studio registration is a simulated frontend demonstration; passwords and credentials are never transmitted or stored.
-- **Client Persistence Only**: Cart persistence is confined to the client browser's `localStorage`.
-- **Archival Imagery Attribution**: Historical ledger and almanac photographs featured in the heritage section are sourced from public domain and Creative Commons collections (The Metropolitan Museum of Art, Gutenberg Museum Mainz, Wikimedia Commons) with licensing documented in `public/archive/credits.json`.
+- `?api_mode=delay` — Routes to `/delay/1500/api/products` to inspect the loading state.
+- `?api_mode=fail` — Routes to `/fail/500/api/products` to inspect the error state and error toast.
+- `?api_mode=fail_once` — Fails on initial load (`500`) and succeeds when clicking **Try Again**.
+- `?api_mode=empty` — Routes to `/empty/api/products` to inspect the empty API catalog state.
