@@ -4,252 +4,745 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ShopBoard — Digital Products Storefront</title>
+    <title>ShopBoard — Digital Experiences Shaped by Structure &amp; Craft</title>
+    <link rel="preconnect" href="https://api.fontshare.com" />
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap"
+      rel="stylesheet"
+    />
   </head>
-  <body>
-    <!-- Site Header & Navigation -->
+  <body class="theme-obsidian">
+    <!-- Atmospheric Cosmic Lighting Canvas -->
+    <div class="ambient-canvas" aria-hidden="true">
+      <div class="ambient-glow ambient-glow-primary"></div>
+      <div class="ambient-glow ambient-glow-secondary"></div>
+      <div class="ambient-glow ambient-glow-tertiary"></div>
+      <div class="ambient-grid-overlay"></div>
+    </div>
+
+    <!-- Floating Glass Capsule Header -->
     <header class="site-header">
       <div class="container header-container">
-        <a href="#hero" class="brand" aria-label="ShopBoard Home">
-          <svg class="brand-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-            <line x1="8" y1="21" x2="16" y2="21"></line>
-            <line x1="12" y1="17" x2="12" y2="21"></line>
-          </svg>
-          <span class="brand-text">ShopBoard</span>
-        </a>
+        <div class="header-glass-bar">
+          <a href="#hero" class="brand" aria-label="ShopBoard Home">
+            <span class="brand-symbol">
+              <svg
+                class="brand-icon"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <rect x="3" y="3" width="18" height="18" rx="3" ry="3"></rect>
+                <line x1="3" y1="9" x2="21" y2="9"></line>
+                <line x1="9" y1="21" x2="9" y2="9"></line>
+              </svg>
+            </span>
+            <span class="brand-text">shopboard<span class="brand-accent-dot">.</span></span>
+          </a>
 
-        <nav class="site-nav" aria-label="Main Navigation">
-          <ul class="nav-list">
-            <li><a href="#hero" class="nav-link">Home</a></li>
-            <li><a href="#products" class="nav-link">Products</a></li>
-            <li><a href="#register" class="nav-link">Register</a></li>
-          </ul>
-        </nav>
+          <nav class="site-nav" aria-label="Main Navigation">
+            <ul class="nav-list">
+              <li><a href="#hero" class="nav-link">Overview</a></li>
+              <li><a href="#products" class="nav-link">Catalogue</a></li>
+              <li><a href="#heritage" class="nav-link">Provenance</a></li>
+              <li><a href="#register" class="nav-link">Studio Access</a></li>
+            </ul>
+          </nav>
+
+          <div class="header-action-wrap">
+            <button
+              type="button"
+              id="cart-toggle-btn"
+              class="cart-toggle-btn"
+              aria-label="Shopping Cart, 0 items"
+              aria-expanded="false"
+              aria-controls="cart-sidebar"
+            >
+              <span class="cart-icon-wrap" aria-hidden="true">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="9" cy="21" r="1"></circle>
+                  <circle cx="20" cy="21" r="1"></circle>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+              </span>
+              <span class="cart-toggle-text">Cart</span>
+              <span id="cart-count" class="cart-badge" aria-hidden="true">0</span>
+            </button>
+          </div>
+        </div>
       </div>
     </header>
 
     <main id="main-content">
-      <!-- Section 1: Hero -->
+      <!-- Section 1: Hero Section (Cinematic Editorial Scale) -->
       <section id="hero" class="hero-section">
         <div class="container hero-container">
-          <p class="hero-tagline">Educational Digital Storefront</p>
-          <h1 class="hero-title">Curated Digital Tools for Everyday Productivity</h1>
-          <p class="hero-description">
-            Discover thoughtfully crafted templates, planners, and organizational guides designed to simplify your academic and professional workflow.
-          </p>
-          <div class="hero-actions">
-            <a href="#products" class="btn btn-primary">Browse Products</a>
+          <div class="hero-content">
+            <div class="status-indicator-pill">
+              <span class="pulse-indicator" aria-hidden="true"></span>
+              <span class="pill-caption"
+                ><span class="pill-title">Studio Collection 2026</span>
+                <span class="pill-divider">&bull;</span>
+                <span class="pill-meta">12 Production Systems</span></span
+              >
+            </div>
+
+            <h1 class="hero-title">
+              We design digital tools shaped by
+              <span class="text-accent-structure">structure</span>,
+              <span class="text-accent-precision">precision</span>, and
+              <span class="text-accent-craft">craft</span>.
+            </h1>
+
+            <p class="hero-description">
+              Twelve production-grade operating sheets, executive templates, and execution
+              dashboards engineered for students, independent builders, and creative studios.
+            </p>
+
+            <div class="hero-actions">
+              <a href="#products" class="btn btn-primary btn-glow">
+                <span>Explore Catalogue</span>
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </a>
+              <a href="#register" class="btn btn-frosted-dark">
+                <span>Studio Access &rarr;</span>
+              </a>
+            </div>
+
+            <div class="hero-feature-tags" aria-label="Key Highlights">
+              <div class="feature-tag-item">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span>Zero Dependencies</span>
+              </div>
+              <div class="feature-tag-item">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span>Offline Storage Sync</span>
+              </div>
+              <div class="feature-tag-item">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span>WCAG Semantic Structure</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- The Live Thing: Interactive Specimen Viewfinder Console -->
+          <div
+            class="viewfinder glass-console-interactive"
+            role="region"
+            aria-label="Interactive digital template previewer"
+          >
+            <div class="console-glass-rim" aria-hidden="true"></div>
+            <div class="viewfinder-header">
+              <div class="viewfinder-controls-header">
+                <div class="console-status-group">
+                  <span class="live-dot" aria-hidden="true"></span>
+                  <span class="specimen-badge">Document Specimen Inspector</span>
+                </div>
+                <span class="specimen-hint">Select a tab to view document</span>
+              </div>
+              <div class="viewfinder-tabs" role="tablist">
+                <button
+                  type="button"
+                  class="tab-btn is-active"
+                  data-view="cv"
+                  role="tab"
+                  aria-selected="true"
+                >
+                  <span class="tab-label-full">CV Resume</span
+                  ><span class="tab-label-short">Resume</span>
+                </button>
+                <button
+                  type="button"
+                  class="tab-btn"
+                  data-view="planner"
+                  role="tab"
+                  aria-selected="false"
+                >
+                  Planner
+                </button>
+                <button
+                  type="button"
+                  class="tab-btn"
+                  data-view="budget"
+                  role="tab"
+                  aria-selected="false"
+                >
+                  Finance
+                </button>
+                <button
+                  type="button"
+                  class="tab-btn"
+                  data-view="kanban"
+                  role="tab"
+                  aria-selected="false"
+                >
+                  Kanban
+                </button>
+              </div>
+            </div>
+            <div id="viewfinder-display" class="viewfinder-display" aria-live="polite">
+              <!-- Live interactive document layout rendered dynamically via src/ui.js -->
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- Section 2: Products -->
+      <!-- Section 1.5: Heritage Provenance Showcase (Archival Material Foundations) -->
+      <section
+        id="heritage"
+        class="heritage-showcase-section"
+        aria-label="Design Heritage & Material Roots"
+      >
+        <div class="container">
+          <div class="heritage-glass-card glass-panel-dark">
+            <div class="heritage-header">
+              <span class="studio-topic-tag">Provenance &bull; Material Roots</span>
+              <h2 class="heritage-title">From physical ledgers to structured digital sheets.</h2>
+              <p class="heritage-desc">
+                ShopBoard synthesizes centuries of physical ledger bookbinding, typographic
+                letterpress grids, and personal almanacs into responsive web interfaces.
+              </p>
+            </div>
+            <div class="heritage-grid">
+              <figure class="heritage-item">
+                <div class="heritage-img-wrap">
+                  <img
+                    src="./archive/account-book-ledger.jpg"
+                    width="400"
+                    height="260"
+                    alt="1835 Account Book Ledger with marbleized cover from The Metropolitan Museum of Art"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <figcaption class="heritage-caption">
+                  <span class="heritage-caption-title">Merchant Ledger (1835)</span>
+                  <span class="heritage-caption-meta"
+                    >The Metropolitan Museum of Art &bull; Public Domain</span
+                  >
+                </figcaption>
+              </figure>
+              <figure class="heritage-item">
+                <div class="heritage-img-wrap">
+                  <img
+                    src="./archive/calendar-almanac-in-scroll-form.jpg"
+                    width="400"
+                    height="260"
+                    alt="1810 Calendar-Almanac Scroll showing structured solar and lunar calculation tables"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <figcaption class="heritage-caption">
+                  <span class="heritage-caption-title">Almanac Calendar Scroll (1810)</span>
+                  <span class="heritage-caption-meta">Katib Muhammad Ma'ruf &bull; CC0</span>
+                </figcaption>
+              </figure>
+              <figure class="heritage-item">
+                <div class="heritage-img-wrap">
+                  <img
+                    src="./archive/type-case-with-movable-types-for-letterpress.jpg"
+                    width="400"
+                    height="260"
+                    alt="Movable type letterpress case at the Gutenberg Museum in Mainz"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <figcaption class="heritage-caption">
+                  <span class="heritage-caption-title">Letterpress Type Case</span>
+                  <span class="heritage-caption-meta">Gutenberg Museum Mainz &bull; CC BY 2.0</span>
+                </figcaption>
+              </figure>
+              <figure class="heritage-item">
+                <div class="heritage-img-wrap">
+                  <img
+                    src="./archive/pocket-diary-1860.jpg"
+                    width="400"
+                    height="260"
+                    alt="1860 Pocket Diary with embossed leather binding and brass clasp"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <figcaption class="heritage-caption">
+                  <span class="heritage-caption-title">Pocket Diary (1860)</span>
+                  <span class="heritage-caption-meta">Cambridgeport Archive &bull; CC0</span>
+                </figcaption>
+              </figure>
+            </div>
+            <div class="heritage-scroll-cue" aria-hidden="true">
+              <span class="cue-arrow">&larr;</span>
+              <span class="cue-label">Swipe archival ledgers</span>
+              <span class="cue-arrow">&rarr;</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Products (The Specimen Catalogue) -->
       <section id="products" class="products-section">
         <div class="container">
-          <div class="section-header">
-            <h2 class="section-title">Digital Products</h2>
-            <p class="section-subtitle">
-              Explore our collection of practical digital downloads. All items and prices shown are demo content.
-            </p>
+          <div class="section-header-wrap">
+            <div class="section-title-lockup">
+              <span class="studio-topic-tag">Digital Catalogue</span>
+              <h2 class="section-title">Production Systems &amp; Templates</h2>
+              <p class="section-subtitle">
+                Twelve precision templates with zero dependencies and instant browser localStorage
+                persistence. Educational demo values.
+              </p>
+            </div>
           </div>
 
-          <div class="products-grid">
-            <!-- Product 1 -->
-            <article class="product-card">
-              <div class="product-icon-wrap" aria-hidden="true">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                  <polyline points="14 2 14 8 20 8"></polyline>
-                  <line x1="16" y1="13" x2="8" y2="13"></line>
-                  <line x1="16" y1="17" x2="8" y2="17"></line>
-                  <polyline points="10 9 9 9 8 9"></polyline>
+          <!-- Product Controls Glass Toolbar (Search, Filter, Sort) -->
+          <div
+            class="product-toolbar glass-panel-dark"
+            role="region"
+            aria-label="Product filter and sort controls"
+          >
+            <div class="toolbar-group toolbar-search">
+              <label for="product-search" class="toolbar-label">Search Products</label>
+              <div class="search-input-wrap">
+                <svg
+                  class="search-icon"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
+                <input
+                  type="search"
+                  id="product-search"
+                  class="toolbar-input"
+                  placeholder="Search by template name or keyword..."
+                  autocomplete="off"
+                />
               </div>
-              <h3 class="product-title">CV Template</h3>
-              <p class="product-description">
-                A modern, ATS-friendly resume layout designed to highlight professional skills and career milestones clearly.
-              </p>
-              <div class="product-footer">
-                <span class="product-price">$12 <span class="price-demo-tag">(Demo Price)</span></span>
-              </div>
-            </article>
+            </div>
 
-            <!-- Product 2 -->
-            <article class="product-card">
-              <div class="product-icon-wrap" aria-hidden="true">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                  <line x1="16" y1="2" x2="16" y2="6"></line>
-                  <line x1="8" y1="2" x2="8" y2="6"></line>
-                  <line x1="3" y1="10" x2="21" y2="10"></line>
+            <div class="toolbar-group">
+              <label for="category-filter" class="toolbar-label">Category</label>
+              <div class="select-input-wrap">
+                <select id="category-filter" class="toolbar-select">
+                  <option value="all">All Categories (12)</option>
+                  <option value="Templates">Templates</option>
+                  <option value="Planners">Planners</option>
+                  <option value="Productivity">Productivity</option>
+                </select>
+                <svg
+                  class="select-chevron"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
               </div>
-              <h3 class="product-title">Study Planner</h3>
-              <p class="product-description">
-                Structured semester and exam planning sheets to help students organize course materials and revision schedules.
-              </p>
-              <div class="product-footer">
-                <span class="product-price">$10 <span class="price-demo-tag">(Demo Price)</span></span>
-              </div>
-            </article>
+            </div>
 
-            <!-- Product 3 -->
-            <article class="product-card">
-              <div class="product-icon-wrap" aria-hidden="true">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                  <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            <div class="toolbar-group">
+              <label for="price-sort" class="toolbar-label">Sort by Price</label>
+              <div class="select-input-wrap">
+                <select id="price-sort" class="toolbar-select">
+                  <option value="default">Default Order</option>
+                  <option value="asc">Price: Low to High</option>
+                  <option value="desc">Price: High to Low</option>
+                </select>
+                <svg
+                  class="select-chevron"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
               </div>
-              <h3 class="product-title">Portfolio Template</h3>
-              <p class="product-description">
-                A clean, responsive web presentation template tailored for creative developers and digital designers.
-              </p>
-              <div class="product-footer">
-                <span class="product-price">$15 <span class="price-demo-tag">(Demo Price)</span></span>
-              </div>
-            </article>
-
-            <!-- Product 4 -->
-            <article class="product-card">
-              <div class="product-icon-wrap" aria-hidden="true">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="12" y1="1" x2="12" y2="23"></line>
-                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                </svg>
-              </div>
-              <h3 class="product-title">Budget Tracker</h3>
-              <p class="product-description">
-                An intuitive personal finance spreadsheet with category breakdowns, monthly goals, and visual spending summaries.
-              </p>
-              <div class="product-footer">
-                <span class="product-price">$14 <span class="price-demo-tag">(Demo Price)</span></span>
-              </div>
-            </article>
-
-            <!-- Product 5 -->
-            <article class="product-card">
-              <div class="product-icon-wrap" aria-hidden="true">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M9 11l3 3L22 4"></path>
-                  <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
-                </svg>
-              </div>
-              <h3 class="product-title">Task Manager</h3>
-              <p class="product-description">
-                A prioritized daily task dashboard featuring status columns, urgency tags, and actionable milestone checkpoints.
-              </p>
-              <div class="product-footer">
-                <span class="product-price">$12 <span class="price-demo-tag">(Demo Price)</span></span>
-              </div>
-            </article>
-
-            <!-- Product 6 -->
-            <article class="product-card">
-              <div class="product-icon-wrap" aria-hidden="true">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                </svg>
-              </div>
-              <h3 class="product-title">Digital Notebook</h3>
-              <p class="product-description">
-                Minimalist hyperlinked digital notebook with index tabs, grid paper, and dedicated project documentation templates.
-              </p>
-              <div class="product-footer">
-                <span class="product-price">$8 <span class="price-demo-tag">(Demo Price)</span></span>
-              </div>
-            </article>
+            </div>
           </div>
+
+          <!-- Live Announcer for Filter/Search Results -->
+          <div
+            id="product-results-announcer"
+            class="sr-only"
+            role="status"
+            aria-live="polite"
+          ></div>
+
+          <!-- Dynamic Products Grid (populated dynamically via src/ui.js) -->
+          <div id="products-grid" class="products-grid" aria-live="polite"></div>
         </div>
       </section>
 
-      <!-- Section 3: Register -->
+      <!-- Section 3: Register (The Frosted Studio Chamber) -->
       <section id="register" class="register-section">
         <div class="container register-container">
-          <div class="section-header">
-            <h2 class="section-title">Create an Account</h2>
-            <p class="section-subtitle">
-              Join ShopBoard to explore educational tools. This is a frontend demonstration form.
-            </p>
+          <div class="register-glass-box glass-panel-dark">
+            <div class="register-header">
+              <span class="studio-topic-tag">Studio Access Registration</span>
+              <h2 class="section-title section-title-light">Join the ShopBoard Studio</h2>
+              <p class="section-subtitle section-subtitle-light">
+                Receive future releases and preview experimental templates. Frontend validation demo
+                with zero credential tracking.
+              </p>
+            </div>
+
+            <form id="register-form" class="register-form" novalidate>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="full-name" class="form-label">Full Name</label>
+                  <div class="input-glow-wrap">
+                    <input
+                      type="text"
+                      id="full-name"
+                      name="fullName"
+                      class="form-input"
+                      required
+                      minlength="2"
+                      autocomplete="name"
+                      placeholder="Jane Doe"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="email-address" class="form-label">Email Address</label>
+                  <div class="input-glow-wrap">
+                    <input
+                      type="email"
+                      id="email-address"
+                      name="email"
+                      class="form-input"
+                      required
+                      autocomplete="email"
+                      placeholder="jane@example.com"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="password" class="form-label">Account Password</label>
+                  <div class="input-glow-wrap">
+                    <input
+                      type="password"
+                      id="password"
+                      name="password"
+                      class="form-input"
+                      required
+                      minlength="8"
+                      autocomplete="new-password"
+                      placeholder="Minimum 8 characters"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="phone-number" class="form-label">
+                    Phone Number <span class="optional-badge">(optional)</span>
+                  </label>
+                  <div class="input-glow-wrap">
+                    <input
+                      type="tel"
+                      id="phone-number"
+                      name="phoneNumber"
+                      class="form-input"
+                      autocomplete="tel"
+                      placeholder="+1 (555) 019-2834"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-action-row">
+                <button type="submit" class="btn btn-primary btn-submit-glass">
+                  <span>Complete Studio Registration &rarr;</span>
+                </button>
+              </div>
+
+              <!-- Accessible status notification -->
+              <div
+                id="register-feedback"
+                class="form-feedback"
+                role="status"
+                aria-live="polite"
+              ></div>
+            </form>
           </div>
-
-          <form id="register-form" class="register-form" novalidate>
-            <div class="form-group">
-              <label for="full-name" class="form-label">Full Name</label>
-              <input
-                type="text"
-                id="full-name"
-                name="fullName"
-                class="form-input"
-                required
-                minlength="2"
-                autocomplete="name"
-                placeholder="Jane Doe"
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="email-address" class="form-label">Email</label>
-              <input
-                type="email"
-                id="email-address"
-                name="email"
-                class="form-input"
-                required
-                autocomplete="email"
-                placeholder="jane@example.com"
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="password" class="form-label">Password</label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                class="form-input"
-                required
-                minlength="8"
-                autocomplete="new-password"
-                placeholder="At least 8 characters"
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="phone-number" class="form-label">
-                Phone Number <span class="optional-badge">(optional)</span>
-              </label>
-              <input
-                type="tel"
-                id="phone-number"
-                name="phoneNumber"
-                class="form-input"
-                autocomplete="tel"
-                placeholder="+1 555 0199"
-              />
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-block">Register</button>
-
-            <!-- Accessible status notification -->
-            <div id="register-feedback" class="form-feedback" role="status" aria-live="polite"></div>
-          </form>
         </div>
       </section>
     </main>
 
-    <!-- Site Footer -->
+    <!-- Site Footer with Sculptural Watermark -->
     <footer class="site-footer">
       <div class="container footer-container">
-        <p class="footer-note">
-          ShopBoard is an educational frontend project for the CorePro Software Development Using AI program.
-        </p>
-        <p class="footer-subnote">Demo project only &bull; No actual purchases, accounts, or services provided.</p>
+        <div class="footer-top-row">
+          <div class="footer-brand-col">
+            <div class="brand brand-footer">
+              <span class="brand-symbol">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <rect x="3" y="3" width="18" height="18" rx="3" ry="3"></rect>
+                  <line x1="3" y1="9" x2="21" y2="9"></line>
+                  <line x1="9" y1="21" x2="9" y2="9"></line>
+                </svg>
+              </span>
+              <span class="brand-text">shopboard<span class="brand-accent-dot">.</span></span>
+            </div>
+            <p class="footer-tagline">
+              An educational digital storefront designed for the CorePro Software Development Using
+              AI program.
+            </p>
+          </div>
+
+          <div class="footer-meta-col">
+            <span class="footer-meta-title">Architecture Specs</span>
+            <ul class="footer-links-list">
+              <li>Vanilla JavaScript ES Modules</li>
+              <li>Native HTML5 Validation</li>
+              <li>WCAG-Guided Accessible Landmarks</li>
+              <li>Hardware-Accelerated CSS Motion</li>
+            </ul>
+          </div>
+
+          <div class="footer-meta-col">
+            <span class="footer-meta-title">Quick Navigation</span>
+            <ul class="footer-links-list">
+              <li><a href="#hero" class="footer-link">Hero Overview</a></li>
+              <li><a href="#heritage" class="footer-link">Material Provenance</a></li>
+              <li><a href="#products" class="footer-link">Digital Catalogue</a></li>
+              <li><a href="#register" class="footer-link">Studio Registration</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-watermark" aria-hidden="true">SHOPBOARD</div>
+
+        <div class="footer-bottom-bar">
+          <p class="footer-copy">
+            &copy; 2026 ShopBoard Project. All products are simulated educational demo units.
+          </p>
+          <p class="footer-disclaimer">
+            Zero analytics cookies &bull; LocalStorage client cache &bull; Pure frontend web
+            standards.
+          </p>
+        </div>
       </div>
     </footer>
+
+    <!-- Cart Sidebar Drawer with Frosted Glassmorphism (Inspired by Luxury Obsidian Modal) -->
+    <aside
+      id="cart-sidebar"
+      class="cart-sidebar glass-drawer"
+      aria-label="Shopping Cart"
+      aria-hidden="true"
+      role="dialog"
+    >
+      <div class="cart-sidebar-header">
+        <div class="cart-header-title-wrap">
+          <div class="cart-title-row">
+            <h2 class="cart-sidebar-title">Active Cart</h2>
+          </div>
+          <span id="cart-header-count" class="cart-header-badge">0 items</span>
+        </div>
+        <button
+          type="button"
+          id="cart-close-btn"
+          class="cart-close-btn"
+          aria-label="Close shopping cart"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Accessible screen reader announcer for cart actions -->
+      <div id="cart-announcer" class="sr-only" role="status" aria-live="polite"></div>
+
+      <!-- Luxury Delivery Option Bar (Mirroring User's Reference Image) -->
+      <div class="cart-delivery-banner">
+        <div class="delivery-icon-wrap" aria-hidden="true">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+            ></path>
+          </svg>
+        </div>
+        <div class="delivery-text-wrap">
+          <span class="delivery-title">Instant Digital Delivery</span>
+          <span class="delivery-sub">Verified browser client persistence &bull; Demo</span>
+        </div>
+        <span class="delivery-free-tag">Free</span>
+      </div>
+
+      <!-- Cart items container (dynamically rendered) -->
+      <div id="cart-items-container" class="cart-items-container">
+        <div class="cart-empty">
+          <div class="empty-icon-wrap" aria-hidden="true">
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.75"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+          </div>
+          <p class="cart-empty-title">Your cart is empty</p>
+          <p class="cart-empty-subtitle">
+            Explore the digital products catalog and add items to your cart.
+          </p>
+        </div>
+      </div>
+
+      <!-- Cart Sidebar Footer -->
+      <div id="cart-sidebar-footer" class="cart-sidebar-footer">
+        <div class="cart-total-row">
+          <span class="cart-total-label">Total Amount</span>
+          <div class="cart-total-value-wrap">
+            <span id="cart-total-amount" class="cart-total-amount">$0</span>
+            <span class="price-demo-tag">(Demo Total)</span>
+          </div>
+        </div>
+
+        <div class="cart-actions-group">
+          <button
+            type="button"
+            id="clear-cart-btn"
+            class="btn btn-outline-dark btn-block clear-cart-btn"
+            disabled
+          >
+            Clear Cart
+          </button>
+        </div>
+
+        <p class="cart-demo-note">
+          Educational demo only &bull; No checkout or payment gateway integrated.
+        </p>
+      </div>
+    </aside>
+
+    <!-- Cart Backdrop Overlay with Frosted Blur -->
+    <div id="cart-backdrop" class="cart-backdrop" aria-hidden="true"></div>
 
     <script type="module" src="/src/main.js"></script>
   </body>

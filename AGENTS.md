@@ -1,4 +1,4 @@
-﻿# ShopBoard — AI Agent Instructions
+# ShopBoard — AI Agent Instructions
 
 ## 1. Project Overview
 
@@ -12,117 +12,80 @@ Follow the requirements provided in each development task. Do not assume or impl
 
 - Vite (Vanilla JavaScript)
 - HTML5
-- CSS3
+- CSS3 (Mobile-first, zero `!important`)
 - JavaScript (ES Modules)
+- Quality & Guardrail Tools: Prettier, ESLint, Husky, lint-staged
 
-Use the existing project setup and dependencies.
+Use the existing project setup and dependencies. Do not introduce additional frameworks or runtime dependencies without prior approval.
 
-Do not introduce additional frameworks, libraries, or tools without prior approval.
+## 3. Core Day 2 Engineering Rules (Derived from Real Day 2 AI Risks)
 
-## 3. Coding Standards
+1. **Rule 1 — Array Immutability in Sorting & Filtering**:
+   Never mutate the input product array in-place. Always create a shallow copy (`[...products]`) before sorting so that choosing "Default Order" cleanly restores the original catalog sequence.
+2. **Rule 2 — Event Delegation Over Repeated Registration**:
+   Never register event listeners inside rendering functions (`renderProducts()`, `renderCartUI()`). Register event listeners once on stable container elements (`#products-grid`, `#cart-items-container`) using event delegation (`event.target.closest()`). Changing category filters 5 times and clicking "Add to Cart" once must add exactly 1 unit.
+3. **Rule 3 — Defensive Storage Parsing & Validation**:
+   Never trust `localStorage` data blindly. Wrap `JSON.parse()` in a `try...catch` block, verify `Array.isArray()`, sanitize objects (ensuring valid string `id`, valid `name`, numeric `price`, and `quantity > 0`), and fall back safely to `[]` when data is missing or corrupted.
+4. **Rule 4 — Single DOM Interaction Owner**:
+   Only `src/ui.js` touches the page DOM (`document`, `window`, `querySelector`, `innerHTML`, `addEventListener`). Pure modules like `src/logic.js` must remain 100% deterministic, side-effect free, and runnable in any environment.
+5. **Rule 5 — Empirical Verification Integrity**:
+   Never claim a test, build, lint, or feature passed without executing the command and inspecting the actual results. Distinguish logic tests from browser interaction tests.
+
+## 4. Coding Standards
 
 ### HTML
-- Use semantic HTML first.
-- Prefer appropriate HTML5 elements such as header, nav, main, section, article, and form.
-- Every input must have an associated label.
-- Use native HTML validation whenever appropriate.
-- Maintain accessible and understandable markup.
+
+- Use semantic HTML first (`header`, `nav`, `main`, `section`, `article`, `form`, `footer`, `aside`).
+- Only one `h1` per page.
+- Every input must have an associated `<label>` linked via `for` and `id`.
+- Use native HTML validation whenever appropriate (`required`, `type="email"`, `minlength`).
+- Maintain accessible markup with visible focus rings (`:focus-visible`) and ARIA live regions for dynamic announcements.
 
 ### CSS
-- Follow a mobile-first approach.
-- Use min-width media queries for responsive layouts.
-- Never use !important.
-- Keep CSS clean, readable, and organized.
-- Avoid unnecessary duplication.
+
+- Follow a mobile-first approach using `min-width` media queries.
+- Never use `!important`.
+- Keep CSS clean, readable, organized, and free of unnecessary duplication.
+- Ensure zero horizontal page overflow across all viewport widths (320px to 1440px).
 
 ### JavaScript
+
 - Use vanilla JavaScript and ES Modules.
-- Keep functions simple and focused.
+- Keep functions simple and focused with single responsibilities.
 - Use meaningful variable and function names.
-- Avoid unnecessary complexity.
-- Maintain readable and maintainable code.
+- Prefer array methods (`map`, `filter`, `reduce`, `find`) over manual loop counters.
 
-### General
-- Explain every change.
-- Follow consistent formatting.
-- Prefer simple solutions over unnecessary abstractions.
-- Preserve existing working functionality.
+## 5. Modular Architecture & Project Structure
 
-## 4. AI Workflow
+- `index.html` — Main HTML entry point containing semantic landmarks and controls (zero hardcoded product cards).
+- `src/data.js` — Product catalog data module only (exports 12 digital products with ID, name, category, price, description, icon).
+- `src/logic.js` — Pure functions for searching, filtering, sorting, and calculations (no DOM, document, window, or localStorage access).
+- `src/state.js` — Shopping cart state management and safe localStorage persistence.
+- `src/ui.js` — All DOM access, dynamic rendering, and UI event handlers (the sole DOM owner).
+- `src/main.js` — Application bootstrap importing modules and delegating DOM mounting to `ui.js`.
+- `src/style.css` — Application styling following mobile-first CSS without `!important`.
+- `public/` — Public static assets.
+- `AGENTS.md` — AI development instructions and architectural guidelines.
+- `CLAUDE.md` — Project architecture and course instructions for AI agents.
+- `debugging-log.md` — Record of bugs, discovery methods, root causes, and fixes in official course format.
+- `package.json` — Project configuration and dependencies.
 
-Follow this workflow for development tasks:
+## 6. Where Future Features Belong
 
-1. Understand the requested task and its requirements.
-2. Briefly explain the implementation plan.
-3. Make small, focused changes independently.
-4. Stay within the approved project scope.
-5. Request approval before:
-   - Making major architectural changes.
-   - Deleting files or existing functionality.
-   - Installing new dependencies.
-   - Adding features outside the requirements.
-6. Verify the implementation.
-7. Explain what was changed and why.
-
-Do not make destructive or significant changes without explicit approval.
-
-## 5. Project Structure
-
-Preserve the existing Vite Vanilla project structure.
-
-Main project files:
-
-- index.html — Main HTML entry point.
-- src/main.js — JavaScript application logic.
-- src/style.css — Application styling.
-- public/ — Public static assets.
-- AGENTS.md — AI development instructions.
-- package.json — Project configuration and dependencies.
-
-Guidelines:
-
-- Keep the structure simple and organized.
-- Maintain clear responsibilities for each file.
-- Avoid unnecessary folders or files.
-- Create additional files or directories only when justified by project requirements.
-- Do not reorganize existing files without a clear reason.
-- Keep the structure maintainable and easy to extend.
-
-## 6. Dependencies & Scope
-
-- Follow the approved technology stack.
-- Use existing dependencies whenever possible.
-- Avoid unnecessary external libraries.
-- Do not install new dependencies without approval.
-- Do not implement additional functionality without approval.
-- Additional tools or features may be suggested, but must be explained and approved before implementation.
-- Do not introduce a backend, database, authentication service, or payment system unless explicitly requested.
-- Keep the implementation aligned with the current assignment requirements.
+- **Wishlist Feature**:
+  - `src/state.js`: Wishlist state management and localStorage sync (`shopboard_wishlist`).
+  - `src/logic.js`: Pure helpers if needed.
+  - `src/ui.js`: Wishlist button rendering and delegated click handlers.
+  - `src/main.js`: Stays unchanged.
 
 ## 7. Testing & Verification
 
 After every significant implementation or modification:
 
-1. Verify that the development server runs using:
-
-   npm run dev
-
-2. Verify that the production build succeeds using:
-
-   npm run build
-
-3. Check for JavaScript errors in the browser console when browser access is available.
-
-4. Verify that forms use appropriate labels and native HTML validation.
-
-5. Check responsive behavior on mobile and desktop screen sizes.
-
-6. Confirm that existing functionality remains operational.
-
-7. Explain the verification results and any remaining issues.
-
-Never claim that a test passed unless it was actually executed.
-
-If a test cannot be performed, explicitly state that it was not verified.
-
-Do not introduce additional testing frameworks without approval.
+1. Run `npm run lint` — verify 0 errors and 0 warnings.
+2. Run `npm run format:check` — verify Prettier formatting.
+3. Run `npm test` — verify Node.js automated test runner tests pass.
+4. Run `npm run build` — verify production build succeeds without errors.
+5. Verify browser interactions and zero console errors.
+6. Verify responsive behavior without horizontal overflow on 320px, 375px, 390px, 430px, 768px, 1440px.
+7. Explain verification results truthfully.
