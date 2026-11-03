@@ -15,7 +15,7 @@
 
 ## 2. Color Palette & Design Tokens
 
-AEVUM implements a cohesive CSS Custom Properties token architecture in [`src/style.css`](file:///C:/Mahmoud%20Alminavi/CorePro/shopboard/src/style.css):
+AEVUM implements a cohesive CSS Custom Properties token architecture in [`styles/style.css`](./styles/style.css):
 
 ### 2.1 Color Tokens
 

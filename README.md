@@ -16,7 +16,7 @@ The platform supports two distinct modes accessible via URL query routing:
 
 1. **Default Gallery Mode (`/`):**
    - **Identity:** AEVUM — Nocturne Pavilion & Royal Salon.
-   - **Data Source:** High-fidelity local curated art records ([`src/modules/artworks/artworks.data.ts`](file:///C:/Mahmoud%20Alminavi/CorePro/shopboard/src/modules/artworks/artworks.data.ts)) with 16 canonical historical records across six curatorial departments (Paintings, Sculptures, Decorative Antiques, Ceramics & Glass, Prints & Editions, Curiosities).
+   - **Data Source:** High-fidelity local curated art records ([`src/modules/artworks/artworks.data.ts`](./src/modules/artworks/artworks.data.ts)) with 16 canonical historical records across six curatorial departments (Paintings, Sculptures, Decorative Antiques, Ceramics & Glass, Prints & Editions, Curiosities).
    - **Resilience:** 100% self-contained and completely independent of external network availability.
 2. **Course Compatibility Mode (`/index.html?mode=course`):**
    - **Identity:** ShopBoard Production Storefront (Day 2 & Day 3).
@@ -96,13 +96,14 @@ All quality gates run locally and must pass with zero errors:
 The codebase adheres strictly to feature-based modular design:
 
 ```text
-src/
+styles/
+└── style.css                        # Design token system, AEVUM museum identity & glassmorphic styles
+src/                                 # Strictly TypeScript (.ts) source modules only
 ├── main.ts                          # Bootstrap: initializes cart state, detects mode, routes catalog
 ├── ui.ts                            # UI Coordinator: event delegation, hero parallax, art journal observer
 ├── logic.ts                         # Pure logic barrel (filtering, sorting, cart calculations)
 ├── state.ts                         # Cart state barrel (localStorage synchronization)
 ├── data.ts                          # Original Day 2 digital products dataset (preserved for reference)
-├── style.css                        # Design token system, AEVUM museum identity & glassmorphic styles
 ├── shared/
 │   ├── api/client.ts                # Generic fetchJson<T> client, ApiError, runtime base URL resolver
 │   └── ui/toast.ts                  # Centralized accessible toast notification renderer

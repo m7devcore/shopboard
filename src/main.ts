@@ -1,4 +1,4 @@
-import "./style.css";
+import "../styles/style.css";
 import { getArtworks } from "./modules/artworks/artworks.data.ts";
 import { artworkToProduct } from "./modules/artworks/artworks.types.ts";
 import { detectCatalogMode } from "./modules/catalog/catalog.mode.ts";

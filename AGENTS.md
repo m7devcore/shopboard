@@ -31,13 +31,14 @@ AEVUM — Art Across Ages (built on the CorePro ShopBoard architecture) is an ed
 │   │   └── journal/                     # Art Journal editorial assets (Winged Victory WebP)
 │   ├── favicon.svg                      # AEVUM monogram favicon
 │   └── icons.svg                        # SVG symbol sprite definitions
-├── src/
+├── styles/
+│   └── style.css                        # Design token system & visual styles (Obsidian, Nocturne & Liquid Glass)
+├── src/                                 # Strictly TypeScript (.ts) source modules only
 │   ├── main.ts                          # Application bootstrap & catalog mode routing
 │   ├── ui.ts                            # UI coordinator (event delegation, viewfinder, parallax, observer)
 │   ├── logic.ts                         # Logic barrel re-exporting product and cart calculation logic
 │   ├── state.ts                         # State barrel re-exporting cart state operations
 │   ├── data.ts                          # Preserved 12 digital products catalog for Course Mode reference
-│   ├── style.css                        # Design token system & visual styles (Obsidian, Nocturne & Liquid Glass)
 │   ├── shared/
 │   │   ├── api/client.ts                # Generic fetchJson<T> client, ApiError, and API base URL resolution
 │   │   └── ui/toast.ts                  # Centralized accessible toast notification system
@@ -58,14 +59,14 @@ AEVUM — Art Across Ages (built on the CorePro ShopBoard architecture) is an ed
 │           ├── cart.state.ts            # LocalStorage persistence, safe deserialization, cart operations
 │           ├── cart.types.ts            # CartItem, Cart, AddableProduct types
 │           └── cart.ui.ts               # Acquisitions sidebar drawer renderer and event handlers
-└── tests/
-    ├── cdp.mjs                          # Zero-dependency Chrome DevTools Protocol test harness
-    ├── test-logic.mjs                   # Unit tests: pure filtering, sorting, and cart calculations
-    ├── test-state.mjs                   # Unit tests: cart state operations and defensive localStorage handling
-    ├── test-api.mjs                     # Unit tests: API client, schema validation, and toProduct mapper
-    ├── test-browser-interaction.mjs     # Browser tests: Course Mode compatibility and interaction flows
-    ├── test-gallery-interaction.mjs     # Browser tests: Nocturne Pavilion Gallery Mode regression suite
-    └── test-mobile-responsive.mjs       # Responsive tests: zero horizontal overflow audit across 6 viewports
+├── tests/
+│   └── cdp.mjs                          # Zero-dependency Chrome DevTools Protocol test harness
+├── test-logic.mjs                       # Unit tests: pure filtering, sorting, and cart calculations
+├── test-state.mjs                       # Unit tests: cart state operations and defensive localStorage handling
+├── test-api.mjs                         # Unit tests: API client, schema validation, and toProduct mapper
+├── test-browser-interaction.mjs         # Browser tests: Course Mode compatibility and interaction flows
+├── test-gallery-interaction.mjs         # Browser tests: Nocturne Pavilion Gallery Mode regression suite
+└── test-mobile-responsive.mjs           # Responsive tests: zero horizontal overflow audit across 6 viewports
 ```
 
 ## 4. Where to Add New Features
@@ -97,29 +98,46 @@ AEVUM — Art Across Ages (built on the CorePro ShopBoard architecture) is an ed
 5. **Defensive Storage & API Parsing:** Wrap all `JSON.parse()` calls in `try...catch`. Validate shapes at runtime via schema guards before committing to application state.
 6. **Mobile-First CSS:** Author styles starting at mobile viewports with `min-width` media queries. Zero `!important` permitted. Ensure zero horizontal page overflow across all viewports (320px to 1440px).
 
-## 6. Rules Derived from Real Project AI Mistakes
+## 6. AI Review Log & Rules Derived from Real Project AI Mistakes
 
-These enforceable rules address specific failure modes observed during previous AI agent sprints in this codebase:
+This section documents real issues encountered during AI-assisted development of AEVUM / ShopBoard, along with the enforceable engineering rules established to prevent recurrence.
 
-### Rule A — Ground Truth Artwork Availability
+### AI Review Log
 
-- **Mistake Observed:** An AI agent arbitrarily marked two canonical artworks (`aevum-sculpture-03` and `aevum-object-04`) as "Unavailable / Out of Stock" without user instruction, inventing false acquisition histories.
-- **Enforceable Rule:** All 16 canonical gallery artworks must remain active (`inStock: true`, `saleStatus: "In Exhibition"`) unless the user explicitly requests otherwise. Never invent sales, acquisitions, or provenance states. Preserve the Course Mode out-of-stock behavior completely separate from the Gallery collection.
+#### Issue 1 — Incorrect Artwork Availability
 
-### Rule B — Code-to-Report Reconciliation Before Reporting
+- **Location:** [`src/modules/artworks/artworks.data.ts`](./src/modules/artworks/artworks.data.ts)
+- **What went wrong:** AI marked two artworks (`aevum-sculpture-03` and `aevum-object-04`) as unavailable / out of stock without user approval, inventing unapproved acquisition statuses.
+- **Why it was risky:** It altered canonical exhibition data without instruction and blocked user acquisition interactions in the local gallery demonstration.
+- **How it was fixed:** Restored `inStock: true` and `saleStatus: "In Exhibition"` for all 16 canonical gallery artworks while keeping Course Mode out-of-stock behavior completely separate.
 
-- **Mistake Observed:** An AI agent generated an audit report claiming artwork title mismatches (e.g. "Napoleon in His Study" vs. bust) when the actual TypeScript source code already contained the correct descriptive titles.
-- **Enforceable Rule:** Always inspect the actual source files and running DOM before generating reports or asserting defects. Distinguish Markdown documentation mistakes from actual codebase bugs.
+#### Issue 2 — Incorrect Artwork Reporting
 
-### Rule C — Mode Isolation & Zero API Leakage
+- **Location:** Earlier implementation and audit reports vs. [`src/modules/artworks/artworks.data.ts`](./src/modules/artworks/artworks.data.ts)
+- **What went wrong:** AI described several artworks incorrectly in written reports (for example, reporting "Napoleon in His Study" instead of the laurel-crowned Napoleon bust, or "Gilded Porcelain Demitasse Cup" instead of the chased brass goblet) even though the TypeScript source code already contained accurate neutral descriptive titles.
+- **Why it was risky:** Unverified report claims can mislead reviewers into mutating accurate source data or misdiagnosing documentation errors as application bugs.
+- **How it was fixed:** Reconciled all reports and documentation against the canonical TypeScript source files and verified DOM output before reporting findings.
 
-- **Mistake Observed:** AI implementations allowed course API wire assumptions (such as `price_cents` or network failure handling) to leak into the local gallery catalog, causing the gallery to fail when the external API was unreachable.
-- **Enforceable Rule:** Default Gallery Mode (`/`) must remain 100% autonomous, local, and resilient against network outages. The external course REST API (`https://shopboard-api.vercel.app`) belongs strictly to Course Mode (`/index.html?mode=course`). Network timeouts on the external API must never crash or disable the gallery.
+#### Issue 3 — Gallery / Course API Interference
 
-### Rule D — Living Interface Synchronization
+- **Location:** Catalog mode selection ([`src/modules/catalog/catalog.mode.ts`](./src/modules/catalog/catalog.mode.ts)), product loading ([`src/main.ts`](./src/main.ts)), and API integration ([`src/modules/products/products.api.ts`](./src/modules/products/products.api.ts))
+- **What went wrong:** Earlier integration mixed external Course API assumptions with local gallery behavior, risking broken local gallery rendering when the external API was unreachable.
+- **Why it was risky:** Network timeouts or schema differences from the external course endpoint could break the self-contained AEVUM gallery experience.
+- **How it was fixed:** Isolated default Gallery Mode (`/`) so it loads strictly from local curated data (`ARTWORKS`) with zero external network dependency, while preserving full live REST API behavior in Course Mode (`/index.html?mode=course`).
 
-- **Mistake Observed:** As features progressed from planning to completion (e.g. Curated Collection gallery, department filters, Art Journal), navigation links, badges, and Hero CTA copy remained stale ("Upcoming", "In Curation", or displaying placeholder toasts).
-- **Enforceable Rule:** When an exhibition section or department becomes active, update all corresponding interface elements: navigation links must scroll to or filter the section, badges must reflect live exhibition status, and CTAs must directly enter active experiences.
+#### Issue 4 — Outdated UI Navigation
+
+- **Location:** [`index.html`](./index.html) and [`src/ui.ts`](./src/ui.ts)
+- **What went wrong:** Department badges and Hero CTA behavior remained outdated ("Upcoming" badges on active departments and a placeholder toast on the Hero CTA) after the gallery catalog was completed.
+- **Why it was risky:** Users clicking primary navigation controls encountered dead-end placeholder states instead of the finished interactive catalog.
+- **How it was fixed:** Updated active department badges ("In Exhibition" for active departments, "In Preparation" for upcoming ones), wired header/drawer department links to filter `#products`, and connected the Hero CTA directly to scroll into `#products`.
+
+### Enforceable Engineering Rules
+
+- **Rule A — Ground Truth Artwork Availability:** All 16 canonical gallery artworks must remain active (`inStock: true`, `saleStatus: "In Exhibition"`) unless the user explicitly requests otherwise. Never invent sales, acquisitions, or provenance states. Preserve Course Mode out-of-stock behavior completely separate from the Gallery collection.
+- **Rule B — Code-to-Report Reconciliation Before Reporting:** Always inspect the actual source files and running DOM before generating reports or asserting defects. Distinguish Markdown documentation mistakes from actual codebase bugs.
+- **Rule C — Mode Isolation & Zero API Leakage:** Default Gallery Mode (`/`) must remain 100% autonomous, local, and resilient against network outages. The external course REST API (`https://shopboard-api.vercel.app`) belongs strictly to Course Mode (`/index.html?mode=course`). Network timeouts on the external API must never crash or disable the gallery.
+- **Rule D — Living Interface Synchronization:** When an exhibition section or department becomes active, update all corresponding interface elements: navigation links must scroll to or filter the section, badges must reflect live exhibition status, and CTAs must directly enter active experiences.
 
 ## 7. Testing & Quality Verification
 
