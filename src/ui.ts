@@ -6,11 +6,17 @@
  */
 
 import {
+  closeArtworkModal,
+  openArtworkModal,
+  setupArtworkModalEvents,
+} from "./modules/artworks/artworks.ui.ts";
+import {
   closeCartSidebar,
   openCartSidebar,
   renderCartUI,
   setupCartEvents,
 } from "./modules/cart/cart.ui.ts";
+import { detectCatalogMode } from "./modules/catalog/catalog.mode.ts";
 import type { LoadState, Product } from "./modules/products/products.types.ts";
 import {
   renderCatalogState,
@@ -20,11 +26,14 @@ import {
 } from "./modules/products/products.ui.ts";
 
 export {
+  closeArtworkModal,
   closeCartSidebar,
+  openArtworkModal,
   openCartSidebar,
   renderCartUI,
   renderCatalogState,
   renderProducts,
+  setupArtworkModalEvents,
   setupCartEvents,
   setupProductCardEvents,
   setupToolbar,
@@ -211,6 +220,228 @@ export function setupRegistrationForm(): void {
   });
 }
 
+let mobileNavBound = false;
+
+/**
+ * Initializes responsive mobile navigation drawer and collections dropdown.
+ */
+export function setupMobileNav(): void {
+  if (mobileNavBound) {
+    return;
+  }
+  mobileNavBound = true;
+
+  const mobileNavToggle = document.querySelector("#mobile-nav-toggle");
+  const mobileNavClose = document.querySelector("#mobile-nav-close");
+  const mobileNavDrawer = document.querySelector("#mobile-nav-drawer");
+  const mobileNavBackdrop = document.querySelector("#mobile-nav-backdrop");
+  const mobileLinks = document.querySelectorAll(".mobile-nav-link");
+
+  const openMobileNav = (): void => {
+    if (mobileNavDrawer && mobileNavBackdrop && mobileNavToggle) {
+      mobileNavDrawer.classList.add("is-open");
+      mobileNavBackdrop.classList.add("is-open");
+      mobileNavDrawer.setAttribute("aria-hidden", "false");
+      mobileNavBackdrop.setAttribute("aria-hidden", "false");
+      mobileNavToggle.setAttribute("aria-expanded", "true");
+      if (mobileNavClose instanceof HTMLElement) {
+        mobileNavClose.focus();
+      }
+    }
+  };
+
+  const closeMobileNav = (): void => {
+    if (mobileNavDrawer && mobileNavBackdrop && mobileNavToggle) {
+      mobileNavDrawer.classList.remove("is-open");
+      mobileNavBackdrop.classList.remove("is-open");
+      mobileNavDrawer.setAttribute("aria-hidden", "true");
+      mobileNavBackdrop.setAttribute("aria-hidden", "true");
+      mobileNavToggle.setAttribute("aria-expanded", "false");
+      if (mobileNavToggle instanceof HTMLElement) {
+        mobileNavToggle.focus();
+      }
+    }
+  };
+
+  if (mobileNavToggle) {
+    mobileNavToggle.addEventListener("click", () => {
+      const isOpen = mobileNavDrawer?.classList.contains("is-open");
+      if (isOpen) {
+        closeMobileNav();
+      } else {
+        openMobileNav();
+      }
+    });
+  }
+
+  if (mobileNavClose) {
+    mobileNavClose.addEventListener("click", closeMobileNav);
+  }
+
+  if (mobileNavBackdrop) {
+    mobileNavBackdrop.addEventListener("click", closeMobileNav);
+  }
+
+  mobileLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      closeMobileNav();
+    });
+  });
+
+  document.addEventListener("keydown", (e: KeyboardEvent) => {
+    if (e.key === "Escape" && mobileNavDrawer?.classList.contains("is-open")) {
+      closeMobileNav();
+    }
+  });
+
+  document.querySelectorAll<HTMLElement>(".nav-dept-link").forEach((link) => {
+    link.addEventListener("click", () => {
+      const dept = link.dataset.dept;
+      if (dept) {
+        const categorySelect = document.querySelector("#category-filter");
+        if (categorySelect instanceof HTMLSelectElement) {
+          categorySelect.value = dept;
+          categorySelect.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+      }
+      closeMobileNav();
+      const collectionsTrigger = document.querySelector("#collections-trigger");
+      const collectionsDropdown = document.querySelector("#collections-dropdown");
+      if (collectionsTrigger && collectionsDropdown) {
+        collectionsTrigger.setAttribute("aria-expanded", "false");
+        collectionsDropdown.classList.remove("is-active");
+      }
+    });
+  });
+
+  const collectionsTrigger = document.querySelector("#collections-trigger");
+  const collectionsDropdown = document.querySelector("#collections-dropdown");
+  if (collectionsTrigger && collectionsDropdown) {
+    collectionsTrigger.addEventListener("click", () => {
+      const isExpanded = collectionsTrigger.getAttribute("aria-expanded") === "true";
+      collectionsTrigger.setAttribute("aria-expanded", String(!isExpanded));
+      collectionsDropdown.classList.toggle("is-active", !isExpanded);
+    });
+
+    document.addEventListener("click", (e: MouseEvent) => {
+      const target = e.target;
+      if (target instanceof Node) {
+        if (!collectionsTrigger.contains(target) && !collectionsDropdown.contains(target)) {
+          collectionsTrigger.setAttribute("aria-expanded", "false");
+          collectionsDropdown.classList.remove("is-active");
+        }
+      }
+    });
+
+    document.addEventListener("keydown", (e: KeyboardEvent) => {
+      if (e.key === "Escape" && collectionsTrigger.getAttribute("aria-expanded") === "true") {
+        collectionsTrigger.setAttribute("aria-expanded", "false");
+        collectionsDropdown.classList.remove("is-active");
+        if (collectionsTrigger instanceof HTMLElement) {
+          collectionsTrigger.focus();
+        }
+      }
+    });
+  }
+}
+
+/**
+ * Sets up the AEVUM Royal Salon Hero Primary CTA handler.
+ * Provides accessible, truthful feedback without misleading links.
+ */
+export function setupHeroCTA(): void {
+  const ctaBtn = document.querySelector("#hero-enter-gallery-btn");
+  if (!ctaBtn) return;
+  ctaBtn.addEventListener("click", () => {
+    const productsSection = document.querySelector("#products");
+    if (productsSection) {
+      productsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  });
+}
+
+/**
+ * Living gallery subtle ambient parallax depth on desktop.
+ * Respects prefers-reduced-motion, applies slow damping (lerp), and restricts motion to max ±6px.
+ */
+export function setupHeroParallax(): void {
+  if (typeof window === "undefined") return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (!window.matchMedia("(min-width: 960px)").matches) return;
+
+  const heroSection = document.querySelector<HTMLElement>(".aevum-hero-section");
+  const canvas = document.querySelector<HTMLElement>(".hero-artwork-canvas");
+  if (!heroSection || !canvas) return;
+
+  let targetX = 0;
+  let targetY = 0;
+  let currentX = 0;
+  let currentY = 0;
+  let isMoving = false;
+
+  const tick = (): void => {
+    currentX += (targetX - currentX) * 0.05;
+    currentY += (targetY - currentY) * 0.05;
+
+    canvas.style.transform = `scale(1.03) translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`;
+
+    if (Math.abs(targetX - currentX) > 0.01 || Math.abs(targetY - currentY) > 0.01) {
+      requestAnimationFrame(tick);
+    } else {
+      isMoving = false;
+    }
+  };
+
+  const onMouseMove = (e: MouseEvent): void => {
+    const rect = heroSection.getBoundingClientRect();
+    const xRatio = (e.clientX - rect.left) / rect.width - 0.5;
+    const yRatio = (e.clientY - rect.top) / rect.height - 0.5;
+    targetX = -xRatio * 10;
+    targetY = -yRatio * 8;
+
+    if (!isMoving) {
+      isMoving = true;
+      requestAnimationFrame(tick);
+    }
+  };
+
+  const onMouseLeave = (): void => {
+    targetX = 0;
+    targetY = 0;
+  };
+
+  heroSection.addEventListener("mousemove", onMouseMove);
+  heroSection.addEventListener("mouseleave", onMouseLeave);
+}
+
+/**
+ * Sets up a restrained single-trigger scroll entrance animation for the Art Journal section.
+ * Respects prefers-reduced-motion and fails safe (content remains visible if JS fails).
+ */
+export function setupArtJournalObserver(): void {
+  if (typeof window === "undefined" || !("IntersectionObserver" in window)) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const spread = document.querySelector<HTMLElement>(".art-journal-spread");
+  if (!spread) return;
+
+  spread.classList.add("is-scroll-ready");
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          spread.classList.add("is-in-view");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.05 },
+  );
+
+  observer.observe(spread);
+}
+
 /**
  * Initializes and mounts all UI components and event listeners.
  */
@@ -218,12 +449,61 @@ export function initUI(
   catalogInitializer?: readonly Product[] | (() => void | Promise<void>),
 ): void {
   const mount = (): void => {
+    const mode = detectCatalogMode();
+    if (typeof document !== "undefined") {
+      document.documentElement.dataset.mode = mode;
+      document.body.classList.remove("mode-gallery", "mode-course");
+      document.body.classList.add(`mode-${mode}`);
+
+      if (mode === "gallery") {
+        const topicTag = document.querySelector("#products .studio-topic-tag");
+        const sectionTitle = document.querySelector("#products .section-title");
+        const sectionSubtitle = document.querySelector("#products .section-subtitle");
+
+        if (topicTag) topicTag.textContent = "Curated Salons";
+        if (sectionTitle) sectionTitle.textContent = "The Curated Collection";
+        if (sectionSubtitle) {
+          sectionSubtitle.textContent =
+            "Six distinguished curatorial departments spanning centuries of classical and modern mastery. Fictional educational portfolio values.";
+        }
+
+        const regTopic = document.querySelector("#register .studio-topic-tag");
+        const regTitle = document.querySelector("#register .section-title");
+        const regSubtitle = document.querySelector("#register .section-subtitle");
+        if (regTopic) regTopic.textContent = "Curatorial Salons";
+        if (regTitle) regTitle.textContent = "Private Viewing Inquiries";
+        if (regSubtitle) {
+          regSubtitle.textContent =
+            "Request private viewing appointments or submit curatorial acquisition inquiries. Educational portfolio demonstration.";
+        }
+
+        const footerBrand = document.querySelector(".footer-brand .brand-text");
+        if (footerBrand) {
+          footerBrand.innerHTML = 'AEVUM<span class="brand-accent-dot">.</span>';
+        }
+        const footerTagline = document.querySelector(".footer-tagline");
+        if (footerTagline) {
+          footerTagline.textContent =
+            "Art Across Ages — An educational fine art exhibition and digital storefront designed for the CorePro program.";
+        }
+        const footerWatermark = document.querySelector(".footer-watermark");
+        if (footerWatermark) {
+          footerWatermark.textContent = "AEVUM";
+        }
+      }
+    }
+
     renderCartUI();
     setupViewfinder();
     setupToolbar();
     setupProductCardEvents();
+    setupArtworkModalEvents();
     setupCartEvents();
     setupRegistrationForm();
+    setupMobileNav();
+    setupHeroCTA();
+    setupHeroParallax();
+    setupArtJournalObserver();
 
     if (typeof catalogInitializer === "function") {
       void catalogInitializer();

@@ -1,14 +1,16 @@
 /**
- * ShopBoard — Products UI Module
+ * ShopBoard & AEVUM — Products UI Module
  *
- * Handles product card rendering, async LoadState views (loading, error with Retry,
- * empty API catalog, empty search/filter results), toolbar filtering/sorting,
- * and delegated product card events.
+ * Handles product card rendering, curatorial gallery cards, async LoadState views,
+ * department tab filtering, toolbar controls, and delegated card/modal events.
  */
 
 import { showToast } from "../../shared/ui/toast.ts";
 import { addToCart } from "../cart/cart.state.ts";
 import { openCartSidebar, renderCartUI } from "../cart/cart.ui.ts";
+import { getArtworkById } from "../artworks/artworks.data.ts";
+import { openArtworkModal } from "../artworks/artworks.ui.ts";
+import { isGalleryMode } from "../catalog/catalog.mode.ts";
 import { filterProducts, sortProducts } from "./products.logic.ts";
 import type { LoadState, Product } from "./products.types.ts";
 
@@ -17,6 +19,16 @@ let currentLoadStatus: LoadState["status"] = "loading";
 let retryCallback: (() => void) | null = null;
 let toolbarEventsBound = false;
 let productCardEventsBound = false;
+
+const GALLERY_DEPARTMENTS: readonly { id: string; label: string; count: number }[] = [
+  { id: "all", label: "All Departments", count: 16 },
+  { id: "Paintings", label: "Paintings", count: 6 },
+  { id: "Sculptures", label: "Sculptures", count: 3 },
+  { id: "Decorative Antiques", label: "Decorative Antiques", count: 4 },
+  { id: "Ceramics & Glass", label: "Ceramics & Glass", count: 3 },
+  { id: "Prints & Editions", label: "Prints & Editions", count: 0 },
+  { id: "Curiosities", label: "Curiosities", count: 0 },
+];
 
 /**
  * Escapes characters for safe HTML injection to prevent XSS.
@@ -31,12 +43,9 @@ function escapeHtml(str: string): string {
 }
 
 /**
- * Generates card header preview markup for each product.
- * Displays accurate category visual representation for physical catalog items,
- * or original miniature specimen sheets when displaying the digital dataset.
+ * Generates card header preview markup for digital products (Course Mode).
  */
 function getProductPreviewHtml(product: Product): string {
-  // If product is from digital templates catalog (e.g. cv-template, study-planner)
   if (product.id === "cv-template") {
     return `
       <div class="specimen-sheet specimen-cv" aria-hidden="true">
@@ -185,7 +194,6 @@ function getProductPreviewHtml(product: Product): string {
     `;
   }
 
-  // Neutral visual card representation for API physical products (Bags, Shoes, Accessories)
   return `
     <div class="specimen-sheet product-category-backdrop" aria-hidden="true">
       <div class="category-emblem">
@@ -196,17 +204,107 @@ function getProductPreviewHtml(product: Product): string {
 }
 
 /**
+ * Updates the visual active state of the horizontal gallery department tabs.
+ */
+export function updateActiveDepartmentTab(selectedCategory: string): void {
+  const tabs = document.querySelectorAll<HTMLButtonElement>(
+    "#gallery-department-tabs .dept-tab-btn",
+  );
+  tabs.forEach((tab) => {
+    const tabCat = tab.dataset.category;
+    const isActive = tabCat === selectedCategory;
+    tab.classList.toggle("is-active", isActive);
+    tab.setAttribute("aria-selected", isActive ? "true" : "false");
+  });
+}
+
+/**
+ * Renders the horizontal curatorial department tabs in Gallery Mode.
+ */
+export function renderDepartmentTabs(activeCategory = "all"): void {
+  const container = document.querySelector("#gallery-department-tabs");
+  if (!container) return;
+
+  container.innerHTML = `
+    <div class="dept-tabs-scroll-wrap" role="tablist" aria-label="Curatorial Departments">
+      ${GALLERY_DEPARTMENTS.map((dept) => {
+        const isActive = dept.id === activeCategory;
+        const countBadge = dept.count > 0 ? ` (${dept.count})` : " (0)";
+        return `
+          <button
+            type="button"
+            role="tab"
+            class="dept-tab-btn${isActive ? " is-active" : ""}"
+            data-category="${escapeHtml(dept.id)}"
+            aria-selected="${isActive ? "true" : "false"}"
+          >
+            <span class="dept-tab-label">${escapeHtml(dept.label)}</span>
+            <span class="dept-tab-count">${countBadge}</span>
+          </button>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+
+/**
  * Renders filtered/sorted product cards dynamically into `#products-grid`.
- * When `productsToRender` is empty (due to active search/category filters),
- * renders the empty search-result state with a "Reset Filters" action.
  */
 export function renderProducts(productsToRender: readonly Product[]): void {
   const container = document.querySelector("#products-grid");
   const announcer = document.querySelector("#product-results-announcer");
+  const inGalleryMode = isGalleryMode();
 
   if (!container) return;
 
+  // Empty search/filter state handling
   if (productsToRender.length === 0) {
+    const categorySelect = document.querySelector("#category-filter");
+    const currentCategory =
+      categorySelect instanceof HTMLSelectElement ? categorySelect.value : "all";
+
+    if (
+      inGalleryMode &&
+      (currentCategory === "Prints & Editions" || currentCategory === "Curiosities")
+    ) {
+      container.innerHTML = `
+        <div class="products-empty catalog-state-empty-filter coming-soon-placard" role="status">
+          <div class="placard-ornament" aria-hidden="true">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+          </div>
+          <span class="placard-dept-tag">${escapeHtml(currentCategory)}</span>
+          <h3 class="products-empty-title">Department in Preparation</h3>
+          <p class="products-empty-desc">
+            The ${escapeHtml(currentCategory)} curatorial holdings are currently undergoing archival cataloging and provenance verification for upcoming salon openings. Private viewing inquiries remain available.
+          </p>
+          <button type="button" id="reset-filters-btn" class="btn btn-sm btn-outline">
+            View All Departments
+          </button>
+        </div>
+      `;
+      if (announcer) {
+        announcer.textContent = `${currentCategory} department is in preparation. Zero items currently displayed.`;
+      }
+      return;
+    }
+
+    if (inGalleryMode) {
+      container.innerHTML = `
+        <div class="products-empty catalog-state-empty-filter" role="status">
+          <p class="products-empty-title">No artworks match your search</p>
+          <p class="products-empty-desc">Try adjusting your curatorial query or selecting a different department.</p>
+          <button type="button" id="reset-filters-btn" class="btn btn-sm btn-outline">Reset Filters</button>
+        </div>
+      `;
+      if (announcer) {
+        announcer.textContent = "No artworks found matching the selected filters.";
+      }
+      return;
+    }
+
+    // Default Course Mode empty filter state
     container.innerHTML = `
       <div class="products-empty catalog-state-empty-filter" role="status">
         <p class="products-empty-title">No products match your filter</p>
@@ -220,6 +318,94 @@ export function renderProducts(productsToRender: readonly Product[]): void {
     return;
   }
 
+  // Gallery Mode: Nocturne Pavilion curatorial cards
+  if (inGalleryMode) {
+    container.innerHTML = productsToRender
+      .map((product) => {
+        const artwork = getArtworkById(product.id);
+        const isAvailable = product.inStock;
+        const disabledAttr = isAvailable ? "" : "disabled";
+        const outOfStockCardClass = isAvailable ? "" : " is-out-of-stock";
+        const outOfStockBadge = isAvailable
+          ? ""
+          : `<span class="stock-badge out-of-stock" aria-label="Unavailable">Acquired / Private Viewing</span>`;
+
+        const attributionBadge =
+          artwork && artwork.artist === null
+            ? `<span class="curatorial-badge-pending">Attribution Pending</span>`
+            : "";
+
+        const imageSrc = artwork?.imageSrc ?? "";
+        const altText = artwork?.altText ?? product.name;
+        const imgWidth = artwork?.imageWidth ?? 600;
+        const imgHeight = artwork?.imageHeight ?? 450;
+        const mediumText = artwork?.medium ?? "Historical Reference";
+
+        return `
+          <article class="product-card artwork-card${outOfStockCardClass}" data-product-id="${escapeHtml(product.id)}">
+            <div class="artwork-frame">
+              <div class="artwork-image-wrapper">
+                <img
+                  src="${escapeHtml(imageSrc)}"
+                  alt="${escapeHtml(altText)}"
+                  class="artwork-card-img"
+                  width="${imgWidth}"
+                  height="${imgHeight}"
+                  loading="lazy"
+                />
+                <div class="artwork-card-badges">
+                  ${outOfStockBadge}
+                  <span class="product-category-tag artwork-category-tag">${escapeHtml(product.category)}</span>
+                  ${attributionBadge}
+                </div>
+              </div>
+            </div>
+            <div class="product-body artwork-body">
+              <h3 class="product-title artwork-title">${escapeHtml(product.name)}</h3>
+              <p class="product-description artwork-description">${escapeHtml(product.description)}</p>
+              <div class="artwork-meta-row">
+                <span class="artwork-medium-label">${escapeHtml(mediumText)}</span>
+              </div>
+              <div class="product-footer artwork-footer">
+                <div class="product-price-info artwork-price-info">
+                  <span class="product-price artwork-price">$${product.price.toLocaleString("en-US")}</span>
+                  <span class="price-demo-tag">(Portfolio Demo)</span>
+                </div>
+                <div class="artwork-card-actions">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline view-artwork-btn"
+                    data-artwork-id="${escapeHtml(product.id)}"
+                    aria-label="View curatorial details for ${escapeHtml(product.name)}"
+                  >
+                    View Artwork
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-action add-to-cart-btn"
+                    data-id="${escapeHtml(product.id)}"
+                    aria-label="${isAvailable ? `Acquire ${escapeHtml(product.name)}` : `${escapeHtml(product.name)} is unavailable`}"
+                    ${disabledAttr}
+                  >
+                    ${isAvailable ? "Acquire Piece" : "Acquired"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+        `;
+      })
+      .join("");
+
+    if (announcer) {
+      announcer.textContent = `Showing ${productsToRender.length} ${
+        productsToRender.length === 1 ? "artwork" : "artworks"
+      }.`;
+    }
+    return;
+  }
+
+  // Course Mode: Original specimen/API product cards
   container.innerHTML = productsToRender
     .map((product) => {
       const isAvailable = product.inStock;
@@ -295,6 +481,10 @@ export function applyToolbarFilters(): void {
   const sortOrder =
     sortSelect instanceof HTMLSelectElement && sortSelect.value ? sortSelect.value : "default";
 
+  if (isGalleryMode()) {
+    updateActiveDepartmentTab(category);
+  }
+
   const filtered = filterProducts(activeCatalogProducts, {
     searchTerm,
     category,
@@ -305,8 +495,46 @@ export function applyToolbarFilters(): void {
 }
 
 /**
- * Renders the async `LoadState` (loading, error with Retry, empty API response,
- * or success catalog) inside `#products-grid`.
+ * Updates the `#category-filter` select options to match the active catalog.
+ */
+export function updateCategoryFilterOptions(products: readonly Product[]): void {
+  const categorySelect = document.querySelector("#category-filter");
+  if (!(categorySelect instanceof HTMLSelectElement)) return;
+
+  if (isGalleryMode()) {
+    const currentSelection = categorySelect.value;
+    categorySelect.innerHTML = [
+      `<option value="all">All Departments (${products.length})</option>`,
+      ...GALLERY_DEPARTMENTS.filter((d) => d.id !== "all").map(
+        (dept) => `<option value="${escapeHtml(dept.id)}">${escapeHtml(dept.label)}</option>`,
+      ),
+    ].join("");
+
+    const isStillValid =
+      currentSelection === "all" || GALLERY_DEPARTMENTS.some((d) => d.id === currentSelection);
+    categorySelect.value = isStillValid ? currentSelection : "all";
+
+    renderDepartmentTabs(categorySelect.value);
+    return;
+  }
+
+  // Course Mode
+  const currentSelection = categorySelect.value;
+  const categories = Array.from(new Set(products.map((p) => p.category)));
+
+  if (categories.length === 0) return;
+
+  categorySelect.innerHTML = [
+    `<option value="all">All Categories (${products.length})</option>`,
+    ...categories.map((cat) => `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`),
+  ].join("");
+
+  const isStillValid = categories.some((c) => c === currentSelection);
+  categorySelect.value = isStillValid ? currentSelection : "all";
+}
+
+/**
+ * Renders the async `LoadState` inside `#products-grid`.
  */
 export function renderCatalogState(state: LoadState, onRetry?: () => void): void {
   currentLoadStatus = state.status;
@@ -323,12 +551,12 @@ export function renderCatalogState(state: LoadState, onRetry?: () => void): void
       container.innerHTML = `
         <div class="products-empty catalog-state-loading" role="status">
           <div class="catalog-loading-spinner" aria-hidden="true"></div>
-          <p class="products-empty-title">Loading products...</p>
-          <p class="products-empty-desc">Fetching live catalog from ShopBoard API.</p>
+          <p class="products-empty-title">Loading catalog...</p>
+          <p class="products-empty-desc">Fetching curated works from the collection.</p>
         </div>
       `;
       if (announcer) {
-        announcer.textContent = "Loading products from API...";
+        announcer.textContent = "Loading catalog items...";
       }
       return;
     }
@@ -351,7 +579,6 @@ export function renderCatalogState(state: LoadState, onRetry?: () => void): void
       activeCatalogProducts = [...state.products];
       updateCategoryFilterOptions(state.products);
 
-      // Distinct empty API state when the server returns 0 items
       if (state.products.length === 0) {
         container.innerHTML = `
           <div class="products-empty catalog-state-empty-api" role="status">
@@ -373,32 +600,8 @@ export function renderCatalogState(state: LoadState, onRetry?: () => void): void
 }
 
 /**
- * Updates the `#category-filter` select options to match the distinct categories
- * present in the active catalog, preserving the "All Categories" option.
+ * Initializes toolbar inputs, select listeners, and category tab delegation.
  */
-export function updateCategoryFilterOptions(products: readonly Product[]): void {
-  const categorySelect = document.querySelector("#category-filter");
-  if (!(categorySelect instanceof HTMLSelectElement)) return;
-
-  const currentSelection = categorySelect.value;
-  const categories = Array.from(new Set(products.map((p) => p.category)));
-
-  // If no products, leave standard default
-  if (categories.length === 0) return;
-
-  categorySelect.innerHTML = [
-    `<option value="all">All Categories (${products.length})</option>`,
-    ...categories.map((cat) => `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`),
-  ].join("");
-
-  // Restore selection if still valid, otherwise reset to 'all'
-  const isStillValid = categories.some((c) => c === currentSelection);
-  if (isStillValid) {
-    categorySelect.value = currentSelection;
-  } else {
-    categorySelect.value = "all";
-  }
-}
 export function setupToolbar(allProducts?: readonly Product[]): void {
   if (allProducts) {
     activeCatalogProducts = [...allProducts];
@@ -415,17 +618,43 @@ export function setupToolbar(allProducts?: readonly Product[]): void {
   const categorySelect = document.querySelector("#category-filter");
   const sortSelect = document.querySelector("#price-sort");
   const productsContainer = document.querySelector("#products-grid");
+  const departmentTabs = document.querySelector("#gallery-department-tabs");
 
   if (searchInput) {
     searchInput.addEventListener("input", applyToolbarFilters);
   }
 
   if (categorySelect) {
-    categorySelect.addEventListener("change", applyToolbarFilters);
+    categorySelect.addEventListener("change", () => {
+      if (isGalleryMode() && categorySelect instanceof HTMLSelectElement) {
+        updateActiveDepartmentTab(categorySelect.value);
+      }
+      applyToolbarFilters();
+    });
   }
 
   if (sortSelect) {
     sortSelect.addEventListener("change", applyToolbarFilters);
+  }
+
+  // Delegated horizontal tabs listener
+  if (departmentTabs) {
+    departmentTabs.addEventListener("click", (event: Event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+
+      const tabBtn = target.closest<HTMLButtonElement>(".dept-tab-btn");
+      if (!tabBtn) return;
+
+      const category = tabBtn.dataset.category;
+      if (!category) return;
+
+      if (categorySelect instanceof HTMLSelectElement) {
+        categorySelect.value = category;
+      }
+      updateActiveDepartmentTab(category);
+      applyToolbarFilters();
+    });
   }
 
   if (productsContainer) {
@@ -437,6 +666,9 @@ export function setupToolbar(allProducts?: readonly Product[]): void {
         if (searchInput instanceof HTMLInputElement) searchInput.value = "";
         if (categorySelect instanceof HTMLSelectElement) categorySelect.value = "all";
         if (sortSelect instanceof HTMLSelectElement) sortSelect.value = "default";
+        if (isGalleryMode()) {
+          updateActiveDepartmentTab("all");
+        }
         applyToolbarFilters();
         return;
       }
@@ -451,7 +683,7 @@ export function setupToolbar(allProducts?: readonly Product[]): void {
 }
 
 /**
- * Attaches event delegation once to `#products-grid` for "Add to Cart" clicks.
+ * Attaches event delegation once to `#products-grid` for "Add to Cart" and "View Artwork" clicks.
  */
 export function setupProductCardEvents(allProducts?: readonly Product[]): void {
   if (allProducts) {
@@ -472,8 +704,19 @@ export function setupProductCardEvents(allProducts?: readonly Product[]): void {
     const target = event.target;
     if (!(target instanceof Element)) return;
 
-    const addBtn = target.closest(".add-to-cart-btn");
-    if (!(addBtn instanceof HTMLElement)) return;
+    // 1. Delegated "View Artwork" button (Modal trigger)
+    const viewBtn = target.closest<HTMLElement>(".view-artwork-btn");
+    if (viewBtn) {
+      const artworkId = viewBtn.dataset.artworkId;
+      if (artworkId) {
+        openArtworkModal(artworkId);
+        return;
+      }
+    }
+
+    // 2. Delegated "Add to Cart" / "Acquire Piece" button
+    const addBtn = target.closest<HTMLElement>(".add-to-cart-btn");
+    if (!addBtn) return;
 
     const productId = addBtn.dataset.id;
     if (!productId) return;

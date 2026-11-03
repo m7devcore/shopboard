@@ -4,7 +4,13 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ShopBoard — Digital Experiences Shaped by Structure &amp; Craft</title>
+    <title>AEVUM — Art Across Ages | Fine Art &amp; Curated Antiquities</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
     <link rel="preconnect" href="https://api.fontshare.com" />
     <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
     <link
@@ -21,110 +27,415 @@
       <div class="ambient-grid-overlay"></div>
     </div>
 
-    <!-- Floating Glass Capsule Header -->
-    <header class="site-header">
-      <div class="container header-container">
-        <div class="header-glass-bar">
-          <a href="#hero" class="brand" aria-label="ShopBoard Home">
-            <span class="brand-symbol">
+    <!-- AEVUM Refined Private Gallery Header -->
+    <header class="site-header aevum-header" id="site-header">
+      <div class="header-inner container">
+        <a href="#hero" class="brand aevum-brand" aria-label="AEVUM — Art Across Ages">
+          <span class="brand-ornament" aria-hidden="true">
+            <svg class="ornament-svg" width="34" height="17" viewBox="0 0 34 17" fill="none">
+              <!-- Roman-inspired diamond with fine horizontal lines -->
+              <path
+                d="M17 2 L23 8.5 L17 15 L11 8.5 Z"
+                stroke="currentColor"
+                stroke-width="1.3"
+                fill="none"
+              />
+              <circle cx="17" cy="8.5" r="1.6" fill="currentColor" />
+              <line
+                x1="2"
+                y1="8.5"
+                x2="8"
+                y2="8.5"
+                stroke="currentColor"
+                stroke-width="1.2"
+                stroke-linecap="round"
+              />
+              <line
+                x1="26"
+                y1="8.5"
+                x2="32"
+                y2="8.5"
+                stroke="currentColor"
+                stroke-width="1.2"
+                stroke-linecap="round"
+              />
+            </svg>
+          </span>
+          <div class="brand-titles">
+            <span class="brand-wordmark">AEVUM</span>
+            <span class="brand-tagline">Art Across Ages</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="site-nav aevum-nav" id="site-nav" aria-label="Main Navigation">
+          <ul class="nav-list">
+            <li class="nav-item has-dropdown">
+              <button
+                type="button"
+                class="nav-link dropdown-trigger"
+                id="collections-trigger"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <span>Collections</span>
+                <svg
+                  class="dropdown-chevron"
+                  width="10"
+                  height="6"
+                  viewBox="0 0 10 6"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M1 1L5 5L9 1"
+                    stroke="currentColor"
+                    stroke-width="1.4"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+              <div
+                class="collections-dropdown"
+                id="collections-dropdown"
+                role="region"
+                aria-label="Approved Collections"
+              >
+                <div class="collections-dropdown-panel">
+                  <div class="collections-dropdown-header">
+                    <span class="collections-dropdown-label">Curated Collections</span>
+                    <span class="collections-status-pill">In Exhibition</span>
+                  </div>
+                  <ul class="collections-dropdown-list">
+                    <li class="dropdown-list-item">
+                      <a href="#products" class="dropdown-item nav-dept-link" data-dept="Paintings">
+                        <span class="collection-name">Paintings</span>
+                        <span class="collection-badge">6 Works</span>
+                      </a>
+                    </li>
+                    <li class="dropdown-list-item">
+                      <a
+                        href="#products"
+                        class="dropdown-item nav-dept-link"
+                        data-dept="Sculptures"
+                      >
+                        <span class="collection-name">Sculptures</span>
+                        <span class="collection-badge">3 Works</span>
+                      </a>
+                    </li>
+                    <li class="dropdown-list-item">
+                      <a
+                        href="#products"
+                        class="dropdown-item nav-dept-link"
+                        data-dept="Decorative Antiques"
+                      >
+                        <span class="collection-name">Decorative Antiques</span>
+                        <span class="collection-badge">4 Works</span>
+                      </a>
+                    </li>
+                    <li class="dropdown-list-item">
+                      <a
+                        href="#products"
+                        class="dropdown-item nav-dept-link"
+                        data-dept="Ceramics &amp; Glass"
+                      >
+                        <span class="collection-name">Ceramics &amp; Glass</span>
+                        <span class="collection-badge">3 Works</span>
+                      </a>
+                    </li>
+                    <li class="dropdown-list-item">
+                      <a
+                        href="#products"
+                        class="dropdown-item nav-dept-link is-upcoming"
+                        data-dept="Prints &amp; Editions"
+                      >
+                        <span class="collection-name">Prints &amp; Editions</span>
+                        <span class="collection-badge">In Preparation</span>
+                      </a>
+                    </li>
+                    <li class="dropdown-list-item">
+                      <a
+                        href="#products"
+                        class="dropdown-item nav-dept-link is-upcoming"
+                        data-dept="Curiosities"
+                      >
+                        <span class="collection-name">Curiosities</span>
+                        <span class="collection-badge">In Preparation</span>
+                      </a>
+                    </li>
+                  </ul>
+                  <div class="collections-dropdown-footer">
+                    <span class="collections-footer-text"
+                      >Six curatorial departments with 16 canonical works on exhibition.</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a href="#heritage" class="nav-link">Art Journal</a>
+            </li>
+            <li class="nav-item">
+              <a href="#hero" class="nav-link">Overview</a>
+            </li>
+            <li class="nav-item">
+              <a href="#register" class="nav-link">Private Viewing</a>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- Header Actions: Cart & Mobile Menu Toggle -->
+        <div class="header-action-wrap">
+          <button
+            type="button"
+            id="cart-toggle-btn"
+            class="cart-toggle-btn aevum-cart-btn"
+            aria-label="Shopping Cart, 0 items"
+            aria-expanded="false"
+            aria-controls="cart-sidebar"
+          >
+            <span class="cart-icon-wrap" aria-hidden="true">
               <svg
-                class="brand-icon"
-                width="18"
-                height="18"
+                width="16"
+                height="16"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2.5"
+                stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                aria-hidden="true"
               >
-                <rect x="3" y="3" width="18" height="18" rx="3" ry="3"></rect>
-                <line x1="3" y1="9" x2="21" y2="9"></line>
-                <line x1="9" y1="21" x2="9" y2="9"></line>
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <path d="M16 10a4 4 0 0 1-8 0"></path>
               </svg>
             </span>
-            <span class="brand-text">shopboard<span class="brand-accent-dot">.</span></span>
-          </a>
+            <span class="cart-toggle-text">Acquisitions</span>
+            <span id="cart-count" class="cart-badge" aria-hidden="true">0</span>
+          </button>
 
-          <nav class="site-nav" aria-label="Main Navigation">
-            <ul class="nav-list">
-              <li><a href="#hero" class="nav-link">Overview</a></li>
-              <li><a href="#products" class="nav-link">Catalogue</a></li>
-              <li><a href="#heritage" class="nav-link">Provenance</a></li>
-              <li><a href="#register" class="nav-link">Studio Access</a></li>
-            </ul>
-          </nav>
-
-          <div class="header-action-wrap">
-            <button
-              type="button"
-              id="cart-toggle-btn"
-              class="cart-toggle-btn"
-              aria-label="Shopping Cart, 0 items"
-              aria-expanded="false"
-              aria-controls="cart-sidebar"
-            >
-              <span class="cart-icon-wrap" aria-hidden="true">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <circle cx="9" cy="21" r="1"></circle>
-                  <circle cx="20" cy="21" r="1"></circle>
-                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                </svg>
-              </span>
-              <span class="cart-toggle-text">Cart</span>
-              <span id="cart-count" class="cart-badge" aria-hidden="true">0</span>
-            </button>
-          </div>
+          <!-- Mobile Navigation Toggle -->
+          <button
+            type="button"
+            id="mobile-nav-toggle"
+            class="mobile-nav-toggle"
+            aria-label="Open navigation menu"
+            aria-expanded="false"
+            aria-controls="mobile-nav-drawer"
+          >
+            <span class="hamburger-box" aria-hidden="true">
+              <span class="hamburger-line"></span>
+              <span class="hamburger-line"></span>
+              <span class="hamburger-line"></span>
+            </span>
+          </button>
         </div>
       </div>
+
+      <!-- Mobile Navigation Drawer -->
+      <div
+        id="mobile-nav-drawer"
+        class="mobile-nav-drawer"
+        aria-label="Mobile Navigation"
+        aria-hidden="true"
+        tabindex="-1"
+      >
+        <div class="mobile-nav-head">
+          <div class="mobile-nav-brand">
+            <span class="mobile-wordmark">AEVUM</span>
+            <span class="mobile-tagline">Art Across Ages</span>
+          </div>
+          <button
+            type="button"
+            id="mobile-nav-close"
+            class="mobile-nav-close"
+            aria-label="Close navigation menu"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="mobile-nav-body">
+          <div class="mobile-nav-section">
+            <div class="mobile-section-head-wrap">
+              <span class="mobile-section-heading">Collections</span>
+              <span class="mobile-section-badge">In Exhibition</span>
+            </div>
+            <ul class="mobile-nav-list">
+              <li class="mobile-nav-item">
+                <a href="#products" class="mobile-nav-link nav-dept-link" data-dept="Paintings">
+                  <span class="collection-name">Paintings</span>
+                  <span class="collection-badge">6 Works</span>
+                </a>
+              </li>
+              <li class="mobile-nav-item">
+                <a href="#products" class="mobile-nav-link nav-dept-link" data-dept="Sculptures">
+                  <span class="collection-name">Sculptures</span>
+                  <span class="collection-badge">3 Works</span>
+                </a>
+              </li>
+              <li class="mobile-nav-item">
+                <a
+                  href="#products"
+                  class="mobile-nav-link nav-dept-link"
+                  data-dept="Decorative Antiques"
+                >
+                  <span class="collection-name">Decorative Antiques</span>
+                  <span class="collection-badge">4 Works</span>
+                </a>
+              </li>
+              <li class="mobile-nav-item">
+                <a
+                  href="#products"
+                  class="mobile-nav-link nav-dept-link"
+                  data-dept="Ceramics &amp; Glass"
+                >
+                  <span class="collection-name">Ceramics &amp; Glass</span>
+                  <span class="collection-badge">3 Works</span>
+                </a>
+              </li>
+              <li class="mobile-nav-item">
+                <a
+                  href="#products"
+                  class="mobile-nav-link nav-dept-link is-upcoming"
+                  data-dept="Prints &amp; Editions"
+                >
+                  <span class="collection-name">Prints &amp; Editions</span>
+                  <span class="collection-badge">In Preparation</span>
+                </a>
+              </li>
+              <li class="mobile-nav-item">
+                <a
+                  href="#products"
+                  class="mobile-nav-link nav-dept-link is-upcoming"
+                  data-dept="Curiosities"
+                >
+                  <span class="collection-name">Curiosities</span>
+                  <span class="collection-badge">In Preparation</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="mobile-nav-section">
+            <span class="mobile-section-heading">Private Gallery</span>
+            <ul class="mobile-nav-list">
+              <li><a href="#hero" class="mobile-nav-link">Overview</a></li>
+              <li><a href="#heritage" class="mobile-nav-link">Art Journal</a></li>
+              <li><a href="#register" class="mobile-nav-link">Private Viewing</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="mobile-nav-footer">
+          <div class="mobile-ornament" aria-hidden="true">
+            <svg width="24" height="12" viewBox="0 0 32 16" fill="none">
+              <path
+                d="M16 2 L22 8 L16 14 L10 8 Z"
+                stroke="currentColor"
+                stroke-width="1.2"
+                fill="none"
+              />
+              <circle cx="16" cy="8" r="1.5" fill="currentColor" />
+            </svg>
+          </div>
+          <span class="mobile-footnote">Curatorial Art Portfolio Exhibition</span>
+        </div>
+      </div>
+      <div id="mobile-nav-backdrop" class="mobile-nav-backdrop" aria-hidden="true"></div>
     </header>
 
     <main id="main-content">
-      <!-- Section 1: Hero Section (Cinematic Editorial Scale) -->
-      <section id="hero" class="hero-section">
-        <div class="container hero-container">
-          <div class="hero-content">
-            <div class="status-indicator-pill">
-              <span class="pulse-indicator" aria-hidden="true"></span>
-              <span class="pill-caption"
-                ><span class="pill-title">Studio Collection 2026</span>
-                <span class="pill-divider">&bull;</span>
-                <span class="pill-meta">12 Production Systems</span></span
+      <!-- Section 1: AEVUM Hero — The Royal Salon (Private Viewing Room) -->
+      <section id="hero" class="hero-section aevum-hero-section" aria-labelledby="hero-title">
+        <!-- Full-Bleed Artwork Backdrop Layer -->
+        <div class="hero-backdrop" aria-hidden="true">
+          <picture>
+            <source
+              type="image/webp"
+              srcset="./assets/hero/royal-salon.webp"
+              media="(min-width: 768px)"
+            />
+            <source type="image/webp" srcset="./assets/hero/royal-salon-mobile.webp" />
+            <img
+              src="./assets/hero/royal-salon.png"
+              alt=""
+              class="hero-artwork-canvas"
+              width="1672"
+              height="941"
+              loading="eager"
+              fetchpriority="high"
+            />
+          </picture>
+          <!-- Painterly directional shadow & candlelit atmosphere -->
+          <div class="hero-backdrop-vignette"></div>
+          <div class="hero-candle-glow"></div>
+        </div>
+
+        <!-- Editorial Stage (Text positioned directly inside the room) -->
+        <div class="container hero-editorial-stage">
+          <div class="hero-editorial-content">
+            <div class="hero-museum-overline" aria-label="Curatorial provenance">
+              <svg
+                class="overline-diamond"
+                width="10"
+                height="10"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
               >
+                <path
+                  d="M12 2L22 12L12 22L2 12Z"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  fill="none"
+                />
+                <circle cx="12" cy="12" r="2.5" fill="currentColor" />
+              </svg>
+              <span class="overline-tag">Private Viewing Room</span>
+              <span class="overline-separator" aria-hidden="true">&bull;</span>
+              <span class="overline-salon">Salon I</span>
             </div>
 
-            <h1 class="hero-title">
-              We design digital tools shaped by
-              <span class="text-accent-structure">structure</span>,
-              <span class="text-accent-precision">precision</span>, and
-              <span class="text-accent-craft">craft</span>.
+            <h1 id="hero-title" class="hero-heading aevum-hero-heading">
+              A World of Art &amp; Antiquities.
             </h1>
 
-            <p class="hero-description">
-              Twelve production-grade operating sheets, executive templates, and execution
-              dashboards engineered for students, independent builders, and creative studios.
+            <p class="hero-description aevum-hero-description">
+              Painting, sculpture, and decorative objects &mdash; a study of form, craftsmanship,
+              and time.
             </p>
 
-            <div class="hero-actions">
-              <a href="#products" class="btn btn-primary btn-glow">
-                <span>Explore Catalogue</span>
+            <div class="hero-actions aevum-hero-actions">
+              <button
+                type="button"
+                class="hero-cta-btn"
+                id="hero-enter-gallery-btn"
+                aria-label="Enter the Gallery"
+              >
+                <span class="cta-label">Enter the Gallery</span>
                 <svg
+                  class="hero-cta-arrow"
                   width="15"
                   height="15"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  stroke-width="2.5"
+                  stroke-width="2.2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   aria-hidden="true"
@@ -132,214 +443,42 @@
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                   <polyline points="12 5 19 12 12 19"></polyline>
                 </svg>
-              </a>
-              <a href="#register" class="btn btn-frosted-dark">
-                <span>Studio Access &rarr;</span>
-              </a>
-            </div>
-
-            <div class="hero-feature-tags" aria-label="Key Highlights">
-              <div class="feature-tag-item">
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                >
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-                <span>Zero Dependencies</span>
-              </div>
-              <div class="feature-tag-item">
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                >
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-                <span>Offline Storage Sync</span>
-              </div>
-              <div class="feature-tag-item">
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                >
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-                <span>WCAG Semantic Structure</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- The Live Thing: Interactive Specimen Viewfinder Console -->
-          <div
-            class="viewfinder glass-console-interactive"
-            role="region"
-            aria-label="Interactive digital template previewer"
-          >
-            <div class="console-glass-rim" aria-hidden="true"></div>
-            <div class="viewfinder-header">
-              <div class="viewfinder-controls-header">
-                <div class="console-status-group">
-                  <span class="live-dot" aria-hidden="true"></span>
-                  <span class="specimen-badge">Document Specimen Inspector</span>
-                </div>
-                <span class="specimen-hint">Select a tab to view document</span>
-              </div>
-              <div class="viewfinder-tabs" role="tablist">
-                <button
-                  type="button"
-                  class="tab-btn is-active"
-                  data-view="cv"
-                  role="tab"
-                  aria-selected="true"
-                >
-                  <span class="tab-label-full">CV Resume</span
-                  ><span class="tab-label-short">Resume</span>
-                </button>
-                <button
-                  type="button"
-                  class="tab-btn"
-                  data-view="planner"
-                  role="tab"
-                  aria-selected="false"
-                >
-                  Planner
-                </button>
-                <button
-                  type="button"
-                  class="tab-btn"
-                  data-view="budget"
-                  role="tab"
-                  aria-selected="false"
-                >
-                  Finance
-                </button>
-                <button
-                  type="button"
-                  class="tab-btn"
-                  data-view="kanban"
-                  role="tab"
-                  aria-selected="false"
-                >
-                  Kanban
-                </button>
-              </div>
-            </div>
-            <div id="viewfinder-display" class="viewfinder-display" aria-live="polite">
-              <!-- Live interactive document layout rendered dynamically via src/ui.js -->
+              </button>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Section 1.5: Heritage Provenance Showcase (Archival Material Foundations) -->
-      <section
-        id="heritage"
-        class="heritage-showcase-section"
-        aria-label="Design Heritage & Material Roots"
-      >
+      <!-- Section 1.5: AEVUM Art Journal (Editorial Gallery Spread) -->
+      <section id="heritage" class="art-journal-section" aria-labelledby="journal-heading">
         <div class="container">
-          <div class="heritage-glass-card glass-panel-dark">
-            <div class="heritage-header">
-              <span class="studio-topic-tag">Provenance &bull; Material Roots</span>
-              <h2 class="heritage-title">From physical ledgers to structured digital sheets.</h2>
-              <p class="heritage-desc">
-                ShopBoard synthesizes centuries of physical ledger bookbinding, typographic
-                letterpress grids, and personal almanacs into responsive web interfaces.
+          <div class="art-journal-spread">
+            <div class="journal-content-col">
+              <span class="journal-overline">AEVUM JOURNAL</span>
+              <h2 id="journal-heading" class="journal-heading">The Memory of Form</h2>
+              <div class="journal-divider" aria-hidden="true"></div>
+              <p class="journal-paragraph">
+                In painting, sculpture, and decorative art, every detail reflects a choice &mdash; a
+                line drawn, a gesture captured, a surface shaped by hand.
               </p>
             </div>
-            <div class="heritage-grid">
-              <figure class="heritage-item">
-                <div class="heritage-img-wrap">
+            <div class="journal-media-col">
+              <figure class="journal-artwork-figure">
+                <div class="journal-artwork-frame">
                   <img
-                    src="./archive/account-book-ledger.jpg"
-                    width="400"
-                    height="260"
-                    alt="1835 Account Book Ledger with marbleized cover from The Metropolitan Museum of Art"
+                    src="./assets/journal/winged-marble-figure.webp"
+                    alt="Classical sculpted winged figure seated in flowing drapery against a dark background"
+                    class="journal-artwork-img"
+                    width="900"
+                    height="988"
                     loading="lazy"
                     decoding="async"
                   />
                 </div>
-                <figcaption class="heritage-caption">
-                  <span class="heritage-caption-title">Merchant Ledger (1835)</span>
-                  <span class="heritage-caption-meta"
-                    >The Metropolitan Museum of Art &bull; Public Domain</span
-                  >
+                <figcaption class="journal-artwork-caption">
+                  Sculptural study &bull; Form and gesture
                 </figcaption>
               </figure>
-              <figure class="heritage-item">
-                <div class="heritage-img-wrap">
-                  <img
-                    src="./archive/calendar-almanac-in-scroll-form.jpg"
-                    width="400"
-                    height="260"
-                    alt="1810 Calendar-Almanac Scroll showing structured solar and lunar calculation tables"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-                <figcaption class="heritage-caption">
-                  <span class="heritage-caption-title">Almanac Calendar Scroll (1810)</span>
-                  <span class="heritage-caption-meta">Katib Muhammad Ma'ruf &bull; CC0</span>
-                </figcaption>
-              </figure>
-              <figure class="heritage-item">
-                <div class="heritage-img-wrap">
-                  <img
-                    src="./archive/type-case-with-movable-types-for-letterpress.jpg"
-                    width="400"
-                    height="260"
-                    alt="Movable type letterpress case at the Gutenberg Museum in Mainz"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-                <figcaption class="heritage-caption">
-                  <span class="heritage-caption-title">Letterpress Type Case</span>
-                  <span class="heritage-caption-meta">Gutenberg Museum Mainz &bull; CC BY 2.0</span>
-                </figcaption>
-              </figure>
-              <figure class="heritage-item">
-                <div class="heritage-img-wrap">
-                  <img
-                    src="./archive/pocket-diary-1860.jpg"
-                    width="400"
-                    height="260"
-                    alt="1860 Pocket Diary with embossed leather binding and brass clasp"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-                <figcaption class="heritage-caption">
-                  <span class="heritage-caption-title">Pocket Diary (1860)</span>
-                  <span class="heritage-caption-meta">Cambridgeport Archive &bull; CC0</span>
-                </figcaption>
-              </figure>
-            </div>
-            <div class="heritage-scroll-cue" aria-hidden="true">
-              <span class="cue-arrow">&larr;</span>
-              <span class="cue-label">Swipe archival ledgers</span>
-              <span class="cue-arrow">&rarr;</span>
             </div>
           </div>
         </div>
@@ -358,6 +497,13 @@
               </p>
             </div>
           </div>
+
+          <!-- Gallery Department Filter Tabs (Rendered/Managed in Gallery Mode) -->
+          <nav
+            id="gallery-department-tabs"
+            class="gallery-department-tabs"
+            aria-label="Filter artworks by curatorial department"
+          ></nav>
 
           <!-- Product Controls Glass Toolbar (Search, Filter, Sort) -->
           <div
@@ -604,9 +750,9 @@
             <span class="footer-meta-title">Quick Navigation</span>
             <ul class="footer-links-list">
               <li><a href="#hero" class="footer-link">Hero Overview</a></li>
-              <li><a href="#heritage" class="footer-link">Material Provenance</a></li>
-              <li><a href="#products" class="footer-link">Digital Catalogue</a></li>
-              <li><a href="#register" class="footer-link">Studio Registration</a></li>
+              <li><a href="#heritage" class="footer-link">Art Journal</a></li>
+              <li><a href="#products" class="footer-link">The Curated Collection</a></li>
+              <li><a href="#register" class="footer-link">Private Viewing</a></li>
             </ul>
           </div>
         </div>
@@ -746,6 +892,45 @@
 
     <!-- Cart Backdrop Overlay with Frosted Blur -->
     <div id="cart-backdrop" class="cart-backdrop" aria-hidden="true"></div>
+
+    <!-- Curatorial Artwork Details Modal Dialog -->
+    <div
+      id="artwork-modal"
+      class="artwork-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-hidden="true"
+      aria-labelledby="artwork-modal-title"
+      tabindex="-1"
+    >
+      <div class="artwork-modal-dialog">
+        <button
+          type="button"
+          id="artwork-modal-close"
+          class="artwork-modal-close"
+          aria-label="Close artwork details"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        <div id="artwork-modal-content" class="artwork-modal-content">
+          <!-- Populated dynamically via artworks.ui.ts -->
+        </div>
+      </div>
+    </div>
+    <div id="artwork-modal-backdrop" class="artwork-modal-backdrop" aria-hidden="true"></div>
 
     <div id="toasts" class="toast-stack" aria-live="polite" aria-atomic="false"></div>
     <script type="module" src="/src/main.ts"></script>

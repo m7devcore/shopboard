@@ -17,9 +17,69 @@ const MIME = {
   ".woff2": "font/woff2",
 };
 
+const courseApiProducts = [
+  { id: 1, title: "Leather Tote Bag", category_name: "Bags", price_cents: 8900, in_stock: true },
+  { id: 2, title: "Canvas Backpack", category_name: "Bags", price_cents: 11900, in_stock: true },
+  { id: 3, title: "Mini Crossbody Bag", category_name: "Bags", price_cents: 4900, in_stock: false },
+  { id: 4, title: "White Sneakers", category_name: "Shoes", price_cents: 7900, in_stock: true },
+  { id: 5, title: "Running Shoes", category_name: "Shoes", price_cents: 9900, in_stock: true },
+  { id: 6, title: "Loafers", category_name: "Shoes", price_cents: 12900, in_stock: true },
+  { id: 7, title: "Wool Scarf", category_name: "Accessories", price_cents: 3900, in_stock: true },
+  {
+    id: 8,
+    title: "Minimalist Watch",
+    category_name: "Accessories",
+    price_cents: 14900,
+    in_stock: true,
+  },
+  { id: 9, title: "Sunglasses", category_name: "Accessories", price_cents: 5900, in_stock: false },
+  { id: 10, title: "Duffle Bag", category_name: "Bags", price_cents: 8900, in_stock: true },
+  { id: 11, title: "Chelsea Boots", category_name: "Shoes", price_cents: 13900, in_stock: true },
+  {
+    id: 12,
+    title: "Leather Belt",
+    category_name: "Accessories",
+    price_cents: 3500,
+    in_stock: true,
+  },
+];
+
 const server = createServer((req, res) => {
+  const reqUrl = new URL(req.url, "http://x");
+  const pathname = decodeURIComponent(reqUrl.pathname);
+
+  // Local Course API simulation endpoints for deterministic testing
+  if (pathname === "/api/products") {
+    res.writeHead(200, { "content-type": "application/json" });
+    res.end(JSON.stringify({ items: courseApiProducts, total: courseApiProducts.length }));
+    return;
+  }
+  if (pathname === "/empty/api/products") {
+    res.writeHead(200, { "content-type": "application/json" });
+    res.end(JSON.stringify({ items: [], total: 0 }));
+    return;
+  }
+  if (pathname === "/fail/500/api/products") {
+    res.writeHead(500, { "content-type": "application/json" });
+    res.end(JSON.stringify({ error: "Internal Server Error" }));
+    return;
+  }
+  if (pathname.startsWith("/api/products/")) {
+    const id = Number(pathname.split("/").pop());
+    const item = courseApiProducts.find((p) => p.id === id);
+    if (!item) {
+      res.writeHead(404, { "content-type": "application/json" });
+      res.end(JSON.stringify({ error: "Not found" }));
+    } else {
+      res.writeHead(200, { "content-type": "application/json" });
+      res.end(JSON.stringify(item));
+    }
+    return;
+  }
+
+  // Static assets from production dist
   try {
-    let f = join(root, decodeURIComponent(new URL(req.url, "http://x").pathname));
+    let f = join(root, pathname);
     if (statSync(f).isDirectory()) f = join(f, "index.html");
     res.writeHead(200, {
       "content-type": MIME[extname(f).toLowerCase()] || "application/octet-stream",
@@ -34,7 +94,18 @@ const server = createServer((req, res) => {
 
 await new Promise((r) => server.listen(0, "127.0.0.1", r));
 const port = server.address().port;
-const url = `http://127.0.0.1:${port}/index.html`;
+
+function buildUrl(extraParams = {}) {
+  const u = new URL(`http://127.0.0.1:${port}/index.html`);
+  u.searchParams.set("mode", "course");
+  u.searchParams.set("api_base", `http://127.0.0.1:${port}`);
+  for (const [k, v] of Object.entries(extraParams)) {
+    u.searchParams.set(k, v);
+  }
+  return u.toString();
+}
+
+const url = buildUrl();
 
 console.log(`Starting Browser & UI Interaction Test at ${url}...`);
 
@@ -193,7 +264,7 @@ try {
 
   // TEST 7: Day 3 — Empty API state (distinct from empty search state)
   console.log("Testing Empty API state (?api_mode=empty)...");
-  await page.goto(`${url}?api_mode=empty`, { settleMs: 1000 });
+  await page.goto(buildUrl({ api_mode: "empty" }), { settleMs: 1000 });
   const emptyApiCheck = await page.eval(() => {
     return {
       hasEmptyApiState: Boolean(document.querySelector(".catalog-state-empty-api")),
@@ -210,7 +281,7 @@ try {
 
   // TEST 8: Day 3 — Error state, Error Toast, and working Retry button (?api_mode=fail_once)
   console.log("Testing API Error state, Error Toast, and Retry recovery (?api_mode=fail_once)...");
-  await page.goto(`${url}?api_mode=fail_once`, { settleMs: 1000 });
+  await page.goto(buildUrl({ api_mode: "fail_once" }), { settleMs: 1000 });
   const errorStateCheck = await page.eval(() => {
     const hasErrorCard = Boolean(document.querySelector(".catalog-state-error"));
     const hasErrorToast = Boolean(document.querySelector("#toasts .toast-error"));

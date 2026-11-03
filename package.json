@@ -13,11 +13,13 @@
     "format:check": "prettier --check .",
     "test": "node --test test-logic.mjs test-state.mjs test-api.mjs",
     "test:browser": "node test-browser-interaction.mjs",
+    "test:gallery": "node test-gallery-interaction.mjs",
     "test:responsive": "node test-mobile-responsive.mjs",
     "prepare": "husky"
   },
   "lint-staged": {
     "*.ts": [
+      "eslint --fix",
       "prettier --write"
     ],
     "*.js": [

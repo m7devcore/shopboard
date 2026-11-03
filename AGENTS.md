@@ -1,99 +1,137 @@
-# ShopBoard — AI Agent Instructions
+# AEVUM / ShopBoard — Canonical Agent Instructions & Engineering Rules
 
 ## 1. Project Overview
 
-ShopBoard is an educational frontend web application built as part of the CorePro Software Development Using AI program (Days 2 & 3).
+AEVUM — Art Across Ages (built on the CorePro ShopBoard architecture) is an educational fine art gallery and digital exhibition storefront. It showcases clean, accessible, and responsive frontend architecture using strict TypeScript, feature-based modular design, dual-mode catalog architecture (AEVUM Nocturne Pavilion vs. Course Compatibility Mode), and modern web standards with zero external UI frameworks.
 
-The project focuses on building a clean, responsive, accessible web interface using Vite, strict TypeScript, feature-based modules, and live REST API integration.
+## 2. Technology Stack
 
-Follow the requirements provided in each development task. Do not assume or implement additional features unless explicitly requested or approved.
+- **Bundler & Dev Server:** Vite 8 (TypeScript + Vanilla Web Standards)
+- **Language:** Strict TypeScript 7 (`"strict": true`, `"noUnusedLocals": true`, `"noEmit": true`)
+- **Markup:** Semantic HTML5 (Single `<h1>`, accessible landmarks, linked `<label>`s, ARIA live regions)
+- **Styles:** Mobile-first CSS3 (Strictly zero `!important`, CSS custom properties design tokens)
+- **Quality & Guardrail Tools:** TypeScript (`tsc`), Prettier, ESLint 10, Husky 9, lint-staged 17, Node.js Test Runner (v22+)
 
-## 2. Tech Stack
+## 3. Folder Structure & Architectural Blueprint
 
-- Vite (Vanilla TypeScript)
-- Strict TypeScript (`"strict": true`, `"noUnusedLocals": true`, `"noEmit": true`)
-- HTML5
-- CSS3 (Mobile-first, zero `!important`)
-- ES Modules
-- Quality & Guardrail Tools: TypeScript (`tsc`), Prettier, ESLint, Husky, lint-staged
+```text
+├── index.html                           # Single HTML entry point (semantic landmarks, accessible regions)
+├── tsconfig.json                        # Strict TypeScript configuration
+├── package.json                         # Scripts, dependencies, lint-staged config
+├── eslint.config.js                     # ESLint configuration
+├── .prettierrc                          # Prettier code style configuration
+├── .husky/                              # Git hooks (pre-commit invokes lint-staged)
+├── DESIGN.md                            # Comprehensive design system & specification
+├── README.md                            # Project documentation, setup, and mode guide
+├── AGENTS.md                            # Canonical AI agent instructions (this document)
+├── public/
+│   ├── assets/
+│   │   ├── catalog/                     # Curated exhibition artwork images (antiques, ceramics, paintings, sculptures)
+│   │   ├── hero/                        # Royal Salon hero imagery (WebP responsive assets)
+│   │   └── journal/                     # Art Journal editorial assets (Winged Victory WebP)
+│   ├── favicon.svg                      # AEVUM monogram favicon
+│   └── icons.svg                        # SVG symbol sprite definitions
+├── src/
+│   ├── main.ts                          # Application bootstrap & catalog mode routing
+│   ├── ui.ts                            # UI coordinator (event delegation, viewfinder, parallax, observer)
+│   ├── logic.ts                         # Logic barrel re-exporting product and cart calculation logic
+│   ├── state.ts                         # State barrel re-exporting cart state operations
+│   ├── data.ts                          # Preserved 12 digital products catalog for Course Mode reference
+│   ├── style.css                        # Design token system & visual styles (Obsidian, Nocturne & Liquid Glass)
+│   ├── shared/
+│   │   ├── api/client.ts                # Generic fetchJson<T> client, ApiError, and API base URL resolution
+│   │   └── ui/toast.ts                  # Centralized accessible toast notification system
+│   └── modules/
+│       ├── artworks/                    # AEVUM Fine Art Gallery domain
+│       │   ├── artworks.data.ts         # 16 canonical artwork records with curatorial research metadata
+│       │   ├── artworks.types.ts        # Artwork, ArtworkCategory, CuratorialLicense, SaleStatus types
+│       │   └── artworks.ui.ts           # Curatorial Artwork Details modal dialog & dossier renderer
+│       ├── catalog/                     # Application mode management
+│       │   └── catalog.mode.ts          # Mode detection (Default Gallery vs Course Mode via query params)
+│       ├── products/                    # Course ShopBoard catalog & REST API domain
+│       │   ├── products.api.ts          # ApiProduct wire types, runtime validators, toProduct() mapper
+│       │   ├── products.logic.ts        # Pure search, filter, sort, and grouping functions
+│       │   ├── products.types.ts        # Product, Category, LoadState types
+│       │   └── products.ui.ts           # Nocturne Pavilion card grid, department tabs, toolbar delegation
+│       └── cart/                        # Shopping cart & acquisition state
+│           ├── cart.logic.ts            # Pure cart math (line total, total items, line sum)
+│           ├── cart.state.ts            # LocalStorage persistence, safe deserialization, cart operations
+│           ├── cart.types.ts            # CartItem, Cart, AddableProduct types
+│           └── cart.ui.ts               # Acquisitions sidebar drawer renderer and event handlers
+└── tests/
+    ├── cdp.mjs                          # Zero-dependency Chrome DevTools Protocol test harness
+    ├── test-logic.mjs                   # Unit tests: pure filtering, sorting, and cart calculations
+    ├── test-state.mjs                   # Unit tests: cart state operations and defensive localStorage handling
+    ├── test-api.mjs                     # Unit tests: API client, schema validation, and toProduct mapper
+    ├── test-browser-interaction.mjs     # Browser tests: Course Mode compatibility and interaction flows
+    ├── test-gallery-interaction.mjs     # Browser tests: Nocturne Pavilion Gallery Mode regression suite
+    └── test-mobile-responsive.mjs       # Responsive tests: zero horizontal overflow audit across 6 viewports
+```
 
-Use the existing project setup and dependencies. Do not introduce additional frameworks or runtime dependencies without prior approval.
+## 4. Where to Add New Features
 
-## 3. Core Day 2 & Day 3 Engineering Rules
+1. **Fine Art Gallery Features (Artworks, Salons, Exhibition Metadata):**
+   - Add data and schema models to `src/modules/artworks/artworks.data.ts` and `artworks.types.ts`.
+   - Add modal and curatorial presentation components to `src/modules/artworks/artworks.ui.ts`.
+2. **Course REST API & Product Storefront:**
+   - Add endpoint consumers and mappers to `src/modules/products/products.api.ts`.
+   - Add pure filtering/sorting algorithms to `src/modules/products/products.logic.ts`.
+   - Add catalog card and toolbar interaction handlers to `src/modules/products/products.ui.ts`.
+3. **Acquisitions & Shopping Cart:**
+   - Add pure calculation logic to `src/modules/cart/cart.logic.ts`.
+   - Add state mutations and safe storage schema handlers to `src/modules/cart/cart.state.ts`.
+   - Add drawer rendering and interactive controls to `src/modules/cart/cart.ui.ts`.
+4. **Application Mode & Routing:**
+   - Configure query parameters and runtime mode selection in `src/modules/catalog/catalog.mode.ts`.
+   - Bootstrap mode initialization in `src/main.ts`.
+5. **Cross-Cutting Utilities:**
+   - Shared network logic belongs in `src/shared/api/`.
+   - Shared toast notifications belong in `src/shared/ui/`.
 
-1. **Rule 1 — Array Immutability in Sorting & Filtering**:
-   Never mutate the input product array in-place. Always create a shallow copy (`[...products]`) before sorting so that choosing "Default Order" cleanly restores the original catalog sequence.
-2. **Rule 2 — Event Delegation Over Repeated Registration**:
-   Never register event listeners inside rendering functions (`renderProducts()`, `renderCartUI()`, `renderCatalogState()`). Register event listeners once on stable container elements (`#products-grid`, `#cart-items-container`) using event delegation (`event.target.closest()`). Changing category filters 5 times and clicking "Add to Cart" once must add exactly 1 unit.
-3. **Rule 3 — Defensive Storage & API Parsing**:
-   Never trust `localStorage` or `fetch` JSON data blindly. Wrap `JSON.parse()` in a `try...catch` block, validate schemas at runtime (`isValidCartItem`, `isApiProduct`, `parseApiProductList`), and fall back or throw `ApiError` safely.
-4. **Rule 4 — Strict DOM Ownership**:
-   Only UI modules (`src/ui.ts`, `src/modules/products/products.ui.ts`, `src/modules/cart/cart.ui.ts`, `src/shared/ui/toast.ts`) touch the page DOM (`document`, `window`, `querySelector`, `innerHTML`, `addEventListener`). Pure logic modules (`src/logic.ts`, `src/modules/**/*.logic.ts`) must remain 100% deterministic, side-effect free, and runnable in any environment.
-5. **Rule 5 — Strict TypeScript Hygiene**:
-   Never use `any`, unsafe `as` type assertions, or `!` non-null assertions in `src/**/*.ts`.
-6. **Rule 6 — API Wire vs. Domain Separation (`toProduct`)**:
-   Keep `ApiProduct` (`title`, `category_name`, `price_cents`, `in_stock`) separate from `Product` (`name`, `category`, `price`, `inStock`). Convert `price_cents` to dollars exclusively in `toProduct()`.
-7. **Rule 7 — Complete Async `LoadState` Handling**:
-   Always support Loading, Error (with working Retry button), Empty API catalog, Empty search/filter results, and Success states.
-8. **Rule 8 — Empirical Verification Integrity**:
-   Never claim a test, typecheck, build, lint, or feature passed without executing the command and inspecting the actual results. Distinguish logic/API unit tests from browser interaction tests.
+## 5. Code Conventions & Strict TypeScript Hygiene
 
-## 4. Coding Standards
+1. **Strict TypeScript:** Prohibited in authored TypeScript: `any`, unsafe `as` type assertions, and postfix `!` non-null assertions. Use type guards (`isRecord`, `isCategory`), proper DOM narrowing (`instanceof HTMLElement`), and discriminated unions (`LoadState`).
+2. **Array Immutability:** Never mutate input arrays in pure logic functions. Always shallow-copy (`[...products]`) before sorting or filtering.
+3. **Strict DOM Ownership:** Only UI modules touch DOM globals (`window`, `document`, `querySelector`, `innerHTML`, `addEventListener`). Pure logic modules must remain 100% deterministic and runnable in bare Node.js.
+4. **Event Delegation:** Never register event listeners inside rendering functions. Register event listeners once on stable container elements (`#products-grid`, `#cart-items-container`, `#gallery-department-tabs`) using event delegation (`event.target.closest()`).
+5. **Defensive Storage & API Parsing:** Wrap all `JSON.parse()` calls in `try...catch`. Validate shapes at runtime via schema guards before committing to application state.
+6. **Mobile-First CSS:** Author styles starting at mobile viewports with `min-width` media queries. Zero `!important` permitted. Ensure zero horizontal page overflow across all viewports (320px to 1440px).
 
-### HTML
+## 6. Rules Derived from Real Project AI Mistakes
 
-- Use semantic HTML first (`header`, `nav`, `main`, `section`, `article`, `form`, `footer`, `aside`).
-- Only one `h1` per page.
-- Every input must have an associated `<label>` linked via `for` and `id`.
-- Use native HTML validation whenever appropriate (`required`, `type="email"`, `minlength`).
-- Maintain accessible markup with visible focus rings (`:focus-visible`) and ARIA live regions (`#product-results-announcer`, `#cart-announcer`, `#toasts`) for dynamic announcements.
+These enforceable rules address specific failure modes observed during previous AI agent sprints in this codebase:
 
-### CSS
+### Rule A — Ground Truth Artwork Availability
 
-- Follow a mobile-first approach using `min-width` media queries.
-- Never use `!important`.
-- Keep CSS clean, readable, organized, and free of unnecessary duplication.
-- Ensure zero horizontal page overflow across all viewport widths (320px to 1440px).
+- **Mistake Observed:** An AI agent arbitrarily marked two canonical artworks (`aevum-sculpture-03` and `aevum-object-04`) as "Unavailable / Out of Stock" without user instruction, inventing false acquisition histories.
+- **Enforceable Rule:** All 16 canonical gallery artworks must remain active (`inStock: true`, `saleStatus: "In Exhibition"`) unless the user explicitly requests otherwise. Never invent sales, acquisitions, or provenance states. Preserve the Course Mode out-of-stock behavior completely separate from the Gallery collection.
 
-### TypeScript
+### Rule B — Code-to-Report Reconciliation Before Reporting
 
-- Use strict TypeScript and ES Modules.
-- Avoid `any`, unsafe `as` assertions, and `!` non-null assertions.
-- Keep functions simple and focused with single responsibilities.
-- Prefer array methods (`map`, `filter`, `reduce`, `find`) over manual loop counters.
+- **Mistake Observed:** An AI agent generated an audit report claiming artwork title mismatches (e.g. "Napoleon in His Study" vs. bust) when the actual TypeScript source code already contained the correct descriptive titles.
+- **Enforceable Rule:** Always inspect the actual source files and running DOM before generating reports or asserting defects. Distinguish Markdown documentation mistakes from actual codebase bugs.
 
-## 5. Modular Architecture & Project Structure
+### Rule C — Mode Isolation & Zero API Leakage
 
-- `index.html` — Main HTML entry point containing semantic landmarks, controls, and `#toasts` container (zero hardcoded product cards).
-- `tsconfig.json` — Strict TypeScript configuration.
-- `src/shared/api/client.ts` — `BASE_URL`, `ApiError`, and generic `fetchJson<T>()` with runtime validation.
-- `src/shared/ui/toast.ts` — Accessible toast notification renderer (`showToast()`).
-- `src/modules/products/products.types.ts` — `Category`, `Product`, `CategoryFilter`, `SortOrder`, `LoadState`.
-- `src/modules/products/products.api.ts` — `ApiProduct`, `ApiProductList`, runtime validators, `toProduct()` mapper, `getProducts()`, `getProduct()`.
-- `src/modules/products/products.logic.ts` — Pure product search, filter, sort, and grouping functions.
-- `src/modules/products/products.ui.ts` — Product card rendering, `renderCatalogState()`, toolbar & card event delegation.
-- `src/modules/cart/cart.types.ts` — `CartItem`, `Cart`, `AddableProduct`.
-- `src/modules/cart/cart.logic.ts` — Pure cart calculation functions (`calculateLineTotal`, `calculateTotalItems`, `calculateTotalPrice`).
-- `src/modules/cart/cart.state.ts` — Shopping cart state management and safe `localStorage` persistence.
-- `src/modules/cart/cart.ui.ts` — Cart sidebar drawer rendering and delegated cart event handlers.
-- `src/data.ts` — Preserved original 12 digital products catalog from Day 2.
-- `src/logic.ts` — Pure logic barrel re-exporting product and cart logic.
-- `src/state.ts` — Cart state barrel re-exporting state functions.
-- `src/ui.ts` — Main UI coordinator (`initUI`, `setupViewfinder`, `setupRegistrationForm`).
-- `src/main.ts` — Application bootstrap connecting state, `getProducts()`, `LoadState`, Retry, and error toasts.
-- `src/style.css` — Application styling following the frozen Day 2 Obsidian & Liquid Glass visual identity.
-- `ai-review-log.md` — Technical review of `ai-products.ts` (Day 3 Review Lab).
-- `debugging-log.md` — Record of Day 2 bugs, root causes, and fixes.
+- **Mistake Observed:** AI implementations allowed course API wire assumptions (such as `price_cents` or network failure handling) to leak into the local gallery catalog, causing the gallery to fail when the external API was unreachable.
+- **Enforceable Rule:** Default Gallery Mode (`/`) must remain 100% autonomous, local, and resilient against network outages. The external course REST API (`https://shopboard-api.vercel.app`) belongs strictly to Course Mode (`/index.html?mode=course`). Network timeouts on the external API must never crash or disable the gallery.
 
-## 6. Testing & Verification
+### Rule D — Living Interface Synchronization
 
-After every significant implementation or modification:
+- **Mistake Observed:** As features progressed from planning to completion (e.g. Curated Collection gallery, department filters, Art Journal), navigation links, badges, and Hero CTA copy remained stale ("Upcoming", "In Curation", or displaying placeholder toasts).
+- **Enforceable Rule:** When an exhibition section or department becomes active, update all corresponding interface elements: navigation links must scroll to or filter the section, badges must reflect live exhibition status, and CTAs must directly enter active experiences.
 
-1. Run `npm run typecheck` — verify 0 TypeScript errors.
-2. Run `npm run lint` — verify 0 ESLint errors and 0 warnings.
-3. Run `npm run format:check` — verify Prettier formatting.
-4. Run `npm test` — verify Node.js automated test runner tests (`test-logic.mjs`, `test-state.mjs`, `test-api.mjs`) pass.
-5. Run `npm run build` — verify production build succeeds without errors.
-6. Verify browser interactions (`npm run test:browser`) and zero console errors.
-7. Verify responsive behavior (`npm run test:responsive`) without horizontal overflow on 320px, 375px, 390px, 430px, 768px, 1440px.
-8. Explain verification results truthfully.
+## 7. Testing & Quality Verification
+
+Run every verification command before submitting:
+
+```bash
+npm run typecheck         # Verify 0 TypeScript errors (tsc --noEmit)
+npm run lint              # Verify 0 ESLint errors and warnings
+npm run format:check      # Verify Prettier code style
+npm test                  # Run Node.js unit tests (logic, state, api)
+npm run build             # Verify Vite production build succeeds
+npm run test:browser      # Verify Course Mode compatibility (Chromium CDP)
+npm run test:gallery      # Verify Nocturne Pavilion Gallery Mode (Chromium CDP)
+npm run test:responsive   # Verify zero horizontal overflow (320px–1440px)
+```

@@ -138,11 +138,26 @@ try {
       });
       await sleep(300);
 
-      // Scroll to Heritage section
-      await page.eval(() => {
+      // Scroll to Art Journal section (#heritage)
+      const journalData = await page.eval(() => {
         const h = document.getElementById("heritage");
         if (h) h.scrollIntoView();
+        const heading = h?.querySelector(".journal-heading");
+        const img = h?.querySelector(".journal-artwork-img");
+        return {
+          exists: Boolean(h),
+          headingText: heading?.textContent?.trim() || "",
+          imgExists: Boolean(img),
+        };
       });
+      if (
+        !journalData.exists ||
+        journalData.headingText !== "The Memory of Form" ||
+        !journalData.imgExists
+      ) {
+        console.error("❌ Art Journal section failed responsive check:", journalData);
+        allPass = false;
+      }
       await sleep(400);
       await page.screenshot({ path: join(outDir, "mobile-heritage-carousel.jpg"), quality: 80 });
 

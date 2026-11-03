@@ -7,7 +7,16 @@
 
 export const BASE_URL = "https://shopboard-api.vercel.app";
 
-let activeBaseUrl: string = BASE_URL;
+function resolveInitialBaseUrl(): string {
+  if (typeof window !== "undefined" && window.location && window.location.search) {
+    const params = new URLSearchParams(window.location.search);
+    const custom = params.get("api_base");
+    if (custom) return custom;
+  }
+  return BASE_URL;
+}
+
+let activeBaseUrl: string = resolveInitialBaseUrl();
 
 /**
  * Returns the currently active API base URL.

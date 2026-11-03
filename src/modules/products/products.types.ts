@@ -5,11 +5,15 @@
  * filter/sort controls, and discriminated union async LoadState.
  */
 
+import type { AevumCategory } from "../artworks/artworks.types.ts";
+
+export type { AevumCategory };
+
 export type ApiCategory = "Bags" | "Shoes" | "Accessories";
 
 export type StudioCategory = "Templates" | "Planners" | "Productivity" | "Education" | "Finance";
 
-export type Category = ApiCategory | StudioCategory;
+export type Category = ApiCategory | StudioCategory | AevumCategory;
 
 export type CategoryFilter = Category | "all";
 
