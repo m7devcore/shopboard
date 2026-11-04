@@ -13,18 +13,7 @@ import {
   increaseQuantity,
   removeFromCart,
 } from "./cart.state.ts";
-
-/**
- * Escapes characters for safe HTML injection to prevent XSS.
- */
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
+import { escapeHtml } from "../../shared/utils/format.ts";
 
 /**
  * Opens the cart slide-over sidebar.

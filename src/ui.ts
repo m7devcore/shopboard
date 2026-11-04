@@ -5,39 +5,17 @@
  * Studio Registration form validation, and re-exports feature UI modules.
  */
 
-import {
-  closeArtworkModal,
-  openArtworkModal,
-  setupArtworkModalEvents,
-} from "./modules/artworks/artworks.ui.ts";
-import {
-  closeCartSidebar,
-  openCartSidebar,
-  renderCartUI,
-  setupCartEvents,
-} from "./modules/cart/cart.ui.ts";
+import { setupArtworkModalEvents } from "./modules/artworks/artworks.ui.ts";
+import { renderCartUI, setupCartEvents } from "./modules/cart/cart.ui.ts";
 import { detectCatalogMode } from "./modules/catalog/catalog.mode.ts";
 import type { LoadState, Product } from "./modules/products/products.types.ts";
 import {
   renderCatalogState,
-  renderProducts,
   setupProductCardEvents,
   setupToolbar,
 } from "./modules/products/products.ui.ts";
 
-export {
-  closeArtworkModal,
-  closeCartSidebar,
-  openArtworkModal,
-  openCartSidebar,
-  renderCartUI,
-  renderCatalogState,
-  renderProducts,
-  setupArtworkModalEvents,
-  setupCartEvents,
-  setupProductCardEvents,
-  setupToolbar,
-};
+export { renderCatalogState };
 
 type ViewfinderKey = "cv" | "planner" | "budget" | "kanban";
 

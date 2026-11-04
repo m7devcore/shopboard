@@ -1,6 +1,7 @@
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
 import { products as catalogProducts } from "./src/data.ts";
+import { escapeHtml } from "./src/shared/utils/format.ts";
 import {
   filterProducts,
   sortProducts,
@@ -186,5 +187,43 @@ describe("Logic Module — Cart Calculations", () => {
     // 58 + 57 + 14 = 129
     assert.strictEqual(calculateTotalPrice(cart), 129);
     assert.strictEqual(calculateTotalPrice([]), 0);
+  });
+});
+
+describe("Format Utilities — escapeHtml", () => {
+  test("escapes ampersands (&) to &amp;", () => {
+    assert.strictEqual(escapeHtml("Art & Antiques"), "Art &amp; Antiques");
+  });
+
+  test("escapes less-than (<) and greater-than (>) to &lt; and &gt;", () => {
+    assert.strictEqual(
+      escapeHtml("<script>alert(1)</script>"),
+      "&lt;script&gt;alert(1)&lt;/script&gt;",
+    );
+  });
+
+  test('escapes double quotes (") to &quot;', () => {
+    assert.strictEqual(escapeHtml('"Royal Salon"'), "&quot;Royal Salon&quot;");
+  });
+
+  test("escapes single quotes / apostrophes (') to &#39;", () => {
+    assert.strictEqual(escapeHtml("Collector's Edition"), "Collector&#39;s Edition");
+  });
+
+  test("escapes compound strings containing all sensitive characters", () => {
+    const input = `<div class="art" data-name='Collector\\'s & Co.'>10 < 20 & 30 > 25</div>`;
+    const expected = `&lt;div class=&quot;art&quot; data-name=&#39;Collector\\&#39;s &amp; Co.&#39;&gt;10 &lt; 20 &amp; 30 &gt; 25&lt;/div&gt;`;
+    assert.strictEqual(escapeHtml(input), expected);
+  });
+
+  test("preserves strings without HTML-sensitive characters intact", () => {
+    assert.strictEqual(escapeHtml("AEVUM Fine Art 2026"), "AEVUM Fine Art 2026");
+    assert.strictEqual(escapeHtml(""), "");
+  });
+
+  test("escapes consecutive and repeated special characters correctly", () => {
+    assert.strictEqual(escapeHtml("&&&&"), "&amp;&amp;&amp;&amp;");
+    assert.strictEqual(escapeHtml("<<<>>>"), "&lt;&lt;&lt;&gt;&gt;&gt;");
+    assert.strictEqual(escapeHtml(`""''`), "&quot;&quot;&#39;&#39;");
   });
 });

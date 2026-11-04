@@ -14,6 +14,7 @@
 import { getArtworkById } from "./artworks.data.ts";
 import type { Artwork } from "./artworks.types.ts";
 import type { Product } from "../products/products.types.ts";
+import { escapeHtml } from "../../shared/utils/format.ts";
 
 let activeSequence: Product[] = [];
 let currentArtworkIndex = 0;
@@ -29,18 +30,6 @@ interface DragSession {
 
 let activeDragSession: DragSession | null = null;
 const DRAG_THRESHOLD_PX = 70;
-
-/**
- * Escapes characters for safe HTML injection to prevent XSS.
- */
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
 
 /**
  * Generates the HTML markup for the active featured artwork showcase.

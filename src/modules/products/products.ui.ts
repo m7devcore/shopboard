@@ -13,6 +13,7 @@ import { renderGalleryShowcase } from "../artworks/artworks.showcase.ts";
 import { isGalleryMode } from "../catalog/catalog.mode.ts";
 import { filterProducts, sortProducts } from "./products.logic.ts";
 import type { LoadState, Product } from "./products.types.ts";
+import { escapeHtml } from "../../shared/utils/format.ts";
 
 let activeCatalogProducts: Product[] = [];
 let currentLoadStatus: LoadState["status"] = "loading";
@@ -29,18 +30,6 @@ const GALLERY_DEPARTMENTS: readonly { id: string; label: string; count: number }
   { id: "Prints & Editions", label: "Prints & Editions", count: 0 },
   { id: "Curiosities", label: "Curiosities", count: 0 },
 ];
-
-/**
- * Escapes characters for safe HTML injection to prevent XSS.
- */
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
 
 /**
  * Generates card header preview markup for digital products (Course Mode).
