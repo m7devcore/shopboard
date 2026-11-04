@@ -75,7 +75,9 @@ AEVUM enforces a strict three-tier typographic hierarchy:
     1. `Search the catalogue` (`#product-search`)
     2. `Department` (`#category-filter`)
     3. `Order by value` (`#price-sort`)
-  - **Artwork Information Hierarchy:** Lot sequence (`LOT 01 • PAINTINGS`), Cormorant Garamond title, italic medium, 2-line description, and Estimated Value (`$185,000`).
+  - **Centered Editorial Information Panel:** Centered horizontally beneath the stage (`width: 86%`, `max-width: 890px`, `margin-inline: auto`) with aligned bottom separator. Two-column desktop grid (65% / 35%, 52px gap):
+    - Left column: Lot sequence (`LOT 01 • PAINTINGS`), curatorial tags, position counter (`01 / 16`), Cormorant Garamond title, italic medium, and 54ch narrative description.
+    - Right column: Estimated Value (`$185,000`) and action buttons. Responsive transition to stacked layout on tablet (`90%` width) and mobile (`100%` width with 20px–24px comfortable padding).
   - **Actions:** Primary rectangular outlined `View Artwork` (opens curatorial dossier modal) and discreet secondary `Acquire Piece` (adds to cart).
   - **Reduced Motion:** When `prefers-reduced-motion: reduce` is detected, all slide transitions are replaced with instantaneous updates or subtle opacity shifts.
   - **Contextual Disclosure:** Quiet footer disclaimer clarifying educational portfolio valuations without noisy demo tags on cards.
