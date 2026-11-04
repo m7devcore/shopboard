@@ -17,7 +17,7 @@ The platform supports two distinct modes accessible via URL query routing:
 1. **Default Gallery Mode (`/`):**
    - **Identity:** AEVUM — Burgundy Private Gallery & Royal Salon.
    - **Data Source:** High-fidelity local curated art records ([`src/modules/artworks/artworks.data.ts`](./src/modules/artworks/artworks.data.ts)) with 16 canonical historical records across six curatorial departments (Paintings, Sculptures, Decorative Antiques, Ceramics & Glass, Prints & Editions, Curiosities).
-   - **Experience:** Intimate single-artwork exhibition showcase with horizontal right-to-left navigation, centered stage, and 3-control catalogue toolbar.
+   - **Experience:** Intimate single-artwork exhibition showcase with minimal chevron navigation, centered stage, touch drag/swipe, and 3-control catalogue toolbar.
    - **Resilience:** 100% self-contained and completely independent of external network availability.
 2. **Course Compatibility Mode (`/index.html?mode=course`):**
    - **Identity:** ShopBoard Production Storefront (Day 2 & Day 3).
@@ -87,7 +87,7 @@ All quality gates run locally and must pass with zero errors:
 | `npm test`                | Automated unit test suite (38 passing tests)                | `node --test`           |
 | `npm run build`           | Production client bundling to `dist/`                       | `vite build`            |
 | `npm run test:browser`    | Course Mode browser interaction & API test suite            | CDP / Headless Chromium |
-| `npm run test:gallery`    | Nocturne Pavilion Gallery interaction & modal test suite    | CDP / Headless Chromium |
+| `npm run test:gallery`    | Burgundy Private Gallery showcase interaction suite         | CDP / Headless Chromium |
 | `npm run test:responsive` | Responsive overflow audit across 6 viewports (320px–1440px) | CDP / Headless Chromium |
 
 ---
@@ -111,7 +111,7 @@ src/                                 # Strictly TypeScript (.ts) source modules 
 └── modules/
     ├── artworks/                    # AEVUM Fine Art domain
     │   ├── artworks.data.ts         # 16 canonical artwork records with curatorial research metadata
-    │   ├── artworks.showcase.ts     # Burgundy Private Gallery single-artwork showcase & RTL nav
+    │   ├── artworks.showcase.ts     # Burgundy Private Gallery single-artwork showcase & navigation
     │   ├── artworks.types.ts        # Artwork, ArtworkCategory, CuratorialLicense, SaleStatus
     │   └── artworks.ui.ts           # Curatorial Artwork Details modal dialog & dossier renderer
     ├── catalog/                     # Application mode management
@@ -120,7 +120,7 @@ src/                                 # Strictly TypeScript (.ts) source modules 
     │   ├── products.api.ts          # ApiProduct wire types, runtime validators, toProduct() mapper
     │   ├── products.logic.ts        # Pure search, filter, sort, and grouping algorithms
     │   ├── products.types.ts        # Product, Category, CategoryFilter, SortOrder, LoadState
-    │   └── products.ui.ts           # Nocturne Pavilion card grid, department tabs, toolbar delegation
+    │   └── products.ui.ts           # ShopBoard card grid, department tabs, toolbar delegation
     └── cart/                        # Shopping cart & acquisitions domain
         ├── cart.logic.ts            # Pure cart math (line totals, item counts, order sums)
         ├── cart.state.ts            # LocalStorage persistence, safe deserialization, mutations
@@ -136,7 +136,7 @@ src/                                 # Strictly TypeScript (.ts) source modules 
 - **Ivory Editorial Art Journal:** High-contrast parchment spread (`#FAF6EF`) presenting classical sculpture analysis and single-trigger scroll entrance observer.
 - **Burgundy Private Gallery Showcase:**
   - 16 canonical exhibition pieces explored one at a time on an architectural burgundy stage (`#301A24` on `#2B1720`).
-  - Horizontal RTL navigation flow (left arrow advances Next, right arrow reverses Previous) with live `01 / 16` counter.
+  - Natural chevron navigation flow (right arrow advances Next, left arrow reverses Previous) and touch drag/swipe with live `01 / 16` counter.
   - Complete artwork image preservation using `object-fit: contain` (zero cropped sculpture heads or clipped landscape margins).
   - Three catalogue controls: `Search the catalogue`, `Department`, and `Order by value`.
   - Price sorting (ascending, descending, and restoration of default curatorial order).

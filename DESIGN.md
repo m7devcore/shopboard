@@ -21,7 +21,7 @@ AEVUM implements a cohesive CSS Custom Properties token architecture in [`styles
 
 | Token                            | Value                       | Role                                           |
 | -------------------------------- | --------------------------- | ---------------------------------------------- |
-| `--color-aevum-charcoal`         | `#120F12`                   | Nocturne Pavilion primary background           |
+| `--color-aevum-charcoal`         | `#120F12`                   | Dark charcoal foundation background            |
 | `--color-aevum-charcoal-card`    | `#181418`                   | Artwork card and modal dialog surface          |
 | `--color-aevum-charcoal-surface` | `#1E191E`                   | Filter toolbars and elevated containers        |
 | `--color-aevum-charcoal-border`  | `rgba(209, 175, 115, 0.22)` | Subtle antique brass structural borders        |
