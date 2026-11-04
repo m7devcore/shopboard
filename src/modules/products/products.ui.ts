@@ -8,8 +8,8 @@
 import { showToast } from "../../shared/ui/toast.ts";
 import { addToCart } from "../cart/cart.state.ts";
 import { openCartSidebar, renderCartUI } from "../cart/cart.ui.ts";
-import { getArtworkById } from "../artworks/artworks.data.ts";
 import { openArtworkModal } from "../artworks/artworks.ui.ts";
+import { renderGalleryShowcase } from "../artworks/artworks.showcase.ts";
 import { isGalleryMode } from "../catalog/catalog.mode.ts";
 import { filterProducts, sortProducts } from "./products.logic.ts";
 import type { LoadState, Product } from "./products.types.ts";
@@ -318,91 +318,9 @@ export function renderProducts(productsToRender: readonly Product[]): void {
     return;
   }
 
-  // Gallery Mode: Nocturne Pavilion curatorial cards
+  // Gallery Mode: Burgundy Private Gallery single-artwork showcase
   if (inGalleryMode) {
-    container.innerHTML = productsToRender
-      .map((product) => {
-        const artwork = getArtworkById(product.id);
-        const isAvailable = product.inStock;
-        const disabledAttr = isAvailable ? "" : "disabled";
-        const outOfStockCardClass = isAvailable ? "" : " is-out-of-stock";
-        const outOfStockBadge = isAvailable
-          ? ""
-          : `<span class="stock-badge out-of-stock" aria-label="Unavailable">Acquired / Private Viewing</span>`;
-
-        const attributionBadge =
-          artwork && artwork.artist === null
-            ? `<span class="curatorial-badge-pending">Attribution Pending</span>`
-            : "";
-
-        const imageSrc = artwork?.imageSrc ?? "";
-        const altText = artwork?.altText ?? product.name;
-        const imgWidth = artwork?.imageWidth ?? 600;
-        const imgHeight = artwork?.imageHeight ?? 450;
-        const mediumText = artwork?.medium ?? "Historical Reference";
-
-        return `
-          <article class="product-card artwork-card${outOfStockCardClass}" data-product-id="${escapeHtml(product.id)}">
-            <div class="artwork-frame">
-              <div class="artwork-image-wrapper">
-                <img
-                  src="${escapeHtml(imageSrc)}"
-                  alt="${escapeHtml(altText)}"
-                  class="artwork-card-img"
-                  width="${imgWidth}"
-                  height="${imgHeight}"
-                  loading="lazy"
-                />
-              </div>
-            </div>
-            <div class="product-body artwork-body">
-              <p class="artwork-lot-line">
-                <span class="product-category-tag artwork-category-tag">${escapeHtml(product.category)}</span>
-                ${attributionBadge}
-                ${outOfStockBadge}
-              </p>
-              <h3 class="product-title artwork-title">${escapeHtml(product.name)}</h3>
-              <p class="product-description artwork-description">${escapeHtml(product.description)}</p>
-              <div class="artwork-meta-row">
-                <span class="artwork-medium-label">${escapeHtml(mediumText)}</span>
-              </div>
-              <div class="product-footer artwork-footer">
-                <div class="product-price-info artwork-price-info">
-                  <span class="artwork-value-label">Estimated Value</span>
-                  <span class="product-price artwork-price">$${product.price.toLocaleString("en-US")}</span>
-                  <span class="price-demo-tag">(Portfolio Demo)</span>
-                </div>
-                <div class="artwork-card-actions">
-                  <button
-                    type="button"
-                    class="btn btn-sm btn-outline view-artwork-btn"
-                    data-artwork-id="${escapeHtml(product.id)}"
-                    aria-label="View curatorial details for ${escapeHtml(product.name)}"
-                  >
-                    View Artwork
-                  </button>
-                  <button
-                    type="button"
-                    class="btn btn-sm btn-action add-to-cart-btn"
-                    data-id="${escapeHtml(product.id)}"
-                    aria-label="${isAvailable ? `Acquire ${escapeHtml(product.name)}` : `${escapeHtml(product.name)} is unavailable`}"
-                    ${disabledAttr}
-                  >
-                    ${isAvailable ? "Acquire Piece" : "Acquired"}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </article>
-        `;
-      })
-      .join("");
-
-    if (announcer) {
-      announcer.textContent = `Showing ${productsToRender.length} ${
-        productsToRender.length === 1 ? "artwork" : "artworks"
-      }.`;
-    }
+    renderGalleryShowcase(productsToRender);
     return;
   }
 

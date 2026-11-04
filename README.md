@@ -15,8 +15,9 @@ Default Branch: `main`
 The platform supports two distinct modes accessible via URL query routing:
 
 1. **Default Gallery Mode (`/`):**
-   - **Identity:** AEVUM — Nocturne Pavilion & Royal Salon.
+   - **Identity:** AEVUM — Burgundy Private Gallery & Royal Salon.
    - **Data Source:** High-fidelity local curated art records ([`src/modules/artworks/artworks.data.ts`](./src/modules/artworks/artworks.data.ts)) with 16 canonical historical records across six curatorial departments (Paintings, Sculptures, Decorative Antiques, Ceramics & Glass, Prints & Editions, Curiosities).
+   - **Experience:** Intimate single-artwork exhibition showcase with horizontal right-to-left navigation, centered stage, and 3-control catalogue toolbar.
    - **Resilience:** 100% self-contained and completely independent of external network availability.
 2. **Course Compatibility Mode (`/index.html?mode=course`):**
    - **Identity:** ShopBoard Production Storefront (Day 2 & Day 3).
@@ -110,6 +111,7 @@ src/                                 # Strictly TypeScript (.ts) source modules 
 └── modules/
     ├── artworks/                    # AEVUM Fine Art domain
     │   ├── artworks.data.ts         # 16 canonical artwork records with curatorial research metadata
+    │   ├── artworks.showcase.ts     # Burgundy Private Gallery single-artwork showcase & RTL nav
     │   ├── artworks.types.ts        # Artwork, ArtworkCategory, CuratorialLicense, SaleStatus
     │   └── artworks.ui.ts           # Curatorial Artwork Details modal dialog & dossier renderer
     ├── catalog/                     # Application mode management
@@ -132,11 +134,11 @@ src/                                 # Strictly TypeScript (.ts) source modules 
 
 - **Royal Salon Hero:** Immersive full-bleed exhibition hall with subtle, damped ambient parallax depth on desktop (`prefers-reduced-motion` compliant).
 - **Ivory Editorial Art Journal:** High-contrast parchment spread (`#FAF6EF`) presenting classical sculpture analysis and single-trigger scroll entrance observer.
-- **Nocturne Pavilion Curatorial Catalog:**
-  - 16 canonical exhibition pieces displayed across six curatorial departments.
-  - Complete artwork image preservation using recessed obsidian matting and `object-fit: contain` (zero cropped sculpture heads or clipped landscape margins).
-  - Bidirectional synchronization between horizontal department tabs and the dropdown select filter.
-  - Real-time title search and case-insensitive keyword filtering.
+- **Burgundy Private Gallery Showcase:**
+  - 16 canonical exhibition pieces explored one at a time on an architectural burgundy stage (`#301A24` on `#2B1720`).
+  - Horizontal RTL navigation flow (left arrow advances Next, right arrow reverses Previous) with live `01 / 16` counter.
+  - Complete artwork image preservation using `object-fit: contain` (zero cropped sculpture heads or clipped landscape margins).
+  - Three catalogue controls: `Search the catalogue`, `Department`, and `Order by value`.
   - Price sorting (ascending, descending, and restoration of default curatorial order).
   - Curatorial "Department in Preparation" placard when viewing upcoming departments (_Prints & Editions_, _Curiosities_).
 - **Curatorial Artwork Details Modal:** Accessible modal dialog (`role="dialog"`, `aria-modal="true"`) featuring full curatorial dossier metadata, research summaries, intact watermark reproduction notices, focus trapping, and `Escape` key dismissal.

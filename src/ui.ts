@@ -460,11 +460,10 @@ export function initUI(
         const sectionTitle = document.querySelector("#products .section-title");
         const sectionSubtitle = document.querySelector("#products .section-subtitle");
 
-        if (topicTag) topicTag.textContent = "Private Auction";
+        if (topicTag) topicTag.textContent = "PRIVATE COLLECTION";
         if (sectionTitle) sectionTitle.textContent = "Catalogue of Curated Works";
         if (sectionSubtitle) {
-          sectionSubtitle.textContent =
-            "A rare selection of paintings, sculpture, and decorative objects presented for private acquisition and curatorial review. Values are fictional and for educational portfolio use.";
+          sectionSubtitle.textContent = "An intimate study of art, craftsmanship and time.";
         }
 
         const searchLabel = document.querySelector('label[for="product-search"]');
@@ -474,7 +473,7 @@ export function initUI(
         const sortField = document.querySelector("#price-sort");
         if (searchLabel) searchLabel.textContent = "Search the catalogue";
         if (searchField instanceof HTMLInputElement) {
-          searchField.placeholder = "Title, department or medium";
+          searchField.placeholder = "Title, department or medium...";
         }
         if (categoryLabel) categoryLabel.textContent = "Department";
         if (sortLabel) sortLabel.textContent = "Order by value";

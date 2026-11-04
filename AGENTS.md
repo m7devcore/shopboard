@@ -45,6 +45,7 @@ AEVUM — Art Across Ages (built on the CorePro ShopBoard architecture) is an ed
 │   └── modules/
 │       ├── artworks/                    # AEVUM Fine Art Gallery domain
 │       │   ├── artworks.data.ts         # 16 canonical artwork records with curatorial research metadata
+│       │   ├── artworks.showcase.ts     # Burgundy Private Gallery single-artwork showcase & RTL nav
 │       │   ├── artworks.types.ts        # Artwork, ArtworkCategory, CuratorialLicense, SaleStatus types
 │       │   └── artworks.ui.ts           # Curatorial Artwork Details modal dialog & dossier renderer
 │       ├── catalog/                     # Application mode management
