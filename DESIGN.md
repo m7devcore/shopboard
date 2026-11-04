@@ -8,7 +8,7 @@
 
 - **Royal Salon Hero:** Full-bleed deep crimson and gilded mahogany gallery atmosphere, subtle ambient depth parallax, and commanding typographic presence.
 - **Ivory Editorial Art Journal:** Tactile parchment contrast (`#FAF6EF`) presenting classical sculpture and academic essays with generous negative space and disciplined asymmetric rhythm.
-- **Nocturne Pavilion Curatorial Catalog:** Deep charcoal exhibition canvas (`#120F12`), recessed matte artwork presentations, satin antique brass accents, and fine gold borders.
+- **Burgundy Private Gallery:** Imperial Burgundy (`#432632`) and Deep Burgundy (`#2B1720`) viewing room canvas with centered single-artwork exhibition stage (`#301A24`), Warm Ivory (`#F3EADD`), and Muted Antique Brass accents (`#C7A778`, `#A68158`).
 - **Obsidian & Liquid Glass Surfaces:** Frosted backdrop blurs (`backdrop-filter: blur(12px)`), translucent dark acrylic cards, and accessible amber gold hover highlights.
 
 ---
@@ -21,7 +21,7 @@ AEVUM implements a cohesive CSS Custom Properties token architecture in [`styles
 
 | Token                            | Value                       | Role                                           |
 | -------------------------------- | --------------------------- | ---------------------------------------------- |
-| `--color-aevum-charcoal`         | `#120F12`                   | Nocturne Pavilion primary background           |
+| `--color-aevum-charcoal`         | `#120F12`                   | Dark charcoal foundation background            |
 | `--color-aevum-charcoal-card`    | `#181418`                   | Artwork card and modal dialog surface          |
 | `--color-aevum-charcoal-surface` | `#1E191E`                   | Filter toolbars and elevated containers        |
 | `--color-aevum-charcoal-border`  | `rgba(209, 175, 115, 0.22)` | Subtle antique brass structural borders        |
@@ -68,16 +68,19 @@ AEVUM enforces a strict three-tier typographic hierarchy:
 
 ## 5. Interactive Components & Controls
 
-- **Private Auction Catalogue (Gallery Mode only):** The products section reads as a private auction listing. Eyebrow `Private Auction`, title `Catalogue of Curated Works`. All rules are scoped with `body:not(.mode-course)`; Course Mode keeps its storefront styling.
-  - **Department strip:** Flat, underlined text tabs (fine brass rule, quiet counts) instead of pills.
-  - **Filter bar:** Transparent, borderless-box toolbar with hairline underlined fields and small tracked labels (`Search the catalogue`, `Department`, `Order by value`); no glass, glow or shadow.
-  - **Grid rhythm:** 1 column on mobile, 2 on tablet, 3 on desktop (no 4-column layout), with generous row and column gaps.
-  - **Artwork entries:** Large recessed matte frame with `object-fit: contain` and a thin brass border; below it a lot line (department, plus a quiet italic `Attribution Pending` note where applicable), a larger Cormorant title, a two-line description, an italic medium note, and a hairline-separated footer.
-  - **Value and actions:** Price is shown as `Estimated Value` in a restrained serif. `View Artwork` is the primary square-cornered outline action; `Acquire Piece` is a secondary text action with an underline. No gradients or pills.
-- **Artwork Cards (summary):** Feature a recessed obsidian mat, `object-fit: contain` rendering to preserve full sculpture heads and landscape margins, and two distinct actions:
-  - _View Artwork:_ Opens the full Curatorial Dossier Modal dialog.
-  - _Acquire Piece:_ Simulates acquisition into the local demonstration cart.
-- **Department Tabs:** Horizontally scrollable underlined text tabs with live count indicators, a brass active rule, and full bidirectional synchronization with the `#category-filter` select dropdown.
+- **Burgundy Private Gallery Showcase (Gallery Mode):** The `#products` section functions as an intimate private viewing room presenting exactly one featured artwork at a time.
+  - **Exhibition Stage:** Centered architectural stage (`#301A24` on Deep Burgundy `#2B1720`) with subtle brass framing (`rgba(199, 167, 120, 0.22)`), `object-fit: contain` rendering preserving full artwork dimensions, and zero image cropping.
+  - **Minimal Chevron Navigation & Natural Direction:** Natural viewing flow: the left chevron arrow reverses to the `Previous` artwork; the right chevron arrow advances to the `Next` artwork. Minimal chevron icons (transparent background, zero border, zero box-shadow, understated antique brass `#C7A778`, `>=44px` hit areas) with clamped boundary disabled states. Supports physical sequence mouse click-and-drag and touch swipe (`touch-action: pan-y`, drag left advances to Next, drag right reverses to Previous). Counter displays `01 / 16` in the curatorial lot line.
+  - **Three Catalogue Controls:** Clean horizontal row on desktop with transparent backgrounds and fine underline borders:
+    1. `Search the catalogue` (`#product-search`)
+    2. `Department` (`#category-filter`)
+    3. `Order by value` (`#price-sort`)
+  - **Centered Editorial Information Panel:** Centered horizontally beneath the stage (`width: 86%`, `max-width: 890px`, `margin-inline: auto`) with aligned bottom separator. Two-column desktop grid (65% / 35%, 52px gap):
+    - Left column: Lot sequence (`LOT 01 • PAINTINGS`), curatorial tags, position counter (`01 / 16`), Cormorant Garamond title, italic medium, and 54ch narrative description.
+    - Right column: Estimated Value (`$185,000`) and action buttons. Responsive transition to stacked layout on tablet (`90%` width) and mobile (`100%` width with 20px–24px comfortable padding).
+  - **Actions:** Primary rectangular outlined `View Artwork` (opens curatorial dossier modal) and discreet secondary `Acquire Piece` (adds to cart).
+  - **Reduced Motion:** When `prefers-reduced-motion: reduce` is detected, all slide transitions are replaced with instantaneous updates or subtle opacity shifts.
+  - **Contextual Disclosure:** Quiet footer disclaimer clarifying educational portfolio valuations without noisy demo tags on cards.
 - **Curatorial Artwork Modal:** Accessible dialog (`role="dialog"`, `aria-modal="true"`) featuring focus trapping, `Escape` key dismissal, backdrop dismissal, and curatorial research dossiers.
 - **Acquisitions Drawer:** Side-sliding cart drawer with item quantity controls, running demo total, clear cart action, and auto-dismissing toast notifications.
 

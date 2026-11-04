@@ -11,21 +11,10 @@ import { openCartSidebar, renderCartUI } from "../cart/cart.ui.ts";
 import { showToast } from "../../shared/ui/toast.ts";
 import { getArtworkById } from "./artworks.data.ts";
 import type { Artwork } from "./artworks.types.ts";
+import { escapeHtml } from "../../shared/utils/format.ts";
 
 let lastFocusedElement: HTMLElement | null = null;
 let modalEventsBound = false;
-
-/**
- * Escapes characters for safe HTML injection to prevent XSS.
- */
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
 
 /**
  * Formats a curatorial table row. If the value is null or empty,
