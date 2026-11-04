@@ -20,6 +20,16 @@ let currentArtworkIndex = 0;
 let showcaseEventsBound = false;
 let keydownBound = false;
 
+interface DragSession {
+  pointerId: number;
+  startX: number;
+  startY: number;
+  hasTriggered: boolean;
+}
+
+let activeDragSession: DragSession | null = null;
+const DRAG_THRESHOLD_PX = 70;
+
 /**
  * Escapes characters for safe HTML injection to prevent XSS.
  */
@@ -57,8 +67,20 @@ function createShowcaseHtml(artwork: Artwork, index: number, total: number): str
   return `
     <div class="gallery-showcase" role="region" aria-roledescription="artwork showcase" aria-label="Featured Artwork Exhibition">
       <article class="showcase-card product-card artwork-card" data-product-id="${escapeHtml(artwork.id)}">
-        <!-- 1. Large Exhibition Stage -->
+        <!-- 1. Large Exhibition Stage with Side Navigation Arrows -->
         <div class="artwork-stage">
+          <button
+            type="button"
+            class="showcase-side-arrow showcase-nav-btn nav-btn-next"
+            data-nav="next"
+            aria-label="Next artwork"
+            ${isLast ? "disabled" : ""}
+          >
+            <svg class="nav-arrow-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+
           <div class="artwork-stage-inner">
             <img
               src="${escapeHtml(artwork.imageSrc)}"
@@ -67,8 +89,21 @@ function createShowcaseHtml(artwork: Artwork, index: number, total: number): str
               width="${artwork.imageWidth}"
               height="${artwork.imageHeight}"
               loading="eager"
+              draggable="false"
             />
           </div>
+
+          <button
+            type="button"
+            class="showcase-side-arrow showcase-nav-btn nav-btn-prev"
+            data-nav="prev"
+            aria-label="Previous artwork"
+            ${isFirst ? "disabled" : ""}
+          >
+            <svg class="nav-arrow-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
         </div>
 
         <!-- 2. Supporting Artwork Information & Curatorial Dossier -->
@@ -80,6 +115,11 @@ function createShowcaseHtml(artwork: Artwork, index: number, total: number): str
               <span class="showcase-dept-tag product-category-tag artwork-category-tag">${escapeHtml(artwork.category)}</span>
               ${attributionBadge}
               ${outOfStockBadge}
+              <div class="showcase-counter" aria-live="polite" aria-atomic="true">
+                <span class="counter-current">${currentPadded}</span>
+                <span class="counter-sep">/</span>
+                <span class="counter-total">${totalPadded}</span>
+              </div>
             </div>
 
             <h3 class="showcase-title product-title artwork-title">${escapeHtml(artwork.title)}</h3>
@@ -122,44 +162,7 @@ function createShowcaseHtml(artwork: Artwork, index: number, total: number): str
         </div>
       </article>
 
-      <!-- 3. Horizontal RTL Navigation Bar (Left = Next, Right = Previous) -->
-      <nav class="showcase-nav-bar" aria-label="Catalogue navigation">
-        <button
-          type="button"
-          class="showcase-nav-btn nav-btn-next"
-          data-nav="next"
-          aria-label="Next artwork"
-          ${isLast ? "disabled" : ""}
-        >
-          <svg class="nav-arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <line x1="19" y1="12" x2="5" y2="12"></line>
-            <polyline points="12 19 5 12 12 5"></polyline>
-          </svg>
-          <span class="nav-btn-text">Next</span>
-        </button>
-
-        <div class="showcase-counter" aria-live="polite" aria-atomic="true">
-          <span class="counter-current">${currentPadded}</span>
-          <span class="counter-sep">/</span>
-          <span class="counter-total">${totalPadded}</span>
-        </div>
-
-        <button
-          type="button"
-          class="showcase-nav-btn nav-btn-prev"
-          data-nav="prev"
-          aria-label="Previous artwork"
-          ${isFirst ? "disabled" : ""}
-        >
-          <span class="nav-btn-text">Previous</span>
-          <svg class="nav-arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-            <polyline points="12 5 19 12 12 19"></polyline>
-          </svg>
-        </button>
-      </nav>
-
-      <!-- 4. Contextual Portfolio Disclosure -->
+      <!-- 3. Contextual Portfolio Disclosure -->
       <aside class="showcase-disclosure" aria-label="Curatorial note">
         <p class="disclosure-text">
           AEVUM Private Collection &mdash; Curated educational exhibition demonstration. Values represented are fictional valuations for portfolio study.
@@ -258,7 +261,8 @@ function setupKeyboardNavigation(): void {
 }
 
 /**
- * Initializes delegated click listeners for Next and Previous navigation buttons.
+ * Initializes delegated click listeners for Next and Previous navigation buttons
+ * as well as pointer drag and touch swipe navigation.
  */
 export function setupShowcaseEvents(): void {
   setupKeyboardNavigation();
@@ -267,7 +271,9 @@ export function setupShowcaseEvents(): void {
   showcaseEventsBound = true;
 
   const container = document.querySelector("#products-grid");
-  if (!container) return;
+  if (!container || !(container instanceof HTMLElement)) return;
+
+  setupDragNavigation(container);
 
   container.addEventListener("click", (event: Event) => {
     const target = event.target;
@@ -281,6 +287,96 @@ export function setupShowcaseEvents(): void {
       navigateShowcase(navDir);
     }
   });
+}
+
+/**
+ * Initializes pointer drag and touch swipe navigation on the exhibition stage.
+ * - Drag/swipe LEFT -> Next artwork (RTL progression)
+ * - Drag/swipe RIGHT -> Previous artwork (RTL progression)
+ * - Threshold: ~70px with horizontal dominance (abs(deltaX) > abs(deltaY))
+ * - Single drag triggers at most one artwork navigation
+ * - Moving mouse without pressing does not trigger navigation
+ * - Interactive elements (buttons, links) do not initiate dragging
+ */
+function setupDragNavigation(container: HTMLElement): void {
+  // Prevent native browser image dragging/ghosting
+  container.addEventListener("dragstart", (event: DragEvent) => {
+    event.preventDefault();
+  });
+
+  container.addEventListener("pointerdown", (event: PointerEvent) => {
+    // Only primary button (left mouse) or touch/pen
+    if (event.button !== 0) return;
+
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+
+    // Do not initiate dragging from buttons or interactive controls
+    if (target.closest("button, a, input, select, textarea, .showcase-side-arrow")) {
+      return;
+    }
+
+    const stage = target.closest<HTMLElement>(".artwork-stage");
+    if (!stage) return;
+
+    activeDragSession = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      hasTriggered: false,
+    };
+
+    stage.classList.add("is-dragging");
+    try {
+      stage.setPointerCapture(event.pointerId);
+    } catch {
+      // Safe fallback for testing or non-capture environments
+    }
+  });
+
+  window.addEventListener("pointermove", (event: PointerEvent) => {
+    if (!activeDragSession || activeDragSession.pointerId !== event.pointerId) return;
+    if (activeDragSession.hasTriggered) return;
+
+    const deltaX = event.clientX - activeDragSession.startX;
+    const deltaY = event.clientY - activeDragSession.startY;
+    const absX = Math.abs(deltaX);
+    const absY = Math.abs(deltaY);
+
+    if (absX >= DRAG_THRESHOLD_PX && absX > absY) {
+      activeDragSession.hasTriggered = true;
+
+      const stage = container.querySelector<HTMLElement>(".artwork-stage");
+      if (stage) {
+        stage.classList.remove("is-dragging");
+      }
+
+      // Drag Left -> Next; Drag Right -> Previous (RTL convention)
+      if (deltaX < 0) {
+        navigateShowcase("next");
+      } else {
+        navigateShowcase("prev");
+      }
+    }
+  });
+
+  const endDragSession = (event: PointerEvent): void => {
+    if (!activeDragSession || activeDragSession.pointerId !== event.pointerId) return;
+
+    const stage = container.querySelector<HTMLElement>(".artwork-stage");
+    if (stage) {
+      stage.classList.remove("is-dragging");
+      try {
+        stage.releasePointerCapture(event.pointerId);
+      } catch {
+        // Safe fallback
+      }
+    }
+    activeDragSession = null;
+  };
+
+  window.addEventListener("pointerup", endDragSession);
+  window.addEventListener("pointercancel", endDragSession);
 }
 
 /**

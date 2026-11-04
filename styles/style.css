@@ -4159,6 +4159,15 @@ body:not(.mode-course) .products-grid {
   overflow: hidden;
   padding: 1.75rem;
   transition: border-color var(--transition-normal);
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.artwork-stage.is-dragging,
+.artwork-stage.is-dragging * {
+  cursor: grabbing;
 }
 
 @media (min-width: 768px) {
@@ -4185,6 +4194,10 @@ body:not(.mode-course) .products-grid {
   object-position: center;
   display: block;
   filter: drop-shadow(0 14px 32px rgba(10, 4, 8, 0.8));
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
   transition:
     transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
     opacity 0.3s ease;
@@ -4403,51 +4416,77 @@ body:not(.mode-course) .products-grid {
   border-bottom-color: rgba(199, 167, 120, 0.2);
 }
 
-/* 6. Horizontal RTL Navigation Bar (Left = Next, Right = Previous) */
-.showcase-nav-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2.25rem;
-  margin-top: 2.5rem;
-  padding: 0.5rem 0;
-}
-
-.showcase-nav-btn {
-  background: rgba(48, 26, 36, 0.65);
-  border: 1px solid rgba(199, 167, 120, 0.35);
+/* 6. Exhibition Stage Side Navigation Arrows (Left = Next, Right = Previous) */
+.showcase-side-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  min-height: 48px;
+  border-radius: 50%;
+  background: rgba(30, 15, 22, 0.75);
+  border: 1px solid rgba(199, 167, 120, 0.4);
   color: #f3eadd;
-  font-family: var(--font-aevum-body);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  padding: 0.65rem 1.25rem;
-  min-height: 44px;
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
+  justify-content: center;
+  padding: 0;
   cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 4px 16px rgba(10, 4, 8, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   transition:
     background-color var(--transition-fast),
     border-color var(--transition-fast),
     color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
     opacity var(--transition-fast);
 }
 
-.showcase-nav-btn:hover:not(:disabled) {
-  background: #432632;
-  border-color: #c7a778;
-  color: #f3eadd;
+.showcase-side-arrow.nav-btn-next {
+  left: 1.25rem;
 }
 
-.showcase-nav-btn:focus-visible {
+.showcase-side-arrow.nav-btn-prev {
+  right: 1.25rem;
+}
+
+@media (max-width: 640px) {
+  .showcase-side-arrow {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .showcase-side-arrow.nav-btn-next {
+    left: 0.5rem;
+  }
+
+  .showcase-side-arrow.nav-btn-prev {
+    right: 0.5rem;
+  }
+}
+
+.showcase-side-arrow:hover:not(:disabled) {
+  background: rgba(67, 38, 50, 0.95);
+  border-color: #c7a778;
+  color: #fff;
+  transform: translateY(-50%) scale(1.06);
+  box-shadow: 0 6px 20px rgba(10, 4, 8, 0.7);
+}
+
+.showcase-side-arrow:focus-visible {
   outline: 2px solid #f3eadd;
   outline-offset: 3px;
 }
 
-.showcase-nav-btn:disabled {
-  opacity: 0.28;
+.showcase-side-arrow:disabled {
+  opacity: 0.22;
   cursor: not-allowed;
   border-color: rgba(199, 167, 120, 0.15);
 }
@@ -4456,16 +4495,16 @@ body:not(.mode-course) .products-grid {
   flex-shrink: 0;
 }
 
+/* Metadata Counter in Lot Line */
 .showcase-counter {
   font-family: var(--font-aevum-heading);
-  font-size: 1.35rem;
+  font-size: 1.05rem;
   letter-spacing: 0.08em;
   color: #c7a778;
   display: inline-flex;
   align-items: baseline;
-  gap: 0.4rem;
-  min-width: 5rem;
-  justify-content: center;
+  gap: 0.35rem;
+  margin-left: auto;
 }
 
 .counter-current {
@@ -4479,6 +4518,14 @@ body:not(.mode-course) .products-grid {
 
 .counter-total {
   color: #a68158;
+}
+
+@media (max-width: 540px) {
+  .showcase-counter {
+    margin-left: 0;
+    width: 100%;
+    margin-top: 0.25rem;
+  }
 }
 
 /* 7. Contextual Portfolio Disclosure */

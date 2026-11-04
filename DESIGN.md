@@ -70,7 +70,7 @@ AEVUM enforces a strict three-tier typographic hierarchy:
 
 - **Burgundy Private Gallery Showcase (Gallery Mode):** The `#products` section functions as an intimate private viewing room presenting exactly one featured artwork at a time.
   - **Exhibition Stage:** Centered architectural stage (`#301A24` on Deep Burgundy `#2B1720`) with subtle brass framing (`rgba(199, 167, 120, 0.22)`), `object-fit: contain` rendering preserving full artwork dimensions, and zero image cropping.
-  - **Horizontal RTL Progression:** Right-to-left viewing flow: the left control advances to the `Next` artwork; the right control reverses to the `Previous` artwork. Counter displays `01 / 16` (or filtered counts e.g. `01 / 06`), clamped with disabled boundary states.
+  - **Horizontal RTL Progression & Navigation:** Right-to-left viewing flow: the left side arrow advances to the `Next` artwork; the right side arrow reverses to the `Previous` artwork. Supports mouse click-and-drag and mobile touch swipe (`touch-action: pan-y`, threshold ~70px). Side arrows are vertically centered on the exhibition stage (`>=44px` touch targets) with clamped boundary disabled states. Counter displays `01 / 16` in the curatorial lot line.
   - **Three Catalogue Controls:** Clean horizontal row on desktop with transparent backgrounds and fine underline borders:
     1. `Search the catalogue` (`#product-search`)
     2. `Department` (`#category-filter`)

@@ -530,12 +530,219 @@ try {
     );
   }
 
-  // TEST 16: Zero Console Errors
+  // TEST 16: Side-Positioned Arrows & Structure Audit (Correction 2)
+  console.log("TEST 16: Verifying side-positioned arrows and counter relocation...");
+  const sideArrowCheck = await page.eval(() => {
+    const stage = document.querySelector(".artwork-stage");
+    const nextArrow = stage?.querySelector(".showcase-side-arrow.nav-btn-next");
+    const prevArrow = stage?.querySelector(".showcase-side-arrow.nav-btn-prev");
+    const oldNavBar = document.querySelector(".showcase-nav-bar");
+    const lotLineCounter = document.querySelector(".showcase-lot-line .showcase-counter");
+
+    const nextRect = nextArrow?.getBoundingClientRect();
+    const prevRect = prevArrow?.getBoundingClientRect();
+
+    return {
+      hasNextArrowInStage: !!nextArrow,
+      hasPrevArrowInStage: !!prevArrow,
+      hasOldNavBar: !!oldNavBar,
+      hasCounterInLotLine: !!lotLineCounter,
+      nextAriaLabel: nextArrow?.getAttribute("aria-label"),
+      prevAriaLabel: prevArrow?.getAttribute("aria-label"),
+      nextWidth: nextRect?.width ?? 0,
+      nextHeight: nextRect?.height ?? 0,
+      prevWidth: prevRect?.width ?? 0,
+      prevHeight: prevRect?.height ?? 0,
+      stageCursor: stage ? window.getComputedStyle(stage).cursor : "",
+      stageTouchAction: stage ? window.getComputedStyle(stage).touchAction : "",
+    };
+  });
+
+  if (
+    !sideArrowCheck.hasNextArrowInStage ||
+    !sideArrowCheck.hasPrevArrowInStage ||
+    sideArrowCheck.hasOldNavBar ||
+    !sideArrowCheck.hasCounterInLotLine ||
+    sideArrowCheck.nextAriaLabel !== "Next artwork" ||
+    sideArrowCheck.prevAriaLabel !== "Previous artwork" ||
+    sideArrowCheck.nextWidth < 44 ||
+    sideArrowCheck.nextHeight < 44 ||
+    sideArrowCheck.prevWidth < 44 ||
+    sideArrowCheck.prevHeight < 44 ||
+    sideArrowCheck.stageCursor !== "grab" ||
+    !sideArrowCheck.stageTouchAction.includes("pan-y")
+  ) {
+    failed = true;
+    console.error("❌ Test 16 Failed: Side arrow structure audit failed:", sideArrowCheck);
+  } else {
+    console.log(
+      "✅ Test 16 Passed: Side arrows are in stage (>=44px), old nav bar removed, counter in lot line, grab cursor and touch-action verified.",
+    );
+  }
+
+  // TEST 17: Click & Drag / Swipe Navigation (Correction 1)
+  console.log("TEST 17: Testing click & drag / swipe navigation on stage...");
+  const dragCheck = await page.eval(() => {
+    const stage = document.querySelector(".artwork-stage");
+    if (!stage) return { error: "No stage element" };
+
+    const rect = stage.getBoundingClientRect();
+    const startX = rect.left + rect.width / 2;
+    const startY = rect.top + rect.height / 2;
+
+    // Subtest A: Move mouse without pressing -> must not change artwork
+    window.dispatchEvent(
+      new PointerEvent("pointermove", {
+        clientX: startX - 100,
+        clientY: startY,
+        bubbles: true,
+      }),
+    );
+    const counterAfterPassiveMove = document.querySelector(".counter-current")?.textContent.trim();
+
+    // Subtest B: Drag under threshold (<50px) -> must not change artwork
+    stage.dispatchEvent(
+      new PointerEvent("pointerdown", {
+        clientX: startX,
+        clientY: startY,
+        button: 0,
+        pointerId: 1,
+        bubbles: true,
+      }),
+    );
+    window.dispatchEvent(
+      new PointerEvent("pointermove", {
+        clientX: startX - 40,
+        clientY: startY,
+        pointerId: 1,
+        bubbles: true,
+      }),
+    );
+    window.dispatchEvent(
+      new PointerEvent("pointerup", {
+        clientX: startX - 40,
+        clientY: startY,
+        pointerId: 1,
+        bubbles: true,
+      }),
+    );
+    const counterAfterSmallDrag = document.querySelector(".counter-current")?.textContent.trim();
+
+    // Subtest C: Vertical drag dominance (deltaY 100px, deltaX 20px) -> must not navigate
+    stage.dispatchEvent(
+      new PointerEvent("pointerdown", {
+        clientX: startX,
+        clientY: startY,
+        button: 0,
+        pointerId: 2,
+        bubbles: true,
+      }),
+    );
+    window.dispatchEvent(
+      new PointerEvent("pointermove", {
+        clientX: startX - 20,
+        clientY: startY + 100,
+        pointerId: 2,
+        bubbles: true,
+      }),
+    );
+    window.dispatchEvent(
+      new PointerEvent("pointerup", {
+        clientX: startX - 20,
+        clientY: startY + 100,
+        pointerId: 2,
+        bubbles: true,
+      }),
+    );
+    const counterAfterVerticalDrag = document.querySelector(".counter-current")?.textContent.trim();
+
+    // Subtest D: Horizontal drag LEFT (>70px) -> Next artwork (01 -> 02)
+    stage.dispatchEvent(
+      new PointerEvent("pointerdown", {
+        clientX: startX,
+        clientY: startY,
+        button: 0,
+        pointerId: 3,
+        bubbles: true,
+      }),
+    );
+    window.dispatchEvent(
+      new PointerEvent("pointermove", {
+        clientX: startX - 85,
+        clientY: startY,
+        pointerId: 3,
+        bubbles: true,
+      }),
+    );
+    window.dispatchEvent(
+      new PointerEvent("pointerup", {
+        clientX: startX - 85,
+        clientY: startY,
+        pointerId: 3,
+        bubbles: true,
+      }),
+    );
+    const counterAfterDragLeft = document.querySelector(".counter-current")?.textContent.trim();
+
+    // Subtest E: Horizontal drag RIGHT (>70px) -> Previous artwork (02 -> 01)
+    const stageAfterNext = document.querySelector(".artwork-stage");
+    stageAfterNext?.dispatchEvent(
+      new PointerEvent("pointerdown", {
+        clientX: startX,
+        clientY: startY,
+        button: 0,
+        pointerId: 4,
+        bubbles: true,
+      }),
+    );
+    window.dispatchEvent(
+      new PointerEvent("pointermove", {
+        clientX: startX + 85,
+        clientY: startY,
+        pointerId: 4,
+        bubbles: true,
+      }),
+    );
+    window.dispatchEvent(
+      new PointerEvent("pointerup", {
+        clientX: startX + 85,
+        clientY: startY,
+        pointerId: 4,
+        bubbles: true,
+      }),
+    );
+    const counterAfterDragRight = document.querySelector(".counter-current")?.textContent.trim();
+
+    return {
+      counterAfterPassiveMove,
+      counterAfterSmallDrag,
+      counterAfterVerticalDrag,
+      counterAfterDragLeft,
+      counterAfterDragRight,
+    };
+  });
+
+  if (
+    dragCheck.counterAfterPassiveMove !== "01" ||
+    dragCheck.counterAfterSmallDrag !== "01" ||
+    dragCheck.counterAfterVerticalDrag !== "01" ||
+    dragCheck.counterAfterDragLeft !== "02" ||
+    dragCheck.counterAfterDragRight !== "01"
+  ) {
+    failed = true;
+    console.error("❌ Test 17 Failed: Drag navigation checks failed:", dragCheck);
+  } else {
+    console.log(
+      "✅ Test 17 Passed: Drag LEFT advanced to 02, drag RIGHT reversed to 01, passive and small drags ignored.",
+    );
+  }
+
+  // TEST 18: Zero Console Errors
   if (page.consoleErrors.length > 0) {
     failed = true;
-    console.error("❌ Test 16 Failed: Red console errors detected:", page.consoleErrors);
+    console.error("❌ Test 18 Failed: Red console errors detected:", page.consoleErrors);
   } else {
-    console.log("✅ Test 16 Passed: Zero console errors during all gallery showcase interactions.");
+    console.log("✅ Test 18 Passed: Zero console errors during all gallery showcase interactions.");
   }
 
   await page.close();
