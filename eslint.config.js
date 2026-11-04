@@ -1,13 +1,15 @@
 import js from "@eslint/js";
 import globals from "globals";
+import tseslint from "typescript-eslint";
 
-export default [
+export default tseslint.config(
   {
-    ignores: ["dist/**", "node_modules/**", ".taste-skill/**", "src/**/*.ts"],
+    ignores: ["dist/**", "node_modules/**", ".taste-skill/**"],
   },
   js.configs.recommended,
+  ...tseslint.configs.recommended,
   {
-    files: ["src/**/*.js"],
+    files: ["src/**/*.{ts,tsx}"],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
@@ -19,7 +21,14 @@ export default [
       eqeqeq: "error",
       "no-var": "error",
       "prefer-const": "error",
-      "no-unused-vars": "warn",
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+        },
+      ],
       "no-empty": ["error", { allowEmptyCatch: true }],
     },
   },
@@ -42,4 +51,4 @@ export default [
       "no-empty": ["error", { allowEmptyCatch: true }],
     },
   },
-];
+);
