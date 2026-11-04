@@ -68,10 +68,16 @@ AEVUM enforces a strict three-tier typographic hierarchy:
 
 ## 5. Interactive Components & Controls
 
-- **Artwork Cards:** Feature a recessed obsidian mat, `object-fit: contain` rendering to preserve full sculpture heads and landscape margins, golden department badges, hover lift (`translateY(-4px)`), and two distinct actions:
+- **Private Auction Catalogue (Gallery Mode only):** The products section reads as a private auction listing. Eyebrow `Private Auction`, title `Catalogue of Curated Works`. All rules are scoped with `body:not(.mode-course)`; Course Mode keeps its storefront styling.
+  - **Department strip:** Flat, underlined text tabs (fine brass rule, quiet counts) instead of pills.
+  - **Filter bar:** Transparent, borderless-box toolbar with hairline underlined fields and small tracked labels (`Search the catalogue`, `Department`, `Order by value`); no glass, glow or shadow.
+  - **Grid rhythm:** 1 column on mobile, 2 on tablet, 3 on desktop (no 4-column layout), with generous row and column gaps.
+  - **Artwork entries:** Large recessed matte frame with `object-fit: contain` and a thin brass border; below it a lot line (department, plus a quiet italic `Attribution Pending` note where applicable), a larger Cormorant title, a two-line description, an italic medium note, and a hairline-separated footer.
+  - **Value and actions:** Price is shown as `Estimated Value` in a restrained serif. `View Artwork` is the primary square-cornered outline action; `Acquire Piece` is a secondary text action with an underline. No gradients or pills.
+- **Artwork Cards (summary):** Feature a recessed obsidian mat, `object-fit: contain` rendering to preserve full sculpture heads and landscape margins, and two distinct actions:
   - _View Artwork:_ Opens the full Curatorial Dossier Modal dialog.
   - _Acquire Piece:_ Simulates acquisition into the local demonstration cart.
-- **Department Tabs:** Horizontally scrollable pill tabs with live count indicators, active golden halo glow, and full bidirectional synchronization with the `#category-filter` select dropdown.
+- **Department Tabs:** Horizontally scrollable underlined text tabs with live count indicators, a brass active rule, and full bidirectional synchronization with the `#category-filter` select dropdown.
 - **Curatorial Artwork Modal:** Accessible dialog (`role="dialog"`, `aria-modal="true"`) featuring focus trapping, `Escape` key dismissal, backdrop dismissal, and curatorial research dossiers.
 - **Acquisitions Drawer:** Side-sliding cart drawer with item quantity controls, running demo total, clear cart action, and auto-dismissing toast notifications.
 

@@ -1,5 +1,5 @@
-/* ==========================================================================
-   ShopBoard — Obsidian & Liquid Glass Architecture
+﻿/* ==========================================================================
+   ShopBoard â€” Obsidian & Liquid Glass Architecture
    Creative Direction: Dark Cinematic Studio, Refractive Glass, Precision Type
    Inspired by: High-end industrial hardware & digital editorial experiences
    Palette: Obsidian Ground (#07090e), Electric Sapphire (#2563eb), Cyan & Emerald
@@ -273,7 +273,7 @@ select:focus-visible {
 
 /* ==========================================================================
    AEVUM Header & Private Gallery Navigation
-   Creative Direction: Classic × Contemporary, Art Journal × Private Viewing Room
+   Creative Direction: Classic Ã— Contemporary, Art Journal Ã— Private Viewing Room
    Colors: Gallery Ivory (#F3EADD), Imperial Burgundy (#432632), Antique Brass (#A68158), Charcoal Ink (#261A1E)
    Typography: Playfair Display (Wordmark), Cormorant Garamond (Headings), Inter (Interface)
    ========================================================================== */
@@ -457,7 +457,7 @@ select:focus-visible {
   align-items: center;
   gap: 0.35rem;
   font-family: var(--font-aevum-heading);
-  font-size: 1.3125rem; /* ~21px, target 21–22px */
+  font-size: 1.3125rem; /* ~21px, target 21â€“22px */
   font-weight: 600;
   letter-spacing: 0.02em;
   line-height: 1.2;
@@ -625,7 +625,7 @@ select:focus-visible {
 
 .collection-name {
   font-family: var(--font-aevum-heading);
-  font-size: 1.45rem; /* ~23.2px, target 23–24px */
+  font-size: 1.45rem; /* ~23.2px, target 23â€“24px */
   font-weight: 500;
   line-height: 1.2;
   letter-spacing: 0.01em;
@@ -676,7 +676,7 @@ select:focus-visible {
   }
 }
 
-/* Cart Toggle Button — AEVUM Private Room */
+/* Cart Toggle Button â€” AEVUM Private Room */
 .cart-toggle-btn {
   display: inline-flex;
   align-items: center;
@@ -955,7 +955,7 @@ select:focus-visible {
     1.25rem,
     4.2vw,
     1.45rem
-  ); /* approx 21–23px responsive target to prevent overflow */
+  ); /* approx 21â€“23px responsive target to prevent overflow */
   font-weight: 500;
   line-height: 1.2;
   letter-spacing: 0.01em;
@@ -974,7 +974,7 @@ select:focus-visible {
 .mobile-nav-link {
   display: block;
   font-family: var(--font-aevum-heading);
-  font-size: 1.3125rem; /* ~21px, target 21–22px */
+  font-size: 1.3125rem; /* ~21px, target 21â€“22px */
   font-weight: 600;
   letter-spacing: 0.02em;
   line-height: 1.2;
@@ -1137,7 +1137,7 @@ select:focus-visible {
 }
 
 /* ==========================================================================
-   Section 1: AEVUM Hero — The Royal Salon (Private Viewing Room)
+   Section 1: AEVUM Hero â€” The Royal Salon (Private Viewing Room)
    Art Direction: Full-bleed living salon canvas with text directly inside the room
    Palette: Deep burgundy, dark crimson, near-black, warm candlelit gold, antique brass
    Typography: Cormorant Garamond (H1 Display), Inter (Refined Editorial & Tactile CTA)
@@ -3119,7 +3119,7 @@ select:focus-visible {
 }
 
 /* ==========================================================================
-   Section 3: Register — The Studio Access Chamber
+   Section 3: Register â€” The Studio Access Chamber
    ========================================================================== */
 
 .register-section {
@@ -4000,10 +4000,10 @@ select:focus-visible {
 }
 
 /* ==========================================================================
-   AEVUM — Nocturne Pavilion Exhibition Catalog & Modal (Sprint 04.2)
+   AEVUM â€” Nocturne Pavilion Exhibition Catalog & Modal (Sprint 04.2)
    ========================================================================== */
 
-/* 1. Curatorial Exhibition Canvas */
+/* 1. Private Auction — Exhibition Canvas */
 body:not(.mode-course) .products-section {
   background-color: #120f12;
   color: #faf6ef;
@@ -4011,31 +4011,37 @@ body:not(.mode-course) .products-section {
   position: relative;
 }
 
+body:not(.mode-course) .products-section .section-title-lockup {
+  max-width: 46rem;
+}
+
 body:not(.mode-course) .products-section .studio-topic-tag {
-  color: #d1af73;
-  font-family: var(--font-aevum-heading);
-  font-size: 0.875rem;
-  letter-spacing: 0.15em;
+  color: #b99a62;
+  font-family: var(--font-aevum-body);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
 }
 
 body:not(.mode-course) .products-section .section-title {
   font-family: var(--font-aevum-heading);
-  font-weight: 500;
-  letter-spacing: -0.015em;
+  font-weight: 400;
+  letter-spacing: -0.01em;
   color: #faf6ef;
 }
 
 body:not(.mode-course) .products-section .section-subtitle {
   color: #c2b8a3;
-  font-size: 1.05rem;
-  line-height: 1.65;
-  max-width: 64ch;
+  font-family: var(--font-aevum-heading);
+  font-size: 1.25rem;
+  line-height: 1.55;
+  max-width: 52ch;
 }
 
-/* 2. Gallery Curatorial Department Tabs */
+/* 2. Department Navigation Strip */
 .gallery-department-tabs {
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 body.mode-course .gallery-department-tabs {
@@ -4044,9 +4050,10 @@ body.mode-course .gallery-department-tabs {
 
 .dept-tabs-scroll-wrap {
   display: flex;
-  gap: 0.65rem;
+  gap: 2rem;
   overflow-x: auto;
-  padding: 0.25rem 0 0.65rem;
+  padding: 0 0 0.25rem;
+  border-bottom: 1px solid rgba(209, 175, 115, 0.18);
   scrollbar-width: none;
   -ms-overflow-style: none;
   -webkit-overflow-scrolling: touch;
@@ -4057,30 +4064,29 @@ body.mode-course .gallery-department-tabs {
 }
 
 .dept-tab-btn {
-  background: rgba(25, 20, 25, 0.72);
-  border: 1px solid rgba(209, 175, 115, 0.2);
-  border-radius: var(--radius-pill);
-  padding: 0.55rem 1.15rem;
-  color: #c2b8a3;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  margin-bottom: -1px;
+  border-radius: 0;
+  padding: 0.75rem 0;
+  color: #a89e8b;
   font-family: var(--font-aevum-heading);
-  font-size: 0.9375rem;
-  letter-spacing: 0.03em;
+  font-size: 1.0625rem;
+  letter-spacing: 0.02em;
   white-space: nowrap;
   cursor: pointer;
   display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
+  align-items: baseline;
+  gap: 0.4rem;
   transition:
-    background-color var(--transition-fast),
     border-color var(--transition-fast),
-    color var(--transition-fast),
-    box-shadow var(--transition-fast);
+    color var(--transition-fast);
 }
 
 .dept-tab-btn:hover {
-  background: rgba(209, 175, 115, 0.12);
-  border-color: rgba(209, 175, 115, 0.45);
   color: #faf6ef;
+  border-bottom-color: rgba(209, 175, 115, 0.5);
 }
 
 .dept-tab-btn:focus-visible {
@@ -4089,109 +4095,131 @@ body.mode-course .gallery-department-tabs {
 }
 
 .dept-tab-btn.is-active {
-  background: rgba(209, 175, 115, 0.22);
-  border-color: #d1af73;
   color: #faf6ef;
-  box-shadow: 0 4px 18px rgba(209, 175, 115, 0.18);
-  font-weight: 600;
+  border-bottom-color: #d1af73;
 }
 
 .dept-tab-count {
   font-size: 0.75rem;
-  opacity: 0.8;
-  font-family: var(--font-sans);
+  color: #8c8274;
+  font-family: var(--font-aevum-body);
+  font-variant-numeric: tabular-nums;
 }
 
-/* 3. Nocturne Pavilion Glass Toolbar */
+.dept-tab-btn.is-active .dept-tab-count {
+  color: #b99a62;
+}
+
+/* 3. Auction Filter Bar */
 body:not(.mode-course) .product-toolbar.glass-panel-dark {
-  background: rgba(20, 16, 20, 0.8);
-  border: 1px solid rgba(209, 175, 115, 0.18);
-  box-shadow:
-    0 16px 40px -10px rgba(0, 0, 0, 0.6),
-    0 0 0 1px rgba(209, 175, 115, 0.05) inset;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 0;
+  border-bottom: 1px solid rgba(209, 175, 115, 0.18);
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0 0 1.75rem;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
 }
 
 body:not(.mode-course) .toolbar-input,
 body:not(.mode-course) .toolbar-select {
-  background: rgba(12, 9, 12, 0.65);
-  border: 1px solid rgba(209, 175, 115, 0.22);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid rgba(209, 175, 115, 0.35);
+  border-radius: 0;
   color: #faf6ef;
+  font-family: var(--font-aevum-heading);
+  font-size: 1.0625rem;
+  min-height: 44px;
 }
 
 body:not(.mode-course) .toolbar-input:focus,
 body:not(.mode-course) .toolbar-select:focus {
-  background: rgba(12, 9, 12, 0.9);
-  border-color: #d1af73;
-  box-shadow: 0 0 0 3px rgba(209, 175, 115, 0.25);
+  background: transparent;
+  border-bottom-color: #d1af73;
+  box-shadow: none;
+  outline: 2px solid #d1af73;
+  outline-offset: 4px;
+}
+
+body:not(.mode-course) .toolbar-select option {
+  background: #181418;
+  color: #faf6ef;
 }
 
 body:not(.mode-course) .toolbar-label {
-  color: #c2b8a3;
-  font-family: "Cinzel", Georgia, serif;
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
+  color: #a89e8b;
+  font-family: var(--font-aevum-body);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
 }
 
 body:not(.mode-course) .search-icon,
 body:not(.mode-course) .select-chevron {
-  color: #d1af73;
+  color: #b99a62;
 }
 
-/* 4. Responsive 4-Column Grid for Nocturne Gallery */
-@media (min-width: 1200px) {
+/* 4. Curated Grid: 1 / 2 / 3 columns */
+body:not(.mode-course) .products-grid {
+  gap: 3rem 2rem;
+}
+
+@media (min-width: 1024px) {
   body:not(.mode-course) .products-grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.75rem;
+    gap: 4rem 2.75rem;
   }
 }
 
-/* 5. Artwork Cards */
+/* 5. Catalogue Entries */
 .artwork-card {
-  background: rgba(22, 18, 22, 0.84);
-  border: 1px solid rgba(209, 175, 115, 0.16);
-  border-radius: 6px;
-  overflow: hidden;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
   display: flex;
   flex-direction: column;
-  transition:
-    transform var(--transition-normal),
-    border-color var(--transition-normal),
-    box-shadow var(--transition-normal);
-}
-
-.artwork-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(209, 175, 115, 0.45);
-  box-shadow:
-    0 20px 42px -10px rgba(0, 0, 0, 0.85),
-    0 0 25px rgba(209, 175, 115, 0.08);
 }
 
 .artwork-frame {
   position: relative;
-  background: radial-gradient(ellipse at center, #1c151c 0%, #0d090d 100%);
-  border-bottom: 1px solid rgba(209, 175, 115, 0.15);
+  background: #0c090c;
+  border: 1px solid rgba(209, 175, 115, 0.2);
   overflow: hidden;
-  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
+  transition: border-color var(--transition-normal);
+}
+
+.artwork-card:hover .artwork-frame {
+  border-color: rgba(209, 175, 115, 0.5);
 }
 
 .artwork-image-wrapper {
   position: relative;
   width: 100%;
-  height: 250px;
-  background: transparent;
+  height: 320px;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem 0.85rem;
+  padding: 1.75rem;
 }
 
 @media (min-width: 640px) {
   .artwork-image-wrapper {
-    height: 270px;
-    padding: 1.15rem 1rem;
+    height: 360px;
+    padding: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .artwork-image-wrapper {
+    height: 400px;
+    padding: 2.25rem;
   }
 }
 
@@ -4203,88 +4231,70 @@ body:not(.mode-course) .select-chevron {
   object-fit: contain;
   object-position: center;
   display: block;
-  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.7));
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .artwork-card:hover .artwork-card-img {
-  transform: scale(1.03);
+  transform: scale(1.02);
 }
 
 .artwork-card-badges {
-  position: absolute;
-  top: 0.75rem;
-  left: 0.75rem;
-  right: 0.75rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  align-items: center;
-  justify-content: space-between;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.artwork-category-tag {
-  background: rgba(18, 14, 18, 0.85);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(209, 175, 115, 0.3);
-  color: #d1af73;
-  font-family: var(--font-aevum-heading);
-  font-size: 0.75rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 0.2rem 0.6rem;
-  border-radius: var(--radius-pill);
-  font-weight: 600;
-}
-
-.curatorial-badge-pending {
-  background: rgba(45, 30, 10, 0.85);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(245, 158, 11, 0.4);
-  color: #fde68a;
-  font-size: 0.6875rem;
-  letter-spacing: 0.04em;
-  padding: 0.2rem 0.55rem;
-  border-radius: var(--radius-pill);
-  font-weight: 500;
-}
-
-.artwork-card.is-out-of-stock .stock-badge.out-of-stock {
-  background: rgba(60, 20, 25, 0.88);
-  border: 1px solid rgba(244, 63, 94, 0.4);
-  color: #fecdd3;
-  font-size: 0.6875rem;
-  padding: 0.2rem 0.55rem;
-  border-radius: var(--radius-pill);
-  font-weight: 600;
+  display: none;
 }
 
 .artwork-body {
-  padding: 1.25rem;
+  padding: 1.5rem 0 0;
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
+.artwork-lot-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.9rem;
+  margin: 0 0 0.6rem;
+}
+
+.artwork-category-tag {
+  color: #b99a62;
+  font-family: var(--font-aevum-body);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.curatorial-badge-pending {
+  color: #8c8274;
+  font-family: var(--font-aevum-heading);
+  font-size: 0.875rem;
+  font-style: italic;
+}
+
+.artwork-card.is-out-of-stock .stock-badge.out-of-stock {
+  color: #e6b8bd;
+  font-family: var(--font-aevum-heading);
+  font-size: 0.875rem;
+  font-style: italic;
+}
+
 .artwork-title {
   font-family: var(--font-aevum-heading);
-  font-size: 1.2rem;
-  font-weight: 600;
-  line-height: 1.3;
+  font-size: 1.625rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.005em;
   color: #faf6ef;
-  margin: 0 0 0.45rem 0;
+  margin: 0 0 0.6rem;
 }
 
 .artwork-description {
-  font-size: 0.8125rem;
-  line-height: 1.5;
-  color: #b8ae9c;
-  margin: 0 0 0.85rem 0;
-  flex: 1;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #a89e8b;
+  margin: 0 0 0.9rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -4292,48 +4302,68 @@ body:not(.mode-course) .select-chevron {
 }
 
 .artwork-meta-row {
-  margin-bottom: 0.85rem;
-  font-size: 0.75rem;
-  color: #9e9382;
+  margin: 0 0 1.25rem;
+  flex: 1;
+  font-family: var(--font-aevum-heading);
+  font-size: 0.9375rem;
+  color: #8c8274;
   font-style: italic;
 }
 
 .artwork-footer {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  padding-top: 0.85rem;
-  border-top: 1px solid rgba(209, 175, 115, 0.12);
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(209, 175, 115, 0.18);
 }
 
 .artwork-price-info {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.artwork-value-label {
+  color: #8c8274;
+  font-family: var(--font-aevum-body);
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
 .artwork-price {
   font-family: var(--font-aevum-heading);
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: #d1af73;
+  font-size: 1.25rem;
+  font-weight: 500;
+  font-variant-numeric: lining-nums tabular-nums;
+  color: #d8c9a6;
+}
+
+body:not(.mode-course) .artwork-price-info .price-demo-tag {
+  display: none;
 }
 
 .artwork-card-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .view-artwork-btn {
   background: transparent;
-  border: 1px solid rgba(209, 175, 115, 0.35);
+  border: 1px solid #b99a62;
   color: #faf6ef;
+  font-family: var(--font-aevum-body);
   font-size: 0.75rem;
-  padding: 0.5rem 0.65rem;
-  min-height: 38px;
-  border-radius: var(--radius-pill);
   font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.6rem 1.15rem;
+  min-height: 44px;
+  border-radius: 0;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -4341,53 +4371,59 @@ body:not(.mode-course) .select-chevron {
   text-align: center;
   transition:
     background-color var(--transition-fast),
-    border-color var(--transition-fast),
     color var(--transition-fast);
 }
 
 .view-artwork-btn:hover {
-  background: rgba(209, 175, 115, 0.15);
-  border-color: #d1af73;
-  color: #faf6ef;
+  background: #d1af73;
+  color: #120f12;
 }
 
 .view-artwork-btn:focus-visible {
   outline: 2px solid #d1af73;
-  outline-offset: 2px;
+  outline-offset: 3px;
 }
 
 body:not(.mode-course) .artwork-card-actions .add-to-cart-btn {
-  background: linear-gradient(135deg, rgba(209, 175, 115, 0.3) 0%, rgba(184, 134, 11, 0.18) 100%);
-  border: 1px solid #d1af73;
-  color: #faf6ef;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid rgba(209, 175, 115, 0.5);
+  color: #d8c9a6;
+  font-family: var(--font-aevum-body);
   font-size: 0.75rem;
-  padding: 0.5rem 0.65rem;
-  min-height: 38px;
-  border-radius: var(--radius-pill);
-  font-weight: 600;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.6rem 0;
+  min-height: 44px;
+  border-radius: 0;
+  box-shadow: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   transition:
-    background-color var(--transition-fast),
     border-color var(--transition-fast),
-    box-shadow var(--transition-fast),
     color var(--transition-fast);
 }
 
 body:not(.mode-course) .artwork-card-actions .add-to-cart-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #d1af73 0%, #b8860b 100%);
-  color: #120f12;
-  border-color: #faf6ef;
-  box-shadow: 0 4px 15px rgba(209, 175, 115, 0.3);
+  background: transparent;
+  color: #faf6ef;
+  border-bottom-color: #faf6ef;
+  box-shadow: none;
+}
+
+body:not(.mode-course) .artwork-card-actions .add-to-cart-btn:focus-visible {
+  outline: 2px solid #d1af73;
+  outline-offset: 3px;
 }
 
 body:not(.mode-course) .artwork-card-actions .add-to-cart-btn:disabled {
-  opacity: 0.45;
+  opacity: 0.5;
   cursor: not-allowed;
-  background: rgba(50, 40, 50, 0.4);
-  border-color: rgba(209, 175, 115, 0.15);
+  background: transparent;
+  border-bottom-color: rgba(209, 175, 115, 0.15);
   color: #8c8274;
 }
 

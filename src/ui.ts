@@ -460,11 +460,29 @@ export function initUI(
         const sectionTitle = document.querySelector("#products .section-title");
         const sectionSubtitle = document.querySelector("#products .section-subtitle");
 
-        if (topicTag) topicTag.textContent = "Curated Salons";
-        if (sectionTitle) sectionTitle.textContent = "The Curated Collection";
+        if (topicTag) topicTag.textContent = "Private Auction";
+        if (sectionTitle) sectionTitle.textContent = "Catalogue of Curated Works";
         if (sectionSubtitle) {
           sectionSubtitle.textContent =
-            "Six distinguished curatorial departments spanning centuries of classical and modern mastery. Fictional educational portfolio values.";
+            "A rare selection of paintings, sculpture, and decorative objects presented for private acquisition and curatorial review. Values are fictional and for educational portfolio use.";
+        }
+
+        const searchLabel = document.querySelector('label[for="product-search"]');
+        const searchField = document.querySelector("#product-search");
+        const categoryLabel = document.querySelector('label[for="category-filter"]');
+        const sortLabel = document.querySelector('label[for="price-sort"]');
+        const sortField = document.querySelector("#price-sort");
+        if (searchLabel) searchLabel.textContent = "Search the catalogue";
+        if (searchField instanceof HTMLInputElement) {
+          searchField.placeholder = "Title, department or medium";
+        }
+        if (categoryLabel) categoryLabel.textContent = "Department";
+        if (sortLabel) sortLabel.textContent = "Order by value";
+        if (sortField instanceof HTMLSelectElement) {
+          const [defaultOpt, ascOpt, descOpt] = Array.from(sortField.options);
+          if (defaultOpt) defaultOpt.textContent = "Catalogue order";
+          if (ascOpt) ascOpt.textContent = "Estimated value: ascending";
+          if (descOpt) descOpt.textContent = "Estimated value: descending";
         }
 
         const regTopic = document.querySelector("#register .studio-topic-tag");

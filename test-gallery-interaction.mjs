@@ -91,7 +91,7 @@ try {
   if (
     initCheck.cardCount !== 16 ||
     initCheck.outOfStockCount !== 0 ||
-    initCheck.sectionTitle !== "The Curated Collection"
+    initCheck.sectionTitle !== "Catalogue of Curated Works"
   ) {
     failed = true;
     console.error("❌ Test 1 Failed: Initial gallery state mismatch:", initCheck);

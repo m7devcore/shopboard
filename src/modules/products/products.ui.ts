@@ -353,14 +353,14 @@ export function renderProducts(productsToRender: readonly Product[]): void {
                   height="${imgHeight}"
                   loading="lazy"
                 />
-                <div class="artwork-card-badges">
-                  ${outOfStockBadge}
-                  <span class="product-category-tag artwork-category-tag">${escapeHtml(product.category)}</span>
-                  ${attributionBadge}
-                </div>
               </div>
             </div>
             <div class="product-body artwork-body">
+              <p class="artwork-lot-line">
+                <span class="product-category-tag artwork-category-tag">${escapeHtml(product.category)}</span>
+                ${attributionBadge}
+                ${outOfStockBadge}
+              </p>
               <h3 class="product-title artwork-title">${escapeHtml(product.name)}</h3>
               <p class="product-description artwork-description">${escapeHtml(product.description)}</p>
               <div class="artwork-meta-row">
@@ -368,6 +368,7 @@ export function renderProducts(productsToRender: readonly Product[]): void {
               </div>
               <div class="product-footer artwork-footer">
                 <div class="product-price-info artwork-price-info">
+                  <span class="artwork-value-label">Estimated Value</span>
                   <span class="product-price artwork-price">$${product.price.toLocaleString("en-US")}</span>
                   <span class="price-demo-tag">(Portfolio Demo)</span>
                 </div>
