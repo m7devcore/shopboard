@@ -67,16 +67,16 @@ function createShowcaseHtml(artwork: Artwork, index: number, total: number): str
   return `
     <div class="gallery-showcase" role="region" aria-roledescription="artwork showcase" aria-label="Featured Artwork Exhibition">
       <article class="showcase-card product-card artwork-card" data-product-id="${escapeHtml(artwork.id)}">
-        <!-- 1. Large Exhibition Stage with Side Navigation Arrows -->
+        <!-- 1. Large Exhibition Stage with Minimal Chevron Navigation Arrows -->
         <div class="artwork-stage">
           <button
             type="button"
-            class="showcase-side-arrow showcase-nav-btn nav-btn-next"
-            data-nav="next"
-            aria-label="Next artwork"
-            ${isLast ? "disabled" : ""}
+            class="showcase-side-arrow showcase-nav-btn nav-btn-prev"
+            data-nav="prev"
+            aria-label="Previous artwork"
+            ${isFirst ? "disabled" : ""}
           >
-            <svg class="nav-arrow-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg class="nav-arrow-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <polyline points="15 18 9 12 15 6"></polyline>
             </svg>
           </button>
@@ -95,12 +95,12 @@ function createShowcaseHtml(artwork: Artwork, index: number, total: number): str
 
           <button
             type="button"
-            class="showcase-side-arrow showcase-nav-btn nav-btn-prev"
-            data-nav="prev"
-            aria-label="Previous artwork"
-            ${isFirst ? "disabled" : ""}
+            class="showcase-side-arrow showcase-nav-btn nav-btn-next"
+            data-nav="next"
+            aria-label="Next artwork"
+            ${isLast ? "disabled" : ""}
           >
-            <svg class="nav-arrow-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg class="nav-arrow-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <polyline points="9 18 15 12 9 6"></polyline>
             </svg>
           </button>
@@ -249,13 +249,13 @@ function setupKeyboardNavigation(): void {
       return;
     }
 
-    // Left Arrow advances to Next in RTL progression
+    // Left Arrow reverses to Previous artwork
     if (event.key === "ArrowLeft") {
-      navigateShowcase("next");
-    }
-    // Right Arrow reverses to Previous in RTL progression
-    else if (event.key === "ArrowRight") {
       navigateShowcase("prev");
+    }
+    // Right Arrow advances to Next artwork
+    else if (event.key === "ArrowRight") {
+      navigateShowcase("next");
     }
   });
 }

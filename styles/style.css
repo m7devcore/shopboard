@@ -4452,42 +4452,40 @@ body:not(.mode-course) .products-grid {
   border-bottom-color: rgba(199, 167, 120, 0.2);
 }
 
-/* 6. Exhibition Stage Side Navigation Arrows (Left = Next, Right = Previous) */
+/* 6. Exhibition Stage Minimal Chevron Navigation Arrows (Left = Prev, Right = Next) */
 .showcase-side-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   width: 48px;
   height: 48px;
-  min-width: 48px;
-  min-height: 48px;
-  border-radius: 50%;
-  background: rgba(30, 15, 22, 0.75);
-  border: 1px solid rgba(199, 167, 120, 0.4);
-  color: #f3eadd;
+  min-width: 44px;
+  min-height: 44px;
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  color: #c7a778;
+  opacity: 0.85;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 0;
   cursor: pointer;
   z-index: 10;
-  box-shadow: 0 4px 16px rgba(10, 4, 8, 0.5);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
   transition:
-    background-color var(--transition-fast),
-    border-color var(--transition-fast),
     color var(--transition-fast),
-    transform var(--transition-fast),
-    box-shadow var(--transition-fast),
-    opacity var(--transition-fast);
-}
-
-.showcase-side-arrow.nav-btn-next {
-  left: 1.25rem;
+    opacity var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .showcase-side-arrow.nav-btn-prev {
+  left: 1.25rem;
+}
+
+.showcase-side-arrow.nav-btn-next {
   right: 1.25rem;
 }
 
@@ -4499,36 +4497,37 @@ body:not(.mode-course) .products-grid {
     min-height: 44px;
   }
 
-  .showcase-side-arrow.nav-btn-next {
+  .showcase-side-arrow.nav-btn-prev {
     left: 0.5rem;
   }
 
-  .showcase-side-arrow.nav-btn-prev {
+  .showcase-side-arrow.nav-btn-next {
     right: 0.5rem;
   }
 }
 
 .showcase-side-arrow:hover:not(:disabled) {
-  background: rgba(67, 38, 50, 0.95);
-  border-color: #c7a778;
-  color: #fff;
-  transform: translateY(-50%) scale(1.06);
-  box-shadow: 0 6px 20px rgba(10, 4, 8, 0.7);
+  color: #f3eadd;
+  opacity: 1;
+  transform: translateY(-50%) scale(1.12);
 }
 
 .showcase-side-arrow:focus-visible {
-  outline: 2px solid #f3eadd;
-  outline-offset: 3px;
+  outline: 2px solid #c7a778;
+  outline-offset: 4px;
+  opacity: 1;
 }
 
 .showcase-side-arrow:disabled {
-  opacity: 0.22;
+  opacity: 0.18;
   cursor: not-allowed;
-  border-color: rgba(199, 167, 120, 0.15);
+  color: #8c7860;
+  transform: translateY(-50%);
 }
 
 .nav-arrow-icon {
   flex-shrink: 0;
+  stroke: currentColor;
 }
 
 /* Metadata Counter in Lot Line */

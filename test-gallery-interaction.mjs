@@ -142,7 +142,7 @@ try {
   }
 
   // TEST 5: Next Navigation Advances to Correct Artwork
-  console.log("TEST 5: Testing Next navigation (Left arrow in RTL progression)...");
+  console.log("TEST 5: Testing Next navigation (Right arrow)...");
   const nextCheck = await page.eval(() => {
     const nextBtn = document.querySelector(".nav-btn-next");
     if (nextBtn instanceof HTMLButtonElement) nextBtn.click();
@@ -167,7 +167,7 @@ try {
   }
 
   // TEST 6: Previous Navigation Reverses Correctly
-  console.log("TEST 6: Testing Previous navigation (Right arrow in RTL progression)...");
+  console.log("TEST 6: Testing Previous navigation (Left arrow)...");
   const prevCheck = await page.eval(() => {
     const prevBtn = document.querySelector(".nav-btn-prev");
     if (prevBtn instanceof HTMLButtonElement) prevBtn.click();
@@ -500,7 +500,7 @@ try {
     );
   }
 
-  // TEST 15: Keyboard Arrow Navigation (Left Arrow advances Next, Right Arrow reverses Prev)
+  // TEST 15: Keyboard Arrow Navigation (Right Arrow advances Next, Left Arrow reverses Prev)
   console.log("TEST 15: Testing keyboard arrow navigation...");
   // Close cart sidebar first
   await page.eval(() => {
@@ -510,28 +510,28 @@ try {
   await sleep(350);
 
   const keyNavCheck = await page.eval(() => {
-    // Dispatch Left Arrow -> Next
-    document.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }));
-    const afterLeft = document.querySelector(".counter-current")?.textContent.trim();
-
-    // Dispatch Right Arrow -> Prev
+    // Dispatch Right Arrow -> Next
     document.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
     const afterRight = document.querySelector(".counter-current")?.textContent.trim();
 
-    return { afterLeft, afterRight };
+    // Dispatch Left Arrow -> Prev
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }));
+    const afterLeft = document.querySelector(".counter-current")?.textContent.trim();
+
+    return { afterRight, afterLeft };
   });
 
-  if (keyNavCheck.afterLeft !== "02" || keyNavCheck.afterRight !== "01") {
+  if (keyNavCheck.afterRight !== "02" || keyNavCheck.afterLeft !== "01") {
     failed = true;
     console.error("❌ Test 15 Failed: Keyboard navigation check failed:", keyNavCheck);
   } else {
     console.log(
-      `✅ Test 15 Passed: Left arrow advanced to ${keyNavCheck.afterLeft}, Right arrow reversed to ${keyNavCheck.afterRight}.`,
+      `✅ Test 15 Passed: Right arrow advanced to ${keyNavCheck.afterRight}, Left arrow reversed to ${keyNavCheck.afterLeft}.`,
     );
   }
 
-  // TEST 16: Side-Positioned Arrows & Structure Audit (Correction 2)
-  console.log("TEST 16: Verifying side-positioned arrows and counter relocation...");
+  // TEST 16: Minimal Chevron Side-Positioned Arrows & Structure Audit
+  console.log("TEST 16: Verifying minimal chevron arrows and directional mapping...");
   const sideArrowCheck = await page.eval(() => {
     const stage = document.querySelector(".artwork-stage");
     const nextArrow = stage?.querySelector(".showcase-side-arrow.nav-btn-next");
@@ -542,6 +542,8 @@ try {
     const nextRect = nextArrow?.getBoundingClientRect();
     const prevRect = prevArrow?.getBoundingClientRect();
 
+    const prevStyle = prevArrow ? window.getComputedStyle(prevArrow) : null;
+
     return {
       hasNextArrowInStage: !!nextArrow,
       hasPrevArrowInStage: !!prevArrow,
@@ -549,14 +551,29 @@ try {
       hasCounterInLotLine: !!lotLineCounter,
       nextAriaLabel: nextArrow?.getAttribute("aria-label"),
       prevAriaLabel: prevArrow?.getAttribute("aria-label"),
+      prevDisabledAtStart: prevArrow instanceof HTMLButtonElement && prevArrow.disabled,
+      nextDisabledAtStart: nextArrow instanceof HTMLButtonElement && nextArrow.disabled,
       nextWidth: nextRect?.width ?? 0,
       nextHeight: nextRect?.height ?? 0,
       prevWidth: prevRect?.width ?? 0,
       prevHeight: prevRect?.height ?? 0,
+      isPrevOnLeft: (prevRect?.left ?? 0) < (nextRect?.left ?? 0),
+      prevBg: prevStyle?.backgroundColor ?? "",
+      prevBorderWidth: prevStyle?.borderWidth ?? "",
+      prevBoxShadow: prevStyle?.boxShadow ?? "",
       stageCursor: stage ? window.getComputedStyle(stage).cursor : "",
       stageTouchAction: stage ? window.getComputedStyle(stage).touchAction : "",
     };
   });
+
+  const isTransparent =
+    sideArrowCheck.prevBg === "transparent" ||
+    sideArrowCheck.prevBg === "rgba(0, 0, 0, 0)" ||
+    sideArrowCheck.prevBg === "";
+  const isBorderZero =
+    sideArrowCheck.prevBorderWidth === "0px" || sideArrowCheck.prevBorderWidth === "";
+  const isShadowNone =
+    sideArrowCheck.prevBoxShadow === "none" || sideArrowCheck.prevBoxShadow === "";
 
   if (
     !sideArrowCheck.hasNextArrowInStage ||
@@ -565,18 +582,24 @@ try {
     !sideArrowCheck.hasCounterInLotLine ||
     sideArrowCheck.nextAriaLabel !== "Next artwork" ||
     sideArrowCheck.prevAriaLabel !== "Previous artwork" ||
+    !sideArrowCheck.prevDisabledAtStart ||
+    sideArrowCheck.nextDisabledAtStart ||
+    !sideArrowCheck.isPrevOnLeft ||
     sideArrowCheck.nextWidth < 44 ||
     sideArrowCheck.nextHeight < 44 ||
     sideArrowCheck.prevWidth < 44 ||
     sideArrowCheck.prevHeight < 44 ||
+    !isTransparent ||
+    !isBorderZero ||
+    !isShadowNone ||
     sideArrowCheck.stageCursor !== "grab" ||
     !sideArrowCheck.stageTouchAction.includes("pan-y")
   ) {
     failed = true;
-    console.error("❌ Test 16 Failed: Side arrow structure audit failed:", sideArrowCheck);
+    console.error("❌ Test 16 Failed: Minimal chevron side arrow audit failed:", sideArrowCheck);
   } else {
     console.log(
-      "✅ Test 16 Passed: Side arrows are in stage (>=44px), old nav bar removed, counter in lot line, grab cursor and touch-action verified.",
+      "✅ Test 16 Passed: Minimal chevrons verified (no circle, border:0, transparent bg, >=44px hit area, Left=Prev [disabled at 01], Right=Next [enabled]).",
     );
   }
 
